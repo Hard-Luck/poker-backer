@@ -2,8 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
@@ -11,8 +11,57 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model UserInfo {
+  id        String  @id @default(cuid())
+  username  String
+  is_backer Boolean @default(false)
+  admin     Boolean @default(false)
+
+  @@unique([username])
+  @@index([username])
+}
+
+model Friendship {
+  id         Int      @id @default(autoincrement())
+  user_id    String
+  friend_id  String
+  status     Boolean  @default(false)
+  created_at DateTime @default(now())
+
+  @@unique([user_id, friend_id])
+}
+
+model Pots {
+  id         Int       @id @default(autoincrement())
+  name       String
+  owner      String 
+  float      Int
+  created_at DateTime  @default(now())
+  session    Sessions[] 
+
+  @@unique([name, owner])
+  @@index([owner])
+}
+
+model PotAccess {
+  id      Int   @id @default(autoincrement())
+  user_id String
+  pot_id  Int
+  type    Int
+  percent Float
+
+  @@unique([user_id, pot_id])
+}
+
+model Sessions {
+  id             Int      @id @default(autoincrement())
+  user_id        String
+  pot            Pots      @relation(fields: [pot_id], references: [id])
+  pot_id         Int
+  amount         Int
+  total          Int
+  created_at     DateTime @default(now())
+  session_length Int
+
+  @@index([pot_id])
 }
