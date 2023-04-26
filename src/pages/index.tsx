@@ -9,7 +9,7 @@ const Home: NextPage = () => {
   const dashboard = api.backer.getDashboard.useQuery({
     id: "user_2OmeUZBsdKseCxgxXDbo7Pe0fLD",
   });
-  if (dashboard.data) console.log(dashboard.data);
+  const [backedPlayers, playerSessions] = dashboard.data ?? [null, null];
 
   return (
     <>

@@ -10,6 +10,11 @@ async function seed() {
   await prisma.pots.deleteMany();
   await prisma.friendship.deleteMany();
   await prisma.sessions.deleteMany();
+  await prisma.$queryRaw`ALTER TABLE Pots AUTO_INCREMENT = 1;`;
+  await prisma.$queryRaw`ALTER TABLE Sessions AUTO_INCREMENT = 1;`;
+  await prisma.$queryRaw`ALTER TABLE PotAccess AUTO_INCREMENT = 1;`;
+  await prisma.$queryRaw`ALTER TABLE Friendship AUTO_INCREMENT = 1;`;
+
   await prisma.pots.createMany({
     data: pots,
   });
