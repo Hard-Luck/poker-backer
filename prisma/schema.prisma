@@ -12,14 +12,17 @@ generator client {
 }
 
 model UserInfo {
-  id        String  @id @default(cuid())
-  username  String
-  is_backer Boolean @default(false)
-  admin     Boolean @default(false)
+  id         String     @id @default(cuid())
+  username   String
+  is_backer  Boolean    @default(false)
+  admin      Boolean    @default(false)
+  potAccess  PotAccess[]
+  Sessions    Sessions[]  
 
   @@unique([username])
   @@index([username])
 }
+
 
 model Friendship {
   id         Int      @id @default(autoincrement())
@@ -32,30 +35,35 @@ model Friendship {
 }
 
 model Pots {
-  id         Int       @id @default(autoincrement())
-  name       String
-  owner      String 
-  float      Int
-  created_at DateTime  @default(now())
-  session    Sessions[] 
+  id        Int        @id @default(autoincrement())
+  name      String
+  owner     String 
+  float     Int
+  created_at DateTime   @default(now())
+  sessions  Sessions[]
+  access    PotAccess[] @relation("PotAccess")
 
   @@unique([name, owner])
   @@index([owner])
 }
 
 model PotAccess {
-  id      Int   @id @default(autoincrement())
-  user_id String
-  pot_id  Int
-  type    Int
-  percent Float
-
+  id        Int      @id @default(autoincrement())
+  user_id   String
+  pot_id    Int
+  type      Int
+  percent   Float
+  user      UserInfo @relation(fields: [user_id], references: [id])
+  pot       Pots     @relation("PotAccess", fields: [pot_id], references: [id])
+  
   @@unique([user_id, pot_id])
+  @@index([pot_id])
 }
 
 model Sessions {
   id             Int      @id @default(autoincrement())
   user_id        String
+  user       UserInfo @relation(fields: [user_id], references: [id])
   pot            Pots      @relation(fields: [pot_id], references: [id])
   pot_id         Int
   amount         Int
@@ -64,4 +72,5 @@ model Sessions {
   session_length Int
 
   @@index([pot_id])
+  @@index([user_id])
 }

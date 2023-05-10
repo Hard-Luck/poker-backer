@@ -1,16 +1,13 @@
 import { SignInButton, SignOutButton, useUser } from "@clerk/nextjs";
 import { type NextPage } from "next";
+import { redirect } from "next/navigation";
 import Head from "next/head";
-
-import { api } from "~/utils/api";
+import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
   const user = useUser();
-  const dashboard = api.backer.getDashboard.useQuery({
-    id: "user_2OmeUZBsdKseCxgxXDbo7Pe0fLD",
-  });
-  const [backedPlayers, playerSessions] = dashboard.data ?? [null, null];
-
+  const router = useRouter();
+  if (user.isSignedIn) router.push("/home");
   return (
     <>
       <Head>
@@ -20,8 +17,7 @@ const Home: NextPage = () => {
       </Head>
       <main className="lg flex min-h-screen flex-col items-center  bg-gradient-to-b from-[#000000] to-[#aa0000]">
         <header className="text-white">
-          {!user.isSignedIn && <SignInButton />}
-          {user.isSignedIn && <SignOutButton />}
+          <SignInButton />
         </header>
       </main>
     </>

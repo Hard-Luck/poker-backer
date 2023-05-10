@@ -107,5 +107,13 @@ const enforceUserIsAuthenticated = t.middleware(({ ctx, next }) => {
     return next({ ctx: { currentUser: ctx.currentUserId } })
   }
 })
-
+const enforceUserOrNull = t.middleware(({ ctx, next }) => {
+  if (!ctx.currentUserId) {
+    return next({ ctx: { currentUser: null } })
+  }
+  else {
+    return next({ ctx: { currentUser: ctx.currentUserId } })
+  }
+})
 export const privateProcedure = t.procedure.use(enforceUserIsAuthenticated);
+export const privateOrNullProcedure = t.procedure.use(enforceUserOrNull);
