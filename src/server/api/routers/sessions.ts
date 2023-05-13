@@ -1,7 +1,6 @@
 import { addSession } from "models/sessions";
 import { z } from "zod";
-import { createTRPCRouter, privateProcedure, publicProcedure } from "~/server/api/trpc";
-import { prisma } from "~/server/db";
+import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 
 export const sessionRouter = createTRPCRouter({
     create: privateProcedure

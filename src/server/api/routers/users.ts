@@ -1,6 +1,6 @@
 import { getUserById } from "models/users";
 
-import { createTRPCRouter, privateOrNullProcedure, privateProcedure, publicProcedure } from "~/server/api/trpc";
+import { createTRPCRouter, privateOrNullProcedure } from "~/server/api/trpc";
 
 export const userRouter = createTRPCRouter({
     getCurrentUserInfo: privateOrNullProcedure.query(async ({ ctx }) => {
