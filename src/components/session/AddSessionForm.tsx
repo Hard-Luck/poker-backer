@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, FormEventHandler, useState } from "react";
+import { type ChangeEvent, type FormEvent, useState } from "react";
 import { api } from "~/utils/api";
 export interface PotNameWithID {
   name: string;
@@ -42,7 +42,7 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
     setCreated_at(sessionDate);
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setAmountError(amount === "" || +amount < 0);
     setSessionLengthError(sessionLength === "" || +sessionLength <= 0);

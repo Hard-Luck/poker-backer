@@ -1,4 +1,4 @@
-import { Sessions } from "@prisma/client";
+import type { Sessions } from "@prisma/client";
 
 export type BackedPlayer = {
     username: string;

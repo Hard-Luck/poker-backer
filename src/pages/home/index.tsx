@@ -4,11 +4,17 @@ import * as React from "react";
 import { api } from "~/utils/api";
 import HorseDashboard from "~/components/horse-dashboard/HorseDashboard";
 
-export interface IHomeProps {}
-export default function Home(props: IHomeProps) {
+export default function Home() {
+  const user = useUser();
+  if (!user) return null;
+  return <Dashboard />;
+}
+
+function Dashboard() {
   const { data } = api.users.getCurrentUserInfo.useQuery();
   const isBacker = data?.is_backer;
 
   if (!data) return <p>missing data</p>;
   if (isBacker) return <BackerDashboard userId={data.id} />;
+  return <HorseDashboard userId={data.id} />;
 }

@@ -1,13 +1,12 @@
 import { SignInButton, useUser } from "@clerk/nextjs";
 import { type NextPage } from "next";
-import { redirect } from "next/navigation";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
 const Home: NextPage = () => {
   const user = useUser();
   const router = useRouter();
-  if (user.isSignedIn) router.push("/home");
+  if (user.isSignedIn) void router.push("/home");
   return (
     <>
       <Head>

@@ -46,13 +46,13 @@ export default function BackerDashboard({ userId }: { userId: string }) {
       <div>
         <h2 className="text-center">Backed Players</h2>
         {data.players.map((player) => (
-          <PlayerOverview player={player} />
+          <PlayerOverview key={player.user_id} player={player} />
         ))}
       </div>
       <div>
         <h2>Recent Sessions</h2>
         {data.sessions.map((session) => {
-          return <RecentSession session={session} />;
+          return <RecentSession key={session.id} session={session} />;
         })}
       </div>
     </div>

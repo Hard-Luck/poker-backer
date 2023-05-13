@@ -1,12 +1,9 @@
 import { UserButton, useUser } from "@clerk/nextjs";
-import { useRouter } from "next/router";
+
 import * as React from "react";
 
-export interface IHeaderProps {}
-
-export function Header(props: IHeaderProps) {
+export function Header() {
   const user = useUser();
-  const router = useRouter();
 
   return (
     <>

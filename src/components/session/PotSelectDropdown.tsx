@@ -1,5 +1,5 @@
-import { PotAccess } from "@prisma/client";
-import { Dispatch, SetStateAction } from "react";
+import { type PotAccess } from "@prisma/client";
+import type { Dispatch, SetStateAction } from "react";
 interface PotSelectDropdownProps {
   initial: number;
   pots: PotAccess[];
