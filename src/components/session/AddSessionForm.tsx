@@ -12,7 +12,11 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
   const [amountError, setAmountError] = useState(false);
   const [sessionLengthError, setSessionLengthError] = useState(false);
   const [success, setSuccess] = useState(false);
-  const { mutate: postSession } = api.sessions.create.useMutation();
+  const {
+    mutate: postSession,
+    data,
+    error,
+  } = api.sessions.create.useMutation();
 
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = event.target.value;
@@ -73,9 +77,10 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
           ))}
         </select>
       )}
-      {success && (
+      {!!data && (
         <div style={{ color: "green" }}>Session added successfully!</div>
       )}
+      {!!error && <div style={{ color: "red" }}>An Error Occurred!</div>}
       <form id="add-session-form" onSubmit={handleSubmit}>
         <label>
           Amount:

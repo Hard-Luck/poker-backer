@@ -1,11 +1,11 @@
-import { useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/clerk-react";
 import BackerDashboard from "~/components/backer-dashboard/BackerDashboard";
 import * as React from "react";
 import { api } from "~/utils/api";
 import HorseDashboard from "~/components/horse-dashboard/HorseDashboard";
 
 export default function Home() {
-  const user = useUser();
+  const user = useUser().user;
   if (!user) return null;
   return <Dashboard />;
 }

@@ -19,6 +19,5 @@ export async function addSession(user_id: string, session: AddSessionInput) {
     }) || { total: 0 }
 
     const total = currentTotal.total + amount
-    console.log({ user_id, amount, pot_id, session_length, created_at, total });
     return prisma.sessions.create({ data: { user_id, amount, pot_id, session_length, created_at, total } })
 }

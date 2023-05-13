@@ -1,11 +1,10 @@
-import { useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/clerk-react";
+import FriendsList from "~/components/friends/FriendsList";
+import { api } from "~/utils/api";
 
-export default function Friends() {
-  const user = useUser();
-  if (!user) return null;
-  return (
-    <div>
-      <h1>Friends</h1>
-    </div>
-  );
+export default function FriendsPage() {
+  const { isLoaded } = useUser();
+  const { data, isLoading } = api.users.getCurrentUserName.useQuery();
+  if (!isLoaded || !data || isLoading) return <p>Loading...</p>;
+  return <FriendsList username={data} />;
 }

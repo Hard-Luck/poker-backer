@@ -15,7 +15,9 @@
     "seed": "node --experimental-specifier-resolution=node --loader ts-node/esm/transpile-only prisma/seed.mjs"
   },
   "dependencies": {
+    "@clerk/clerk-js": "^4.39.0",
     "@clerk/nextjs": "^4.16.4",
+    "@clerk/types": "^3.36.0",
     "@prisma/client": "^4.11.0",
     "@tanstack/react-query": "^4.28.0",
     "@trpc/client": "^10.18.0",

@@ -1,6 +1,6 @@
 import { prisma } from "~/server/db";
 import * as _ from "lodash"
-import { BackedPlayer } from "types/dashboard";
+import type { BackedPlayer } from "types/dashboard";
 
 export async function getBackedPlayerOverview(user_id: string) {
     const result = await prisma.potAccess.findMany({
@@ -48,7 +48,7 @@ export async function getBackerDashboard(user_id: string) {
     const players = await getBackedPlayerOverview(user_id)
     const sessions = await getRecentSessionsForBacker(user_id)
     return { players, sessions }
-};
+}
 
 
 export async function getHorseDashboard(id: string) {
