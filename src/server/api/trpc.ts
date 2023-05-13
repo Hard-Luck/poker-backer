@@ -101,9 +101,13 @@ export const createTRPCRouter = t.router;
 export const publicProcedure = t.procedure;
 
 const enforceUserIsAuthenticated = t.middleware(({ ctx, next }) => {
+  console.log(ctx.currentUserId);
+
   if (!ctx.currentUserId) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   } else {
+    console.log("success");
+
     return next({ ctx: { currentUser: ctx.currentUserId } })
   }
 })

@@ -1,6 +1,7 @@
 import { api } from "~/utils/api";
 import { PotBar } from "./PotBar";
 import { RecentSession } from "types/dashboard";
+import { formatShortDate } from "~/utils/timestamp";
 
 interface PlayerOverviewProps {
   player: {
@@ -31,7 +32,7 @@ function RecentSession({ session }: { session: RecentSession }) {
       <div className="col-auto self-end">{session.amount}</div>
       <div className="col-auto self-end">{session.total}</div>
       <div className="col-auto self-end">
-        {session.created_at.toDateString()}
+        {formatShortDate(session.created_at)}
       </div>
     </div>
   );

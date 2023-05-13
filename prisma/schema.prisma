@@ -58,7 +58,8 @@ model PotAccess {
   
   @@unique([user_id, pot_id])
   @@index([pot_id])
-}
+  @@index([user_id])
+  }
 
 model Sessions {
   id             Int      @id @default(autoincrement())

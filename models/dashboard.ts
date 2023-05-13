@@ -1,10 +1,8 @@
 import { prisma } from "~/server/db";
 import * as _ from "lodash"
 import { BackedPlayer } from "types/dashboard";
-import { Sessions } from "@prisma/client";
-import { access } from "fs";
-import { number } from "zod";
-export async function getPlayerOverView(user_id: string) {
+
+export async function getBackedPlayerOverview(user_id: string) {
     const result = await prisma.potAccess.findMany({
         where: {
             user_id: user_id,
@@ -47,10 +45,30 @@ export async function getRecentSessionsForBacker(user_id: string) {
     return sessions
 }
 export async function getBackerDashboard(user_id: string) {
-    const players = await getPlayerOverView(user_id)
+    const players = await getBackedPlayerOverview(user_id)
     const sessions = await getRecentSessionsForBacker(user_id)
     return { players, sessions }
 };
+
+
+export async function getHorseDashboard(id: string) {
+
+    const horseOverview = await prisma.potAccess.findMany({
+        where: { user_id: id, AND: { type: 0 } },
+        include: {
+            pot: {
+                include: {
+                    sessions: {
+                        include: {
+                            user: { select: { username: true } }
+                        }, take: 10
+                    },
+                }
+            }
+        }
+    })
+    return horseOverview
+}
 
 
 
