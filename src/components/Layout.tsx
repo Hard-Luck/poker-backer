@@ -1,6 +1,6 @@
 import React, { type PropsWithChildren } from "react";
 import { Header } from "./Header";
-import NavBar from "./navbar";
+import NavBar from "./Navbar";
 
 const Layout = ({ children }: PropsWithChildren) => {
   return (
