@@ -1,14 +1,20 @@
 
-import { acceptFriendRequest, getAllFriends, getFriendStatus, sendFriendRequest } from "models/friends";
+import { acceptFriendRequest, getAcceptedFriends, getAllFriends, getFriendStatus, sendFriendRequest } from "models/friends";
 import { z } from "zod";
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 
 export const friendsRouter = createTRPCRouter({
-    getUserFriends: privateProcedure
+    getUserFriendsWithStatus: privateProcedure
         .query(async ({ ctx }) => {
             const id = ctx.currentUser
             return getAllFriends(id)
         }),
+    getUserAcceptedFriends: privateProcedure
+        .query(async ({ ctx }) => {
+            const id = ctx.currentUser
+            return getAcceptedFriends(id)
+        }),
+
     getFriendStatus: privateProcedure.input(z.object({ friend_id: z.string() }))
         .query(async ({ input, ctx }) => {
             const user_id = ctx.currentUser

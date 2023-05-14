@@ -5,6 +5,7 @@ import { horseRouter } from "./routers/horse";
 import { potsRouter } from "./routers/pots";
 import { sessionRouter } from "./routers/sessions";
 import { friendsRouter } from "./routers/friends";
+import { potAccessRouter } from "./routers/potAccess";
 
 /**
  * This is the primary router for your server.
@@ -17,7 +18,8 @@ export const appRouter = createTRPCRouter({
   horse: horseRouter,
   pots: potsRouter,
   sessions: sessionRouter,
-  friends: friendsRouter
+  friends: friendsRouter,
+  potAccess: potAccessRouter
 });
 
 // export type definition of API

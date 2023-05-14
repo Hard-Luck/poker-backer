@@ -1,4 +1,4 @@
-import type { Friendship } from "@prisma/client";
+import type { Friendship, PotAccess, Pots, UserInfo } from "@prisma/client";
 
 export type FriendRequest = Friendship & {
     user: {
@@ -8,3 +8,9 @@ export type FriendRequest = Friendship & {
         username: string;
     };
 }
+
+export type InputPot = Omit<Pots, 'id' | 'createdAt'> & { created_at?: Date };
+
+export type InputPotAccess = Omit<PotAccess, 'id' | 'percent'> & { percent?: number };
+
+export type NewUserInput = Omit<UserInfo, 'id' | 'admin'>

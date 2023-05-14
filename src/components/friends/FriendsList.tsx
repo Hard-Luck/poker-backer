@@ -3,7 +3,7 @@ import { api } from "~/utils/api";
 import { formatShortDate } from "~/utils/timestamp";
 
 export default function FriendsList({ username }: { username: string }) {
-  const { data, isLoading } = api.friends.getUserFriends.useQuery();
+  const { data, isLoading } = api.friends.getUserFriendsWithStatus.useQuery();
   if (isLoading) return <p>loading...</p>;
   return (
     <ul>

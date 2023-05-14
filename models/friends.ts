@@ -12,6 +12,31 @@ export async function getAllFriends(userId: string) {
     })
     return friends
 }
+export async function getAcceptedFriends(userId: string) {
+    const acceptedSentRequests = await prisma.friendship.findMany({
+        where: { user_id: userId, status: true },
+        include: { friend: { select: { username: true } } }
+
+    })
+    const formattedAcceptedRequest = acceptedSentRequests.map(request => {
+        return {
+            username: request.friend.username,
+            id: request.friend_id
+        }
+    })
+    const acceptedReceivedRequests = await prisma.friendship.findMany({
+        where: { friend_id: userId, status: true },
+        include: { friend: { select: { username: true } } }
+
+    })
+    const formattedReceivedRequest = acceptedReceivedRequests.map(request => {
+        return {
+            username: request.friend.username,
+            id: request.friend_id
+        }
+    })
+    return [...formattedAcceptedRequest, ...formattedReceivedRequest]
+}
 
 async function friendRequestExists(user_id: string, friend_id: string) {
     const userSent = await prisma.friendship.findFirst({ where: { user_id, AND: { friend_id } } })

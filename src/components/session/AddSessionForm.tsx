@@ -11,7 +11,6 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
   const [created_at, setCreated_at] = useState(new Date());
   const [amountError, setAmountError] = useState(false);
   const [sessionLengthError, setSessionLengthError] = useState(false);
-  const [success, setSuccess] = useState(false);
   const {
     mutate: postSession,
     data,
@@ -57,7 +56,7 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
         session_length: +sessionLength,
         created_at,
       });
-      setSuccess(true);
+
       setAmount("");
       setCreated_at(new Date());
       setSessionLength("");

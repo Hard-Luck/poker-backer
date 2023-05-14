@@ -15,3 +15,11 @@ export function formatShortDate(date: Date) {
   const formattedDate = `${day}-${month}`;
   return formattedDate;
 }
+
+export function convertMinsToHrsMins(mins: number): string {
+  const hours = Math.floor(mins / 60);
+  const minutes = mins % 60;
+  const hourString = hours === 1 ? `${hours} hr` : `${hours} hrs`;
+  const minString = minutes === 1 ? `${minutes} min` : `${minutes} mins`;
+  return `${hourString} ${minString}`;
+}

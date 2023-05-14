@@ -9,7 +9,7 @@ export const sessionRouter = createTRPCRouter({
                 {
                     pot_id: z.number(),
                     amount: z.number(),
-                    session_length: z.number(),
+                    session_length: z.number().int().min(1),
                     created_at: z.date().optional().default(new Date()),
                 }))
         .mutation(({ input, ctx }) => {

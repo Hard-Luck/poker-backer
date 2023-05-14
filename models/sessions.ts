@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server"
 import { prisma } from "~/server/db"
-import { hasAccessToPot } from "./pots"
+import { hasAccessToPot } from "./potAceess"
 
 interface AddSessionInput {
     pot_id: number,
