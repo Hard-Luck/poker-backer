@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function NavBar() {
   const user = useUser();
-  if (!user) return null;
+  if (!user.isSignedIn) return null;
   const pages = ["home", "pots", "session", "friends"];
   return (
     <div>
