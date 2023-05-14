@@ -34,3 +34,13 @@ export async function acceptFriendRequest(sender: string, receiver: string) {
         data: { status: true }
     })
 }
+export async function getFriendStatus(user_id: string, friend_id: string) {
+    const status = await prisma.friendship.findFirst({
+        where: {
+            OR: [{ user_id, friend_id }, { user_id: friend_id, friend_id: user_id }],
+        },
+        select: { status: true }
+    })
+    if (!status) return null;
+    return status.status;
+}

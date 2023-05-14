@@ -15,6 +15,7 @@ export const userRouter = createTRPCRouter({
     getUserByUsername: privateProcedure
         .input(z.object({ username: z.string() }))
         .query(async ({ input }) => {
+            if (!input.username) return []
             const { username } = input
             if (username.length < 3) throw new Error("Username must be at least 3 characters long")
             return getUserByUsername(username)
