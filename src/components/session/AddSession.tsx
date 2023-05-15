@@ -11,5 +11,6 @@ export default function AddSession() {
       name: pot.pot.name,
     };
   });
+  if (pots.length === 0) return <p>No Associated Pots</p>;
   return <AddSessionForm pots={pots} />;
 }

@@ -14,7 +14,7 @@ interface PlayerOverviewProps {
 }
 function PlayerOverview({ player }: PlayerOverviewProps) {
   return (
-    <div className="grid grid-cols-4 gap-1">
+    <div className="mx-auto my-4 grid w-80 max-w-xl grid-cols-4 flex-col gap-1 rounded-lg p-2 text-white shadow-lg shadow-gray-500/50 dark:bg-gray-800 dark:text-gray-200">
       <div className="col-auto self-start">{player.username}</div>
       <div className="col-auto self-end">{player.float}</div>
       <div className="col-auto self-end">{player.total}</div>
@@ -27,9 +27,15 @@ function PlayerOverview({ player }: PlayerOverviewProps) {
 
 function RecentSession({ session }: { session: RecentSession }) {
   return (
-    <div className="grid grid-cols-4 gap-1">
-      <div className="col-auto self-start">{session.user.username}</div>
-      <div className="col-auto self-end">{session.amount}</div>
+    <div className="mx-auto my-4 grid w-80 max-w-xl grid-cols-4 flex-col gap-1 rounded-lg p-2 text-white shadow-lg shadow-gray-500/50 dark:bg-gray-800 dark:text-gray-200">
+      <div className="col-auto self-end">{session.user.username}</div>
+      <div
+        className={`col-auto self-end ${
+          session.amount < 0 ? "text-red-500" : "text-green-500"
+        }`}
+      >
+        {session.amount}
+      </div>
       <div className="col-auto self-end">{session.total}</div>
       <div className="col-auto self-end">
         {formatShortDate(session.created_at)}
@@ -42,15 +48,15 @@ export default function BackerDashboard({ userId }: { userId: string }) {
   if (isLoading) return <p>Loading data</p>;
   if (!data) return <p>Missing Data</p>;
   return (
-    <div className=" flex flex-col">
+    <div className="mx-auto flex h-screen w-full max-w-xl flex-col gap-4  bg-gray-700 p-0 text-white shadow-lg shadow-gray-500/50 dark:bg-gray-800 dark:text-gray-200">
       <div>
-        <h2 className="text-center">Backed Players</h2>
+        <h2 className="text-center text-2xl font-bold">Backed Players</h2>
         {data.players.map((player) => (
           <PlayerOverview key={player.user_id} player={player} />
         ))}
       </div>
       <div>
-        <h2>Recent Sessions</h2>
+        <h2 className="text-center text-2xl font-bold">Recent Sessions</h2>
         {data.sessions.map((session) => {
           return <RecentSession key={session.id} session={session} />;
         })}

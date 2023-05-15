@@ -65,46 +65,65 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
   console.log(pot);
 
   return (
-    <div>
-      <span>Backer Pot Name:</span>
+    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-200">
+      <span className="mb-4 text-lg font-bold">Backer Pot Name:</span>
       {pots?.length && (
-        <select value={pot?.name} onChange={handleChange}>
-          {pots.map((pot, index) => (
-            <option key={index} value={index}>
-              {pot.name}
-            </option>
-          ))}
-        </select>
+        <div className="w-64">
+          <select
+            className="w-full rounded border border-gray-300 p-2"
+            value={pot?.name}
+            onChange={handleChange}
+          >
+            {pots.map((pot, index) => (
+              <option key={index} value={index}>
+                {pot.name}
+              </option>
+            ))}
+          </select>
+        </div>
       )}
       {!!data && (
-        <div style={{ color: "green" }}>Session added successfully!</div>
+        <div className="mb-4 text-green-500">Session added successfully!</div>
       )}
-      {!!error && <div style={{ color: "red" }}>An Error Occurred!</div>}
-      <form id="add-session-form" onSubmit={handleSubmit}>
-        <label>
+      {!!error && <div className="mb-4 text-red-500">An Error Occurred!</div>}
+      <form
+        id="add-session-form"
+        onSubmit={handleSubmit}
+        className="flex w-64 flex-col items-center"
+      >
+        <label className="mb-2 w-full">
           Amount:
-          <input type="number" value={amount} onChange={handleAmountChange} />
+          <input
+            type="number"
+            value={amount}
+            onChange={handleAmountChange}
+            className="mt-2 w-full rounded border border-gray-300 p-2"
+          />
         </label>
-        <br />
-        <label>
+        <label className="mb-2 w-full">
           Session Time (in minutes):
           <input
             type="number"
             value={sessionLength}
             onChange={handleSessionLengthChange}
+            className="mt-2 w-full rounded border border-gray-300 p-2"
           />
         </label>
-        <br />
-        <label>
+        <label className="mb-4 w-full">
           Date/Time:
           <input
             type="datetime-local"
             value={created_at.toISOString().slice(0, -8)}
             onChange={handleCreated_atChange}
+            className="mt-2 w-full rounded border border-gray-300 p-2"
           />
         </label>
-        <br />
-        <button type="submit">Submit</button>
+        <button
+          type="submit"
+          className="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
+        >
+          Submit
+        </button>
       </form>
     </div>
   );

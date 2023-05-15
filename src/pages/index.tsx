@@ -17,7 +17,7 @@ const Home: NextPage = () => {
       </Head>
       <main className="">
         <header className="">
-          <SignInButton afterSignInUrl="/signup/new" />
+          <SignInButton afterSignInUrl="/signup/new" mode="modal" />
         </header>
       </main>
     </>

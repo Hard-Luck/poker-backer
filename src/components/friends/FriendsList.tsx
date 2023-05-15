@@ -31,16 +31,16 @@ function FriendCard({
   const { user_id, status, created_at, friend, user } = friendRequest;
   if (user.username === username)
     return (
-      <li>
-        <div>{friend.username} </div>
-        <div>{formatShortDate(created_at)}</div>
+      <li className=" justify- mb-2 flex items-center rounded-md border border-gray-300 bg-gray-50 p-2">
+        <div className="mr-2">{friend.username} </div>
+        <div className="mr-2">{formatShortDate(created_at)}</div>
         {!status && <div>pending</div>}
       </li>
     );
   return (
-    <li>
-      <div>{friend.username} </div>
-      <div>{formatShortDate(created_at)}</div>
+    <li className="mb-4 flex items-center justify-between rounded bg-white p-4 shadow">
+      <div className="text-lg font-semibold">{friend.username}</div>
+      <div className="text-gray-600">{formatShortDate(created_at)}</div>
       {!status && <FriendRequestButton user_id={user_id} />}
     </li>
   );
@@ -48,7 +48,11 @@ function FriendCard({
 function FriendRequestButton({ user_id }: { user_id: string }) {
   const { mutate, isLoading } = api.friends.accept.useMutation();
   return (
-    <button disabled={isLoading} onClick={() => mutate({ sender: user_id })}>
+    <button
+      className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
+      disabled={isLoading}
+      onClick={() => mutate({ sender: user_id })}
+    >
       Accept?
     </button>
   );

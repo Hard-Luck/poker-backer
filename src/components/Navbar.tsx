@@ -6,11 +6,15 @@ export default function NavBar() {
   if (!user.isSignedIn) return null;
   const pages = ["home", "pots", "session", "friends"];
   return (
-    <div>
+    <div className="fixed bottom-0 flex w-full flex-row justify-center bg-slate-800 ">
       {pages.map((page) => {
         return (
-          <Link href={`/${page}`} key={page}>
-            <button className="m-2 rounded-md bg-gray-200 p-2">{page}</button>
+          <Link
+            className="fle m-2 rounded-md bg-gray-200 p-2"
+            href={`/${page}`}
+            key={page}
+          >
+            <button className="fle m-2  rounded-md bg-gray-200">{page}</button>
           </Link>
         );
       })}
