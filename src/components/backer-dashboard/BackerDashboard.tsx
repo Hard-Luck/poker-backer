@@ -48,7 +48,7 @@ export default function BackerDashboard({ userId }: { userId: string }) {
   if (isLoading) return <p>Loading data</p>;
   if (!data) return <p>Missing Data</p>;
   return (
-    <div className="mx-auto flex h-screen w-full max-w-xl flex-col gap-4  bg-gray-700 p-0 text-white shadow-lg shadow-gray-500/50 dark:bg-gray-800 dark:text-gray-200">
+    <div className="mx-auto flex h-full w-full max-w-xl flex-col gap-4 bg-gray-700 p-0 pb-2 text-white shadow-lg shadow-gray-500/50 dark:bg-gray-800 dark:text-gray-200">
       <div>
         <h2 className="text-center text-2xl font-bold">Backed Players</h2>
         {data.players.map((player) => (
