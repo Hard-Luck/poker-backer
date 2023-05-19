@@ -6,17 +6,13 @@ import { api } from "~/utils/api";
 export default function NewSignUpPage() {
   return (
     <SignedIn>
-      <NewUserCheck />;
+      <NewUserCheck />
     </SignedIn>
   );
 }
 
 export function NewUserCheck() {
   const user = useUser();
-  const router = useRouter();
-  const { data, isLoading } = api.users.getCurrentUserInfo.useQuery();
-  if (!user || isLoading || !router) return null;
-  if (data) void router.push("/home");
   const user_id = user.user?.id;
   const name = user.user?.fullName || "";
   if (!user_id) return null;
@@ -46,26 +42,46 @@ export function NewUser({ name }: { name: string }) {
   };
 
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center gap-4 text-xl">
       <label>
         Username:
         <input
           type="text"
+          className="border-2 border-black"
           value={username}
           onChange={handleUsernameChange}
           maxLength={30}
         />
       </label>
       <label>
-        Are you backing?
+        Are you a backer?
         <input
           type="checkbox"
           checked={isBacker}
+          className="border-2 border-black"
           onChange={handleCheckboxChange}
         />
       </label>
-      <button onClick={handleSubmit}>Submit</button>
-      {isError && <p>Error try again or refresh</p>}
+      <button
+        className="rounded-md border-2 border-black bg-slate-700 p-2 text-white"
+        onClick={handleSubmit}
+      >
+        Submit
+      </button>
+      {isError && (
+        <div className="flex flex-col items-center justify-center gap-4 text-xl">
+          <p>
+            Error try again or refresh, you may have already signed up try going
+            to home click below
+          </p>
+          <button
+            className="rounded-md border-2 border-black bg-slate-700 p-2 text-white"
+            onClick={() => void router.push("/home")}
+          >
+            Go to home page
+          </button>
+        </div>
+      )}
     </div>
   );
 }

@@ -23,7 +23,16 @@ export default function AddPlayerToPot({
         className="rounded-lg bg-white p-6"
         onClick={(e) => e.stopPropagation()}
       >
-        <input value={search} onChange={(e) => setSearch(e.target.value)} />
+        {" "}
+        <label htmlFor="search-add-pot">Search for a friend</label>
+        <input
+          id="search-add-pot"
+          type="text"
+          placeholder="Search for a friend"
+          className="rounded-sm border-2 border-gray-700 p-2"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
         {data
           .filter((friend) =>
             friend.username.toLowerCase().includes(search.toLowerCase())
@@ -31,7 +40,7 @@ export default function AddPlayerToPot({
           .map((user) => {
             return (
               <div key={user.id}>
-                <p>{user.username}</p>
+                <p className="text-lg font-bold">{user.username}</p>
                 <AddToPotButton user_id={user.id} pot_id={pot_id} />
               </div>
             );
@@ -56,7 +65,7 @@ export function AddToPotButton({
     mutate({ user_id, pot_id, type: isBacker });
   };
   return (
-    <div>
+    <div className="flex flex-col items-center">
       <button className="rounded-md bg-blue-500 p-2" onClick={handleClick}>
         Add to pot
       </button>
