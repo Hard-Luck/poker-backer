@@ -12,8 +12,8 @@ const Home: NextPage = () => {
     <>
       <Head>
         <title>Poker Backer</title>
-        <meta name="description" content="Poker Backer " />
-        <link rel="icon" href="" />
+        <meta name="description" content="Poker Backer" />
+        <link rel="icon" href="poker.png" />
       </Head>
       <main className="">
         <header className="flex justify-center">
