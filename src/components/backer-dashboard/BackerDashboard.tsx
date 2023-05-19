@@ -2,6 +2,7 @@ import { api } from "~/utils/api";
 import { PotBar } from "./PotBar";
 import { RecentSession } from "types/dashboard";
 import { formatShortDate } from "~/utils/timestamp";
+import Loading from "../Loading";
 
 interface PlayerOverviewProps {
   player: {
@@ -45,7 +46,7 @@ function RecentSession({ session }: { session: RecentSession }) {
 }
 export default function BackerDashboard({ userId }: { userId: string }) {
   const { data, isLoading } = api.backer.getDashboard.useQuery({ id: userId });
-  if (isLoading) return <p>Loading data</p>;
+  if (isLoading) return <Loading />;
   if (!data) return <p>Missing Data</p>;
   return (
     <div className="mx-auto flex h-full w-full max-w-xl flex-col gap-4 bg-gray-700 p-0 pb-2 text-white shadow-lg shadow-gray-500/50 dark:bg-gray-800 dark:text-gray-200">

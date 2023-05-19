@@ -1,11 +1,15 @@
-import { withClerkMiddleware } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
-// import type { NextRequest } from 'next/server' 
-// if used add req: NextRequest to line 6
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+import { authMiddleware } from "@clerk/nextjs";
 
-export default withClerkMiddleware(() => {
-    return NextResponse.next();
+export default authMiddleware({
+    publicRoutes: ["/"],
+    signInUrl: "/",
+
 });
 
-// Stop Middleware running on static files
-export const config = { matcher: '/((?!_next/image|_next/static|favicon.ico).*)' };
+export const config = {
+    matcher: ["/((?!.*\\..*|_next).*)", "/(api|trpc)(.*)"],
+};

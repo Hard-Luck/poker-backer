@@ -1,7 +1,8 @@
-import { useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/clerk-react";
 import type { Sessions } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import Loading from "~/components/Loading";
 import NotFound404 from "~/components/errors/NotFound";
 import AddPlayerToPot from "~/components/pots/AddPlayerToPot";
 import SettingsModal from "~/components/pots/SettingsModal";
@@ -14,7 +15,7 @@ export default function Pot() {
   const [isAddToPotModalOpen, setIsAddToPotModalOpen] = useState(false);
   const pot_id = Number(useRouter().query.pot_id);
   const user = useUser();
-  if (!pot_id || !user) return <p>Loading...</p>;
+  if (!pot_id || !user) return <Loading />;
   return (
     <div>
       <PotTable pot_id={pot_id} />
@@ -36,7 +37,7 @@ export default function Pot() {
 export function PotTable({ pot_id }: { pot_id: number }) {
   const { data, isLoading, error } = api.pots.getById.useQuery({ pot_id });
   if (error) return <NotFound404 />;
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loading />;
   const sessions = data?.sessions;
   return (
     <>

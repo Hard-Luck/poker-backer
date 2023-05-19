@@ -1,9 +1,10 @@
 import { api } from "~/utils/api";
 import AddSessionForm from "./AddSessionForm";
+import Loading from "../Loading";
 
 export default function AddSession() {
   const { data, isLoading } = api.pots.getCurrentUserPot.useQuery();
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <Loading />;
   if (!data) return <p>No pot</p>;
   const pots = data.map((pot) => {
     return {

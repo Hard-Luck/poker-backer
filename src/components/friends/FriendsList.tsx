@@ -1,10 +1,11 @@
 import type { FriendRequest } from "types/api";
 import { api } from "~/utils/api";
 import { formatShortDate } from "~/utils/timestamp";
+import Loading from "../Loading";
 
 export default function FriendsList({ username }: { username: string }) {
   const { data, isLoading } = api.friends.getUserFriendsWithStatus.useQuery();
-  if (isLoading) return <p>loading...</p>;
+  if (isLoading) return <Loading />;
   return (
     <ul>
       {data &&

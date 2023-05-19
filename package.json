@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@clerk/clerk-js": "^4.39.0",
-    "@clerk/nextjs": "^4.16.4",
+    "@clerk/nextjs": "^4.18.2",
     "@clerk/types": "^3.36.0",
     "@prisma/client": "^4.11.0",
     "@tanstack/react-query": "^4.28.0",

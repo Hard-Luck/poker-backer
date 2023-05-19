@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { api } from "~/utils/api";
+import Loading from "../Loading";
 
 export default function AddPlayerToPot({ pot_id }: { pot_id: number }) {
   const { data, isLoading } = api.friends.getUserAcceptedFriends.useQuery();
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <Loading />;
   if (!data) return <p>No friends</p>;
 
   return (
