@@ -45,6 +45,7 @@ export function PercentageWithSliders({
     percentagesForState[user_id] = percent;
   });
   const [percentages, setPercentages] = useState(percentagesForState);
+
   function handleClick() {
     const sum = sumValues(percentages);
     if (sum !== 100) {

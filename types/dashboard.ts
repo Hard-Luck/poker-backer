@@ -9,7 +9,7 @@ export type BackedPlayer = {
     user_id: string;
 }
 export type RecentSession = Sessions & {
-    user: {
+    user?: {
         username: string;
     };
 }

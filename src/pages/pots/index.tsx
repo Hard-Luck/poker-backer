@@ -1,27 +1,38 @@
-import { useUser } from "@clerk/nextjs";
+import { SignedIn, useUser } from "@clerk/nextjs";
 import Link from "next/link";
+import Loading from "~/components/Loading";
+import CreatePotWizard from "~/components/pots/CreatePotWizard";
 import { api } from "~/utils/api";
 
 export default function Pots() {
-  const user = useUser();
-  if (!user) return null;
   return (
-    <div>
+    <SignedIn>
       <PotsList />
-    </div>
+      <CreatePotWizard />
+    </SignedIn>
   );
 }
 
 export function PotsList() {
   const { data, isLoading } = api.pots.list.useQuery();
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loading />;
   if (!data) return <p>No pots yet</p>;
   return (
-    <div>
+    <div className="flex w-full flex-col gap-4 border-2 border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+      <h2 className="self-center text-2xl font-bold text-white">
+        Pots you have access to
+      </h2>
       {data.map((pot) => {
         return (
-          <Link key={pot.id} passHref={true} href={`/pots/${pot.pot.id}`}>
-            <span>{pot.pot.name}</span>
+          <Link
+            className="flex w-full justify-around self-center text-center"
+            key={pot.id}
+            passHref={true}
+            href={`/pots/${pot.pot.id}`}
+          >
+            <div className="text-centre w-3/4 rounded-lg border-2 border-cyan-100 p-2 text-xl font-bold text-blue-600 hover:underline dark:text-blue-400">
+              {pot.pot.name}
+            </div>
           </Link>
         );
       })}

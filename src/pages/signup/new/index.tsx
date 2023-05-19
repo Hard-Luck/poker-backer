@@ -1,18 +1,20 @@
-import { useUser } from "@clerk/nextjs";
+import { SignedIn, useUser } from "@clerk/clerk-react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { api } from "~/utils/api";
 
 export default function NewSignUpPage() {
-  return <NewUserCheck />;
+  return (
+    <SignedIn>
+      <NewUserCheck />;
+    </SignedIn>
+  );
 }
 
 export function NewUserCheck() {
   const user = useUser();
   const router = useRouter();
-
   const { data, isLoading } = api.users.getCurrentUserInfo.useQuery();
-
   if (!user || isLoading || !router) return null;
   if (data) void router.push("/home");
   const user_id = user.user?.id;
@@ -26,7 +28,10 @@ export function NewUserCheck() {
 export function NewUser({ name }: { name: string }) {
   const [username, setUsername] = useState(name);
   const [isBacker, setIsBacker] = useState(false);
-  const { mutate } = api.users.create.useMutation();
+  const router = useRouter();
+  const { mutate, isError, data } = api.users.create.useMutation();
+  if (!!data) void router.push("/home");
+
   const handleUsernameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
   };
@@ -60,6 +65,7 @@ export function NewUser({ name }: { name: string }) {
         />
       </label>
       <button onClick={handleSubmit}>Submit</button>
+      {isError && <p>Error try again or refresh</p>}
     </div>
   );
 }

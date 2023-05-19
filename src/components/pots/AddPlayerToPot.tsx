@@ -29,24 +29,28 @@ export function AddToPotButton({
   pot_id: number;
 }) {
   const [isBacker, setIsBacker] = useState(0);
-  const { mutate, isError } = api.potAccess.create.useMutation();
+  const { mutate, data, isError } = api.potAccess.create.useMutation();
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsBacker(event.target.checked ? 1 : 0);
   };
+  const handleClick = () => {
+    mutate({ user_id, pot_id, type: isBacker });
+  };
   return (
     <div>
-      <button onClick={() => mutate({ user_id, pot_id, type: isBacker })}>
+      <button className="rounded-md bg-blue-500 p-2" onClick={handleClick}>
         Add to pot
       </button>
       <label>
-        Is Backer:
+        As Backer?:
         <input
           type="checkbox"
           checked={!!isBacker}
           onChange={handleCheckboxChange}
         />
       </label>
-      {isError && <p>Error</p>}
+      {!!data && <p className="text-green-500">Player Added</p>}
+      {isError && <p className="text-red-500">Error</p>}
     </div>
   );
 }

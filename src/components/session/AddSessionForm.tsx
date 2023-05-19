@@ -14,7 +14,7 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
   const {
     mutate: postSession,
     data,
-    error,
+    isError,
   } = api.sessions.create.useMutation();
 
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
@@ -56,13 +56,13 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
         session_length: +sessionLength,
         created_at,
       });
-
-      setAmount("");
-      setCreated_at(new Date());
-      setSessionLength("");
+      if (!isError) {
+        setAmount("");
+        setCreated_at(new Date());
+        setSessionLength("");
+      }
     }
   }
-  console.log(pot);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-200">
@@ -85,7 +85,7 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
       {!!data && (
         <div className="mb-4 text-green-500">Session added successfully!</div>
       )}
-      {!!error && <div className="mb-4 text-red-500">An Error Occurred!</div>}
+      {isError && <div className="mb-4 text-red-500">An Error Occurred!</div>}
       <form
         id="add-session-form"
         onSubmit={handleSubmit}

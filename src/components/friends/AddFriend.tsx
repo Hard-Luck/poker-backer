@@ -59,14 +59,20 @@ export default function AddFriend() {
 }
 
 export function AddFriendButton({ friend_id }: { friend_id: string }) {
-  const { data, isLoading } = api.friends.getFriendStatus.useQuery({
+  const { data: status, isLoading } = api.friends.getFriendStatus.useQuery({
     friend_id,
   });
-  const { mutate, isLoading: disabled } = api.friends.create.useMutation();
+  const {
+    mutate,
+    isLoading: disabled,
+    data,
+  } = api.friends.create.useMutation();
+
   if (isLoading) return null;
-  if (data === true) return <p>Friend</p>;
-  if (data === false) return <p>Pending</p>;
-  if (data === null)
+  if (data) return <p>{data.status ? "Friend" : "Pending"}</p>;
+  if (status === true) return <p>Friend</p>;
+  if (status === false) return <p>Pending</p>;
+  if (status === null)
     return (
       <button
         className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"

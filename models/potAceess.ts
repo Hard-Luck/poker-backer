@@ -11,6 +11,16 @@ export async function hasAccessToPot(userId: string, potId: number) {
     return potAccess !== null;
 }
 
+export async function isBackerOfPot(userId: string, potId: number) {
+    const potAccess = await prisma.potAccess.findFirst({
+        where: {
+            user_id: userId,
+            pot_id: potId,
+        },
+    });
+    return potAccess?.type === 1;
+}
+
 export async function createPotAccess(options: InputPotAccess) {
     return prisma.potAccess.create({
         data: options

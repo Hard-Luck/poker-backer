@@ -4,7 +4,7 @@ import { RecentSession } from "types/dashboard";
 import { formatShortDate } from "~/utils/timestamp";
 import Loading from "../Loading";
 
-interface PlayerOverviewProps {
+export interface PlayerOverviewProps {
   player: {
     username: string;
     float: number;
@@ -29,7 +29,7 @@ function PlayerOverview({ player }: PlayerOverviewProps) {
 function RecentSession({ session }: { session: RecentSession }) {
   return (
     <div className="mx-auto my-4 grid w-80 max-w-xl grid-cols-4 flex-col gap-1 rounded-lg p-2 text-white shadow-lg shadow-gray-500/50 dark:bg-gray-800 dark:text-gray-200">
-      <div className="col-auto self-end">{session.user.username}</div>
+      <div className="col-auto self-end">{session?.user?.username}</div>
       <div
         className={`col-auto self-end ${
           session.amount < 0 ? "text-red-500" : "text-green-500"

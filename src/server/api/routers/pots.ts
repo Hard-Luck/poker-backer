@@ -1,8 +1,9 @@
 
 
 import { TRPCError } from "@trpc/server";
-import { hasAccessToPot } from "models/potAceess";
-import { getAllUsersPots, getPotById } from "models/pots";
+import { create } from "lodash";
+import { hasAccessToPot, isBackerOfPot } from "models/potAceess";
+import { chop, createPot, getAllUsersPots, getPotById } from "models/pots";
 import { z } from "zod";
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 import { prisma } from "~/server/db";
@@ -21,7 +22,7 @@ export const potsRouter = createTRPCRouter({
             }))
         .mutation(async ({ ctx, input }) => {
             const id = ctx.currentUser
-            return prisma.pots.create({ data: { name: input.name, float: input.float, owner: id } })
+            return createPot({ ...input, owner: id })
         }),
     list: privateProcedure.query(async ({ ctx }) => {
         return getAllUsersPots(ctx.currentUser)
@@ -34,4 +35,18 @@ export const potsRouter = createTRPCRouter({
         return getPotById(pot_id)
 
     }),
+    chop: privateProcedure.input(z.object({ pot_id: z.number() })).mutation(async ({ ctx, input }) => {
+        const id = ctx.currentUser
+        const { pot_id } = input
+        const isBacker = await isBackerOfPot(id, pot_id)
+        if (!isBacker) throw new TRPCError({ code: "UNAUTHORIZED" })
+        return chop(pot_id, id)
+    }),
+    getIsBackerOfPot: privateProcedure.input(z.object({ pot_id: z.number() })).query(async ({ ctx, input }) => {
+        const id = ctx.currentUser
+        const { pot_id } = input
+        return isBackerOfPot(id, pot_id)
+
+    })
 })
+

@@ -9,7 +9,7 @@ export type FriendRequest = Friendship & {
     };
 }
 
-export type InputPot = Omit<Pots, 'id' | 'createdAt'> & { created_at?: Date };
+export type InputPot = Omit<Pots, 'id' | 'created_at'> & { created_at?: Date };
 
 export type InputPotAccess = Omit<PotAccess, 'id' | 'percent'> & { percent?: number };
 

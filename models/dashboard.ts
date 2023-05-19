@@ -59,9 +59,7 @@ export async function getHorseDashboard(id: string) {
             pot: {
                 include: {
                     sessions: {
-                        include: {
-                            user: { select: { username: true } }
-                        }, take: 10
+                        take: 10
                     },
                 }
             }

@@ -20,6 +20,8 @@ model UserInfo {
   Sessions            Sessions[]
   sentFriendships     Friendship[] @relation(name: "sent")
   receivedFriendships Friendship[] @relation(name: "received")
+  SessionComments  SessionComments[]
+  chops Chops[]
 
   @@unique([username])
   @@index([username])
@@ -47,6 +49,7 @@ model Pots {
   created_at DateTime    @default(now())
   sessions   Sessions[]
   access     PotAccess[] @relation("PotAccess")
+  chops      Chops[]
 
   @@unique([name, owner])
   @@index([owner])
@@ -77,7 +80,39 @@ model Sessions {
   created_at     DateTime @default(now())
   session_length Int
   chop           Boolean  @default(false)
+  likes Int @default(0)
 
   @@index([pot_id])
   @@index([user_id])
+}
+
+model SessionComments {
+  id Int @id @default(autoincrement())
+  user_id String
+  user UserInfo @relation(fields: [user_id], references: [id])
+  comment String
+  likes Int @default(0)
+  created_at DateTime @default(now())
+
+  @@index([user_id])
+}
+
+model Chops {
+  id Int @id @default(autoincrement())
+  user_id String
+  tx_by UserInfo @relation(fields: [user_id], references: [id])
+  pot_id Int
+  pot Pots @relation(fields: [pot_id], references: [id])
+  chop_top chop_top
+  amount Int
+  split Json?
+  created_at DateTime @default(now())
+
+  @@index([pot_id])
+  @@index([user_id])
+}
+
+enum chop_top {
+  chop
+  top_up
 }
