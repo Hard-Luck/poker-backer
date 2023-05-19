@@ -5,6 +5,7 @@ import { useState } from "react";
 import Loading from "~/components/Loading";
 import NotFound404 from "~/components/errors/NotFound";
 import AddPlayerToPot from "~/components/pots/AddPlayerToPot";
+import ChopButton from "~/components/pots/ChopButton";
 import SettingsModal from "~/components/pots/SettingsModal";
 import { api } from "~/utils/api";
 import { formatCurrency } from "~/utils/currency";
@@ -34,8 +35,8 @@ export function Modals({ pot_id }: { pot_id: number }) {
   if (!data) return null;
   if (isLoading) return <p>...</p>;
   return (
-    <div className="flex justify-center">
-      <div>
+    <div className="flex flex-col gap-4  border-2 border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 ">
+      <div className="self-center">
         <button
           className="m-4 my-1  h-12 w-56 rounded-lg  bg-blue-500 px-4  font-bold text-white hover:bg-blue-700 dark:bg-blue-600 dark:text-gray-200 dark:hover:bg-blue-800 dark:hover:text-white"
           onClick={() => setIsSettingsModalOpen(true)}
@@ -49,14 +50,22 @@ export function Modals({ pot_id }: { pot_id: number }) {
           />
         )}
       </div>
-      <div>
+      <div className="self-center">
         <button
           className="m-4 my-1  h-12 w-56 rounded-lg  bg-blue-500 px-4  font-bold text-white hover:bg-blue-700 dark:bg-blue-600 dark:text-gray-200 dark:hover:bg-blue-800 dark:hover:text-white"
           onClick={() => setIsAddToPotModalOpen(true)}
         >
           Add Player to Pot
         </button>
-        {isAddToPotModalOpen && <AddPlayerToPot pot_id={pot_id} />}
+        {isAddToPotModalOpen && (
+          <AddPlayerToPot
+            onClose={() => setIsAddToPotModalOpen(false)}
+            pot_id={pot_id}
+          />
+        )}
+      </div>
+      <div className="self-center">
+        <ChopButton pot_id={pot_id} />
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import type { InputPot } from "types/api";
 import { prisma } from "~/server/db";
 import { createPotAccess } from "./potAceess";
+import { hasBeenSessionSinceLastChop } from "./sessions";
 
 
 export async function getPotById(pot_id: number) {
@@ -20,6 +21,7 @@ export function getAllUsersPots(user_id: string) {
 }
 
 export async function chop(pot_id: number, user_id: string) {
+    if (!(await hasBeenSessionSinceLastChop(pot_id))) throw new Error("No New Sessions")
     const playersWithAccess = await prisma.potAccess.findMany({ where: { pot_id } })
     const pot = await prisma.pots.findUniqueOrThrow({
         where: { id: pot_id },
@@ -34,8 +36,9 @@ export async function chop(pot_id: number, user_id: string) {
     }, 0)
     const amount = total - float
     const toSplit = amount - topUpTotal
+    if (toSplit <= 0) throw new Error("Negative")
     const split = playersWithAccess.reduce((acc: { [key: string]: number }, player) => {
-        acc.user_id = toSplit * (player.percent / 100)
+        acc[player.user_id] = toSplit * (player.percent / 100)
         return acc
     }, {})
     topUps.forEach(topUp => {

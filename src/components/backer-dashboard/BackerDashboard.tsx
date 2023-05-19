@@ -3,6 +3,7 @@ import { PotBar } from "./PotBar";
 import { RecentSession } from "types/dashboard";
 import { formatShortDate } from "~/utils/timestamp";
 import Loading from "../Loading";
+import { uniqueId } from "lodash";
 
 export interface PlayerOverviewProps {
   player: {
@@ -53,7 +54,7 @@ export default function BackerDashboard({ userId }: { userId: string }) {
       <div>
         <h2 className="text-center text-2xl font-bold">Backed Players</h2>
         {data.players.map((player) => (
-          <PlayerOverview key={player.user_id} player={player} />
+          <PlayerOverview key={player.user_id || uniqueId()} player={player} />
         ))}
       </div>
       <div>

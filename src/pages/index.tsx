@@ -16,12 +16,16 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="">
-        <header className="">
+        <header className="flex justify-center">
           <SignInButton
             afterSignInUrl="/home"
             mode="modal"
             afterSignUpUrl="/signup/new"
-          />
+          >
+            <button className="rounded-lg bg-blue-700 px-5 py-2.5 text-center text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600">
+              Sign in
+            </button>
+          </SignInButton>
         </header>
       </main>
     </>

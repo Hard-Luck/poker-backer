@@ -16,10 +16,18 @@ export default function SettingsModal({
   if (!data || isLoading) return <div>Loading...</div>;
   if (isError) return <p>Error: refresh, if error persists contact admin</p>;
   return (
-    <div>
-      <p>Setting</p>
-      <PercentageWithSliders pot_id={pot_id} access={data} />
-      <button onClick={onClose}>Close</button>
+    <div
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+      onClick={onClose}
+    >
+      <div
+        className="rounded-lg bg-white p-6"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <p>Setting</p>
+        <PercentageWithSliders pot_id={pot_id} access={data} />
+        <button onClick={onClose}>Close</button>
+      </div>
     </div>
   );
 }
@@ -75,7 +83,7 @@ export function PercentageWithSliders({
     }
   }
   return (
-    <div>
+    <div className="flex flex-col gap-2">
       {access.map((player: Access) => (
         <div key={player.user_id}>
           <p>{player.username}</p>

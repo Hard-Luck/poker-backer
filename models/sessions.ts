@@ -31,3 +31,13 @@ export async function addSession(user_id: string, session: AddSessionInput) {
 
     return prisma.sessions.create({ data: { user_id, amount, pot_id, session_length, created_at, total } })
 }
+
+export async function hasBeenSessionSinceLastChop(pot_id: number) {
+    const lastChop = await getLastChop(pot_id)
+    const session = await prisma.sessions.findFirst({
+        where: {
+            pot_id: pot_id, AND: { created_at: { gt: lastChop?.created_at } }
+        }
+    })
+    return !!session
+}
