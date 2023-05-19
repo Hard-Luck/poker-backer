@@ -1,9 +1,8 @@
 
 
 import { TRPCError } from "@trpc/server";
-import { create } from "lodash";
 import { hasAccessToPot, isBackerOfPot } from "models/potAceess";
-import { chop, createPot, getAllUsersPots, getPotById } from "models/pots";
+import { chop, createPot, getAllUsersPots, getChopHistory, getPotById } from "models/pots";
 import { z } from "zod";
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 import { prisma } from "~/server/db";
@@ -47,6 +46,10 @@ export const potsRouter = createTRPCRouter({
         const { pot_id } = input
         return isBackerOfPot(id, pot_id)
 
+    }),
+    getChops: privateProcedure.input(z.object({ pot_id: z.number() })).query(async ({ input }) => {
+        const history = await getChopHistory(input.pot_id)
+        return history
     })
 })
 

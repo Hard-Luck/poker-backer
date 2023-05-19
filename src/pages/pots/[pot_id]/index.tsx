@@ -6,6 +6,7 @@ import Loading from "~/components/Loading";
 import NotFound404 from "~/components/errors/NotFound";
 import AddPlayerToPot from "~/components/pots/AddPlayerToPot";
 import ChopButton from "~/components/pots/ChopButton";
+import NoneSessionHistory from "~/components/pots/ChopHistory";
 import SettingsModal from "~/components/pots/SettingsModal";
 import { api } from "~/utils/api";
 import { formatCurrency } from "~/utils/currency";
@@ -67,6 +68,7 @@ export function Modals({ pot_id }: { pot_id: number }) {
       <div className="self-center">
         <ChopButton pot_id={pot_id} />
       </div>
+      <NoneSessionHistory pot_id={pot_id} />
     </div>
   );
 }

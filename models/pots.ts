@@ -50,11 +50,12 @@ export async function chop(pot_id: number, user_id: string) {
 }
 
 
-export async function getChopHistory(pot_id: number) {
-    return prisma.chops.findMany({ where: { pot_id } })
+export async function getChopHistory(pot_id: number, take = 10) {
+    const history = await prisma.chops.findMany({ where: { pot_id }, take: take, include: { tx_by: { select: { username: true } } } })
+    return history
 }
 
-export async function getLastChop(pot_id: number, withFloat = false) {
+export async function getLastChop(pot_id: number) {
     return prisma.chops.findFirst({
         where: { pot_id },
         orderBy: { created_at: 'desc' },
@@ -83,3 +84,4 @@ export async function getTopUpsSinceLastChop(pot_id: number) {
         }
     })
 }
+
