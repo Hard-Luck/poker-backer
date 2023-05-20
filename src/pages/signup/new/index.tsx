@@ -18,9 +18,9 @@ export function NewUserCheck() {
   const name = user.user?.fullName || "";
   const { data, isLoading } = api.users.getCurrentUserInfo.useQuery();
   if (!user_id) return null;
-  if (!data) void router.push("/home");
   const props = { user_id, name };
   if (isLoading) return null;
+  if (data) void router.push("/home");
   return <NewUser {...props} />;
 }
 
