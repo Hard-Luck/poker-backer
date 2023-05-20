@@ -4,10 +4,12 @@ import { api } from "~/utils/api";
 export default function CreatePotWizard() {
   const [name, setName] = useState<string>("");
   const [float, setFloat] = useState<number>(0);
+  const ctx = api.useContext();
   const { data: userData, isLoading: userLoading } =
     api.users.getCurrentUserInfo.useQuery();
-  const { mutate, data, isLoading } = api.pots.create.useMutation();
+  const { mutate, data, isLoading, isSuccess } = api.pots.create.useMutation();
   if (userLoading || !userData?.is_backer) return null;
+  if (isSuccess) void ctx.pots.invalidate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

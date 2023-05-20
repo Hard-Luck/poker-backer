@@ -4,7 +4,7 @@ import AddSession from "~/components/session/AddSession";
 export default function Session() {
   return (
     <SignedIn>
-      <AddSession />;
+      <AddSession />
     </SignedIn>
   );
 }

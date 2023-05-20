@@ -46,14 +46,15 @@ export function PercentageWithSliders({
   access: Access[];
 }) {
   const [sliderError, setSliderError] = useState<string | null>(null);
-  const { mutate, data, isError, error } =
+  const ctx = api.useContext();
+  const { mutate, data, isError, error, isSuccess } =
     api.potAccess.patchPercent.useMutation();
   const percentagesForState: { [key: string]: number } = {};
   access.forEach(({ user_id, percent }) => {
     percentagesForState[user_id] = percent;
   });
   const [percentages, setPercentages] = useState(percentagesForState);
-
+  if (isSuccess) void ctx.potAccess.getAccessByPotId.invalidate();
   function handleClick() {
     const sum = sumValues(percentages);
     if (sum !== 100) {

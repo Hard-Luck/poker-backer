@@ -1,8 +1,11 @@
 import { api } from "~/utils/api";
 
 export default function ChopButton({ pot_id }: { pot_id: number }) {
-  const { mutate, data, isLoading, isError } = api.pots.chop.useMutation();
+  const ctx = api.useContext();
+  const { mutate, data, isLoading, isError, isSuccess } =
+    api.pots.chop.useMutation();
   if (isLoading) return null;
+  if (isSuccess) void ctx.pots.invalidate();
   return (
     <div>
       <button

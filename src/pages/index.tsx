@@ -18,7 +18,7 @@ const Home: NextPage = () => {
       <main className="">
         <header className="flex justify-center">
           <SignInButton
-            afterSignInUrl="/home"
+            afterSignInUrl="/signup/new"
             mode="modal"
             afterSignUpUrl="/signup/new"
           >

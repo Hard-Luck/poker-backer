@@ -9,7 +9,7 @@ export default function AddPlayerToPot({
   pot_id: number;
   onClose: () => void;
 }) {
-  const [search, setSearch] = useState("");
+  //const [search, setSearch] = useState("");
   const { data, isLoading } = api.friends.getUserAcceptedFriends.useQuery();
   if (isLoading) return <Loading />;
   if (!data) return <p>No friends</p>;
@@ -23,28 +23,23 @@ export default function AddPlayerToPot({
         className="rounded-lg bg-white p-6"
         onClick={(e) => e.stopPropagation()}
       >
-        {" "}
         <label htmlFor="search-add-pot">Search for a friend</label>
-        <input
+        {/* <input
           id="search-add-pot"
           type="text"
           placeholder="Search for a friend"
           className="rounded-sm border-2 border-gray-700 p-2"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-        />
-        {data
-          .filter((friend) =>
-            friend.username.toLowerCase().includes(search.toLowerCase())
-          )
-          .map((user) => {
-            return (
-              <div key={user.id}>
-                <p className="text-lg font-bold">{user.username}</p>
-                <AddToPotButton user_id={user.id} pot_id={pot_id} />
-              </div>
-            );
-          })}
+        /> */}
+        {data.map((user) => {
+          return (
+            <div key={user.id}>
+              <p className="text-lg font-bold">{user.username}</p>
+              <AddToPotButton user_id={user.id} pot_id={pot_id} />
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -57,13 +52,18 @@ export function AddToPotButton({
   pot_id: number;
 }) {
   const [isBacker, setIsBacker] = useState(0);
-  const { mutate, data, isError } = api.potAccess.create.useMutation();
+  const ctx = api.useContext();
+  const { mutate, data, isError, isSuccess } =
+    api.potAccess.create.useMutation();
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsBacker(event.target.checked ? 1 : 0);
   };
   const handleClick = () => {
     mutate({ user_id, pot_id, type: isBacker });
   };
+  if (isSuccess) {
+    void ctx.friends.invalidate();
+  }
   return (
     <div className="flex flex-col items-center">
       <button className="rounded-md bg-blue-500 p-2" onClick={handleClick}>

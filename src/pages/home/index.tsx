@@ -21,7 +21,7 @@ function Dashboard() {
   const { data, isLoading, isError } = api.users.getCurrentUserInfo.useQuery();
   const router = useRouter();
   const isBacker = data?.is_backer;
-  if (isError) void router.push("/login");
+  if (isError) void router.push("/signup/new");
 
   if (isLoading) return <Loading />;
   if (!data) return <p>missing data</p>;

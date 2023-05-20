@@ -26,13 +26,13 @@ export async function getAcceptedFriends(userId: string) {
     })
     const acceptedReceivedRequests = await prisma.friendship.findMany({
         where: { friend_id: userId, status: true },
-        include: { friend: { select: { username: true } } }
+        include: { friend: { select: { username: true } }, user: { select: { username: true } } }
 
     })
     const formattedReceivedRequest = acceptedReceivedRequests.map(request => {
         return {
-            username: request.friend.username,
-            id: request.friend_id
+            username: request.user.username,
+            id: request.user_id
         }
     })
     return [...formattedAcceptedRequest, ...formattedReceivedRequest]

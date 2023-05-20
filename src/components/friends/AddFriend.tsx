@@ -62,12 +62,16 @@ export function AddFriendButton({ friend_id }: { friend_id: string }) {
   const { data: status, isLoading } = api.friends.getFriendStatus.useQuery({
     friend_id,
   });
+  const ctx = api.useContext();
   const {
     mutate,
     isLoading: disabled,
     data,
+    isSuccess,
   } = api.friends.create.useMutation();
-
+  if (isSuccess) {
+    void ctx.friends.invalidate();
+  }
   if (isLoading) return null;
   if (data) return <p>{data.status ? "Friend" : "Pending"}</p>;
   if (status === true) return <p>Friend</p>;

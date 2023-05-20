@@ -68,7 +68,11 @@ function FriendCard({
   );
 }
 function FriendRequestButton({ user_id }: { user_id: string }) {
-  const { mutate, isLoading } = api.friends.accept.useMutation();
+  const { mutate, isLoading, isSuccess } = api.friends.accept.useMutation();
+  const ctx = api.useContext();
+  if (isSuccess) {
+    void ctx.friends.invalidate();
+  }
   return (
     <button
       className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"

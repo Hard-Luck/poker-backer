@@ -7,8 +7,10 @@ import { api } from "~/utils/api";
 export default function Pots() {
   return (
     <SignedIn>
-      <PotsList />
-      <CreatePotWizard />
+      <div className="mt-128 overflow-y-auto">
+        <PotsList />
+        <CreatePotWizard />
+      </div>
     </SignedIn>
   );
 }
@@ -18,7 +20,7 @@ export function PotsList() {
   if (isLoading) return <Loading />;
   if (!data) return <p>No pots yet</p>;
   return (
-    <div className="flex w-full flex-col gap-4 border-2 border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
+    <div className="flex w-full flex-col gap-4  border-2 border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
       <h2 className="self-center text-2xl font-bold text-white">
         Pots you have access to
       </h2>
