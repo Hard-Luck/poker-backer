@@ -107,6 +107,7 @@ model Chops {
   amount Int
   split Json?
   created_at DateTime @default(now())
+  top_up_total Int @default(0)
 
   @@index([pot_id])
   @@index([user_id])

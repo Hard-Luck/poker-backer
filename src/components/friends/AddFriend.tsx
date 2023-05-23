@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { api } from "~/utils/api";
+import ConfirmButton from "../confirm-button/ConfirmButton";
 
 export default function AddFriend() {
   const [search, setSearch] = useState<string>("");
@@ -78,13 +79,13 @@ export function AddFriendButton({ friend_id }: { friend_id: string }) {
   if (status === false) return <p>Pending</p>;
   if (status === null)
     return (
-      <button
+      <ConfirmButton
         className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
         disabled={disabled}
-        onClick={() => mutate({ friend_id })}
-      >
-        Add Friend
-      </button>
+        onConfirm={() => mutate({ friend_id })}
+        buttonLabel="AddFriend"
+        confirmMessage="Send Friend Request"
+      />
     );
   return null;
 }

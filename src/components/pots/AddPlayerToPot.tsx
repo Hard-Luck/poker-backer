@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { api } from "~/utils/api";
 import Loading from "../Loading";
+import ConfirmButton from "../confirm-button/ConfirmButton";
 
 export default function AddPlayerToPot({
   pot_id,
@@ -53,7 +54,7 @@ export function AddToPotButton({
 }) {
   const [isBacker, setIsBacker] = useState(0);
   const ctx = api.useContext();
-  const { mutate, data, isError, isSuccess } =
+  const { mutate, data, isError, isSuccess, isLoading } =
     api.potAccess.create.useMutation();
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsBacker(event.target.checked ? 1 : 0);
@@ -66,9 +67,13 @@ export function AddToPotButton({
   }
   return (
     <div className="flex flex-col items-center">
-      <button className="rounded-md bg-blue-500 p-2" onClick={handleClick}>
-        Add to pot
-      </button>
+      <ConfirmButton
+        className="rounded-md bg-blue-500 p-2"
+        onConfirm={handleClick}
+        disabled={isLoading}
+        buttonLabel="Add Player to Pot"
+        confirmMessage="Confirm?"
+      />
       <label>
         As Backer?:
         <input
