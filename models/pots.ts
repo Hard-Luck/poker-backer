@@ -4,7 +4,9 @@ import { createPotAccess, isBackerOfPot } from "./potAceess";
 import { getLastSession } from "./sessions";
 
 
-
+export async function getPotBasicInfo(pot_id: number) {
+    return prisma.pots.findUnique({ where: { id: pot_id } })
+}
 export async function getPotById(pot_id: number) {
     return prisma.pots.findUnique({ where: { id: pot_id }, include: { sessions: { orderBy: { created_at: 'desc' } } }, })
 }

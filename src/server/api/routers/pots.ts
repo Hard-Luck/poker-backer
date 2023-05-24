@@ -11,7 +11,7 @@ export const potsRouter = createTRPCRouter({
     getCurrentUserPot: privateProcedure
         .query(async ({ ctx }) => {
             const id = ctx.currentUser
-            return prisma.potAccess.findMany({ where: { user_id: id, AND: { type: 0 } }, include: { pot: { select: { name: true } } } })
+            return prisma.potAccess.findMany({ where: { user_id: id }, include: { pot: { select: { name: true } } } })
         }),
     create: privateProcedure
         .input(z.object(

@@ -17,13 +17,12 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({
 }) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
 
+  const handleConfirm = () => {
+    onConfirm();
+    setShowConfirmation(false);
+  };
   const handleClick = () => {
-    if (showConfirmation) {
-      onConfirm();
-      setShowConfirmation(false);
-    } else {
-      setShowConfirmation(true);
-    }
+    setShowConfirmation(true);
   };
 
   const handleCancel = () => {
@@ -34,10 +33,10 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({
     <div>
       {showConfirmation ? (
         <div>
-          <p>{confirmMessage}</p>
+          <p className="text-center text-white">{confirmMessage}</p>
           <button
             className={`${className || ""} bg-green-500`}
-            onClick={onConfirm}
+            onClick={handleConfirm}
             disabled={disabled}
           >
             Confirm

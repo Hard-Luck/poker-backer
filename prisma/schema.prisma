@@ -61,7 +61,7 @@ model PotAccess {
   type    Int
   percent Float    @default(0)
   user    UserInfo @relation(fields: [user_id], references: [id])
-  pot     Pots     @relation("PotAccess", fields: [pot_id], references: [id])
+  pot     Pots     @relation("PotAccess", fields: [pot_id], references: [id], onDelete: Cascade)
 
   @@unique([user_id, pot_id])
   @@index([pot_id])
@@ -69,19 +69,19 @@ model PotAccess {
 }
 
 model Sessions {
-  id             Int      @id @default(autoincrement())
+  id             Int             @id @default(autoincrement())
   user_id        String
-  user           UserInfo @relation(fields: [user_id], references: [id])
-  pot            Pots     @relation(fields: [pot_id], references: [id])
+  user           UserInfo        @relation(fields: [user_id], references: [id])
+  pot            Pots            @relation(fields: [pot_id], references: [id], onDelete: Cascade)
   pot_id         Int
   amount         Int
   total          Int
-  top_ups_total  Int @default(0)
-  created_at     DateTime @default(now())
+  top_ups_total  Int             @default(0)
+  created_at     DateTime        @default(now())
   session_length Int?
-  chop_split Json?
+  chop_split     Json?
   transaction_type transactionType @default(cash_game)
-  likes Int @default(0)
+  likes          Int             @default(0)
 
   @@index([pot_id])
   @@index([user_id])
