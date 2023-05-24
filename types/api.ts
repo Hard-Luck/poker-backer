@@ -1,4 +1,4 @@
-import type { Friendship, PotAccess, Pots, Prisma, UserInfo, chop_top } from "@prisma/client";
+import type { Friendship, PotAccess, Pots, Prisma, UserInfo } from "@prisma/client";
 
 export type FriendRequest = Friendship & {
     user: {
@@ -20,7 +20,6 @@ export type ChopHistoryWithUsername = {
     id: number;
     user_id: string;
     pot_id: number;
-    chop_top: chop_top;
     amount: number;
     split: Prisma.JsonValue;
     created_at: Date;
