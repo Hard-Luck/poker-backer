@@ -1,4 +1,3 @@
-import { string } from "zod";
 import { api } from "~/utils/api";
 
 export default function NoneSessionHistory({ pot_id }: { pot_id: number }) {
@@ -11,9 +10,9 @@ export default function NoneSessionHistory({ pot_id }: { pot_id: number }) {
       <ul>
         {data.map((event) => (
           <li key={event.id}>
-            {event.chop_top} - {event.amount} - {event.tx_by.username}
-            {event.split &&
-              Object.entries(event.split).map(
+            {event.transaction_type} - {event.amount} - {event.user.username}
+            {event.chop_split &&
+              Object.entries(event.chop_split).map(
                 ([id, value]: [string, number]) => {
                   return (
                     <div key={id}>

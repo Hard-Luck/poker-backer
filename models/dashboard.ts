@@ -1,6 +1,7 @@
 import { prisma } from "~/server/db";
 import * as _ from "lodash"
 import type { BackedPlayer } from "types/dashboard";
+import { Pots } from "@prisma/client";
 
 export async function getBackedPlayerOverview(user_id: string) {
     const result = await prisma.potAccess.findMany({
@@ -17,17 +18,23 @@ export async function getBackedPlayerOverview(user_id: string) {
                         orderBy: { created_at: 'desc' },
                         take: 1,
                         include: { user: true }
-                    },
+                    }
                 },
             },
+
         },
     });
-
+    // const chopAdjust = result.reduce((acc: { [key: string]: Chops }, pot) => {
+    //     if (!pot.pot.chops[0]) return acc
+    //     acc[pot.pot.id] = pot.pot.chops[0]
+    //     return acc
+    // }, {})
     return result.map((pot) => {
+        const topUpAmount = pot.pot.sessions[0]?.top_ups_total ?? 0
         const username = pot.pot.sessions[0]?.user.username
         const pot_id = pot.pot.id
-        const float = pot.pot.float
-        const total = pot.pot.sessions[0]?.total
+        const float = pot.pot.float + topUpAmount
+        const total = pot.pot.sessions[0]?.total ?? float
         const percentage = pot.percent
         const user_id = pot.pot.sessions[0]?.user_id
         return { username, pot_id, float, total, percentage, user_id } as BackedPlayer

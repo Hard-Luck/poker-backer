@@ -3,6 +3,7 @@ import type { Sessions } from "@prisma/client";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import Loading from "~/components/Loading";
+import ConfirmButton from "~/components/confirm-button/ConfirmButton";
 import NotFound404 from "~/components/errors/NotFound";
 import AddPlayerToPot from "~/components/pots/AddPlayerToPot";
 import ChopButton from "~/components/pots/ChopButton";
@@ -19,6 +20,7 @@ export default function Pot() {
     <SignedIn>
       <PotTable pot_id={pot_id} />
       <Modals pot_id={pot_id} />
+      <TopUpWizard pot_id={pot_id} />
     </SignedIn>
   );
 }
@@ -109,14 +111,45 @@ export function PotTable({ pot_id }: { pot_id: number }) {
   );
 }
 export function SessionsTableRow({ session }: { session: Sessions }) {
-  const { created_at, session_length, amount, total } = session;
-  const color = amount > 0 ? "green" : "red";
+  const { created_at, session_length, amount, total, transaction_type } =
+    session;
+  let color = amount > 0 ? "green" : "red";
+  if (["chop", "top_up"].includes(transaction_type)) color = "white";
+  const sessionDisplay = !!session_length
+    ? convertMinsToHrsMins(session_length)
+    : transaction_type;
   return (
     <tr>
       <td className="text-center">{formatShortDate(created_at)}</td>
-      <td className="text-end">{convertMinsToHrsMins(session_length)}</td>
+      <td className="text-end">{sessionDisplay}</td>
       <td className={`text-end text-${color}-500`}>{formatCurrency(amount)}</td>
       <td className="text-end">{formatCurrency(total)}</td>
     </tr>
+  );
+}
+
+export function TopUpWizard({ pot_id }: { pot_id: number }) {
+  const [amount, setAmount] = useState(0);
+  const { isSuccess, isLoading, mutate } = api.pots.topUp.useMutation();
+  const ctx = api.useContext();
+  if (!mutate) return null;
+  if (isSuccess) void ctx.pots.invalidate();
+  return (
+    <div>
+      <input
+        type="number"
+        value={amount}
+        onChange={(e) => setAmount(Number(e.target.value))}
+      />
+      <ConfirmButton
+        buttonLabel="Top Up"
+        onConfirm={() => mutate({ pot_id, amount })}
+        disabled={isLoading}
+        className="mt-4"
+        confirmMessage={`Are you sure you want to top up this pot by ${formatCurrency(
+          amount
+        )}`}
+      />
+    </div>
   );
 }

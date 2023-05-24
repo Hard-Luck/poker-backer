@@ -1,3 +1,4 @@
+import React from "react";
 import { api } from "~/utils/api";
 import { PotBar } from "./PotBar";
 import { RecentSession } from "types/dashboard";
@@ -14,6 +15,7 @@ export interface PlayerOverviewProps {
     total: number;
   };
 }
+
 function PlayerOverview({ player }: PlayerOverviewProps) {
   return (
     <div className="mx-auto my-4 grid w-80 max-w-xl grid-cols-4 flex-col gap-1 rounded-lg p-2 text-white shadow-lg shadow-gray-500/50 dark:bg-gray-800 dark:text-gray-200">
@@ -45,23 +47,35 @@ function RecentSession({ session }: { session: RecentSession }) {
     </div>
   );
 }
+
 export default function BackerDashboard({ userId }: { userId: string }) {
   const { data, isLoading } = api.backer.getDashboard.useQuery({ id: userId });
   if (isLoading) return <Loading />;
-  if (!data) return <p>Missing Data</p>;
+  if (!data || !data.players) return <p>Missing Data</p>;
   return (
     <div className="mx-auto flex h-full w-full max-w-xl flex-col gap-4 bg-gray-700 p-0 pb-2 text-white shadow-lg shadow-gray-500/50 dark:bg-gray-800 dark:text-gray-200">
       <div>
         <h2 className="text-center text-2xl font-bold">Backed Players</h2>
-        {data.players.map((player) => (
-          <PlayerOverview key={player.user_id || uniqueId()} player={player} />
-        ))}
+        {data.players.length > 0 ? (
+          data.players.map((player) => (
+            <PlayerOverview
+              key={player.user_id || uniqueId()}
+              player={player}
+            />
+          ))
+        ) : (
+          <p>No players found.</p>
+        )}
       </div>
       <div>
         <h2 className="text-center text-2xl font-bold">Recent Sessions</h2>
-        {data.sessions.map((session) => {
-          return <RecentSession key={session.id} session={session} />;
-        })}
+        {data.sessions.length > 0 ? (
+          data.sessions.map((session) => (
+            <RecentSession key={session.id} session={session} />
+          ))
+        ) : (
+          <p>No recent sessions found.</p>
+        )}
       </div>
     </div>
   );

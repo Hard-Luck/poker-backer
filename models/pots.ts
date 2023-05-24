@@ -1,7 +1,8 @@
 import type { InputPot } from "types/api";
 import { prisma } from "~/server/db";
-import { createPotAccess } from "./potAceess";
-import { hasBeenSessionSinceLastChop } from "./sessions";
+import { createPotAccess, isBackerOfPot } from "./potAceess";
+import { getLastSession } from "./sessions";
+
 
 
 export async function getPotById(pot_id: number) {
@@ -21,21 +22,16 @@ export function getAllUsersPots(user_id: string) {
 }
 
 export async function chop(pot_id: number, user_id: string) {
-    if (!(await hasBeenSessionSinceLastChop(pot_id))) throw new Error("No New Sessions")
+    if (!(await isBackerOfPot(user_id, pot_id))) throw new Error("Not a backer")
     const playersWithAccess = await prisma.potAccess.findMany({ where: { pot_id } })
-    const pot = await prisma.pots.findUniqueOrThrow({
-        where: { id: pot_id },
-        include: { sessions: { orderBy: { created_at: 'desc' }, take: 1 } }
-    })
+    const pot = await getPotDataSinceLastChop(pot_id)
     if (!pot.sessions[0]) throw new Error("No Sessions")
+    const recentSession = pot.sessions[0]
+    const topUps = pot.sessions.filter(session => session.transaction_type === "top_up")
     const float = pot.float
-    const total = pot.sessions[0].total
-    const topUps = await getTopUpsSinceLastChop(pot_id)
-    const topUpTotal = topUps.reduce((acc: number, curr) => {
-        return acc + curr.amount
-    }, 0)
-    const amount = total - float
-    const toSplit = amount - topUpTotal
+    const total = recentSession.total
+    const amount = total - float - pot.sessions[0].top_ups_total
+    const toSplit = amount
     if (toSplit <= 0) throw new Error("Negative")
     const split = playersWithAccess.reduce((acc: { [key: string]: number }, player) => {
         acc[player.user_id] = toSplit * (player.percent / 100)
@@ -44,44 +40,71 @@ export async function chop(pot_id: number, user_id: string) {
     topUps.forEach(topUp => {
         split.user_id += topUp.amount
     })
-    return prisma.chops.create({
-        data: { chop_top: "chop", pot_id, split, user_id, amount }
+    return prisma.sessions.create({
+        data: {
+            user_id,
+            pot_id,
+            transaction_type: "chop",
+            amount,
+            chop_split: split,
+            top_ups_total: 0,
+            total: float
+        }
     })
 }
 
 
 export async function getChopHistory(pot_id: number, take = 10) {
-    const history = await prisma.chops.findMany({ where: { pot_id }, take: take, include: { tx_by: { select: { username: true } } } })
+    const history = await prisma.sessions.findMany({
+        where: { pot_id, transaction_type: "chop" },
+        take: take,
+        include: {
+            user: { select: { username: true } }
+        }
+    })
     return history
 }
 
 export async function getLastChop(pot_id: number) {
-    return prisma.chops.findFirst({
-        where: { pot_id },
+    return prisma.sessions.findFirst({
+        where: { pot_id, transaction_type: "chop" },
         orderBy: { created_at: 'desc' },
     })
-
 }
 
-export async function getLastChopWithFloat(pot_id: number) {
-    return prisma.chops.findFirst({
-        where: { pot_id },
-        orderBy: { created_at: 'desc' },
-        include: { pot: { select: { float: true } } }
-    })
 
-}
-export async function getTopUpsSinceLastChop(pot_id: number) {
-    const lastChop = await getLastChop(pot_id)
-    if (!lastChop) return []
-    return prisma.chops.findMany({
-        where: {
+
+export async function topUpPot(pot_id: number, user_id: string, amount: number) {
+    if (!(await isBackerOfPot(user_id, pot_id))) throw new Error("Not a backer")
+    const lastTransaction = await getLastSession(pot_id)
+    return prisma.sessions.create({
+        data: {
+            user_id,
             pot_id,
-            chop_top: "top_up",
-            created_at: {
-                gte: lastChop.created_at
+            transaction_type: "top_up",
+            amount,
+            top_ups_total: lastTransaction?.top_ups_total ? lastTransaction.top_ups_total + amount : amount,
+            total: lastTransaction?.total ? lastTransaction.total + amount : amount
+        }
+    })
+
+}
+
+export async function getPotDataSinceLastChop(pot_id: number) {
+    const lastChop = await getLastChop(pot_id)
+    const lastChopDate = lastChop?.created_at
+    if (!lastChopDate) {
+        return prisma.pots.findUniqueOrThrow({
+            where: { id: pot_id }, include: { sessions: { orderBy: { created_at: 'desc' } } }
+        })
+    }
+    return prisma.pots.findUniqueOrThrow({
+        where: { id: pot_id },
+        include: {
+            sessions: {
+                where: { created_at: { gt: lastChopDate } },
+                orderBy: { created_at: 'desc' }
             }
         }
     })
 }
-

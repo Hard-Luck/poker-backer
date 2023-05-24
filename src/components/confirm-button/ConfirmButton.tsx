@@ -20,6 +20,7 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({
   const handleClick = () => {
     if (showConfirmation) {
       onConfirm();
+      setShowConfirmation(false);
     } else {
       setShowConfirmation(true);
     }

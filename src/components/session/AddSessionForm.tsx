@@ -26,7 +26,7 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
 
   function handleAmountChange(event: ChangeEvent<HTMLInputElement>) {
     setAmount(event.target.value);
-    setAmountError(event.target.value === "" || +event.target.value < 0);
+    setAmountError(event.target.value === "");
   }
 
   function handleSessionLengthChange(event: ChangeEvent<HTMLInputElement>) {
@@ -95,7 +95,7 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
           Amount:
           <input
             type="number"
-            value={amount}
+            value={amount === "" ? "" : +amount}
             onChange={handleAmountChange}
             className="mt-2 w-full rounded border border-gray-300 p-2"
           />
