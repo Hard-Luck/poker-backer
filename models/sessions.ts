@@ -39,3 +39,54 @@ export async function getLastSession(pot_id: number) {
         orderBy: { created_at: 'desc' },
     })
 }
+
+export async function deleteSession(session_id: number) {
+    const session = await prisma.sessions.findUnique({ where: { id: session_id } })
+    if (!session || !session.pot_id) throw new TRPCError({ code: "NOT_FOUND" })
+    if (!(await canDeleteSession(session_id, session.user_id))) throw new TRPCError({ code: "FORBIDDEN" })
+    if (session.transaction_type === "cash_game") {
+        return prisma.$transaction(
+            [
+                prisma.sessions.delete({ where: { id: session_id } }),
+                prisma.sessions.updateMany({
+                    where: {
+                        pot_id: session.pot_id,
+                        AND: { created_at: { gt: session.created_at } }
+                    }, data: { total: { decrement: session.amount } }
+                })
+            ])
+    }
+    if (session.transaction_type === "top_up") {
+        return prisma.$transaction(
+            [
+                prisma.sessions.delete({ where: { id: session_id } }),
+                prisma.sessions.updateMany({
+                    where: {
+                        pot_id: session.pot_id,
+                        AND: { created_at: { gt: session.created_at } }
+                    }, data: { top_ups_total: { decrement: session.amount } }
+                })
+            ])
+    }
+    throw new TRPCError({ code: "METHOD_NOT_SUPPORTED" })
+}
+
+
+export async function canDeleteSession(session_id: number, user_id: string) {
+    const session = await prisma.sessions.findFirst({ where: { id: session_id } })
+    const lastChop = await prisma.sessions.findFirst({
+        where: {
+            id: session_id,
+            AND: { transaction_type: "chop" }
+        }
+    })
+    if (session?.user_id === user_id) return true
+    if (!session) throw new TRPCError({ code: "NOT_FOUND" })
+    if (lastChop && lastChop.created_at > session.created_at) return false
+    const pot_id = session.pot_id
+    const potAccess = await prisma.potAccess.findFirst({ where: { pot_id, user_id } })
+    const isBacker = potAccess?.type === 1
+    if (isBacker) return true
+    return false
+}
+

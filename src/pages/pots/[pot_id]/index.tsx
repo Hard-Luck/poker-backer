@@ -94,6 +94,7 @@ export function PotTable({ pot_id }: { pot_id: number }) {
             <td className="text-end">Session Length</td>
             <td className="text-end">Amount</td>
             <td className="text-end">Total</td>
+            <td className="text-center"></td>
           </tr>
         </thead>
         <tbody>
@@ -106,6 +107,7 @@ export function PotTable({ pot_id }: { pot_id: number }) {
   );
 }
 export function SessionsTableRow({ session }: { session: Sessions }) {
+  const { mutate, isLoading, isSuccess } = api.sessions.delete.useMutation();
   const { created_at, session_length, amount, total, transaction_type } =
     session;
   let color = amount > 0 ? "green" : "red";
@@ -119,6 +121,15 @@ export function SessionsTableRow({ session }: { session: Sessions }) {
       <td className="text-end">{sessionDisplay}</td>
       <td className={`text-end text-${color}-500`}>{formatCurrency(amount)}</td>
       <td className="text-end">{formatCurrency(total)}</td>
+      <td>
+        <ConfirmButton
+          buttonLabel="🚮"
+          confirmMessage="permanantly delete session?"
+          disabled={isLoading}
+          onConfirm={() => mutate({ id: session.id })}
+          className="text-red-500"
+        />
+      </td>
     </tr>
   );
 }

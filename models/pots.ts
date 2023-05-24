@@ -110,3 +110,7 @@ export async function getPotDataSinceLastChop(pot_id: number) {
         }
     })
 }
+
+export async function deletePot(pot_id: number) {
+    return prisma.pots.delete({ where: { id: pot_id } })
+}

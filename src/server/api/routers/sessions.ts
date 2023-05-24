@@ -1,4 +1,5 @@
-import { addSession } from "models/sessions";
+import { TRPCError } from "@trpc/server";
+import { addSession, canDeleteSession, deleteSession } from "models/sessions";
 import { z } from "zod";
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 
@@ -17,5 +18,10 @@ export const sessionRouter = createTRPCRouter({
             return addSession(user_id, input)
 
         }),
-
+    delete: privateProcedure.input(z.object({ id: z.number() })).mutation(async ({ input, ctx }) => {
+        const user_id = ctx.currentUser
+        const { id } = input
+        if (!await canDeleteSession(id, user_id)) throw new TRPCError({ code: "UNAUTHORIZED" })
+        return deleteSession(id)
+    })
 })
