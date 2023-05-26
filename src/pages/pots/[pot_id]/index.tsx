@@ -108,6 +108,10 @@ export function PotTable({ pot_id }: { pot_id: number }) {
 }
 export function SessionsTableRow({ session }: { session: Sessions }) {
   const { mutate, isLoading, isSuccess } = api.sessions.delete.useMutation();
+  const ctx = api.useContext();
+  if (isSuccess) {
+    void ctx.invalidate();
+  }
   const { created_at, session_length, amount, total, transaction_type } =
     session;
   let color = amount > 0 ? "green" : "red";
