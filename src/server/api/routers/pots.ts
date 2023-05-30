@@ -2,7 +2,7 @@
 
 import { TRPCError } from "@trpc/server";
 import { hasAccessToPot, isBackerOfPot } from "models/potAceess";
-import { chop, createPot, getAllUsersPots, getChopHistory, getPotById, topUpPot, } from "models/pots";
+import { chop, createPot, deletePot, getAllUsersPots, getChopHistory, getPotById, isPotOwner, topUpPot, } from "models/pots";
 import { z } from "zod";
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 import { prisma } from "~/server/db";
@@ -56,7 +56,13 @@ export const potsRouter = createTRPCRouter({
             const user_id = ctx.currentUser
             const { pot_id, amount } = input
             return topUpPot(pot_id, user_id, amount)
-        })
+        }),
+    delete: privateProcedure.input(z.object({ pot_id: z.number() })).mutation(async ({ input, ctx }) => {
+        const { pot_id } = input
+        const user_id = ctx.currentUser
+        if (!(await isPotOwner(pot_id, user_id))) throw new TRPCError({ code: "FORBIDDEN" })
+        return deletePot(pot_id)
+    }),
 })
 
 

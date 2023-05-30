@@ -110,7 +110,10 @@ export async function getPotDataSinceLastChop(pot_id: number) {
         }
     })
 }
-
+export async function isPotOwner(pot_id: number, user_id: string) {
+    const pot = await prisma.pots.findFirst({ where: { id: pot_id } })
+    return pot?.owner === user_id
+}
 export async function deletePot(pot_id: number) {
     return prisma.pots.delete({ where: { id: pot_id } })
 }
