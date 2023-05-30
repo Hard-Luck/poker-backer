@@ -16,7 +16,8 @@ export default function NoneSessionHistory({ pot_id }: { pot_id: number }) {
                 ([id, value]: [string, number]) => {
                   return (
                     <div key={id}>
-                      {<Username user_id={id} />} - £{value.toFixed(2)}
+                      {value && <Username user_id={id} />} - £
+                      {value?.toFixed(2)}
                     </div>
                   );
                 }

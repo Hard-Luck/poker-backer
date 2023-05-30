@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useReducer, useState } from "react";
+import { useState } from "react";
 import InputSlider from "react-input-slider";
 import { api } from "~/utils/api";
 import { sumValues } from "~/utils/helper";
@@ -129,7 +129,7 @@ export function DeletePotButton({ pot_id }: { pot_id: number }) {
   }
   if (error) console.error(error);
   return (
-    <div className="dark flex flex-col gap-2 rounded-lg bg-gray-200 p-2 text-center text-red-500 shadow-md shadow-gray-300/50 dark:bg-gray-800 dark:text-gray-200 dark:shadow-gray-700/50 dark:shadow-gray-700/50 dark:shadow-gray-700/50 dark:shadow-gray-700/50 dark:shadow-gray-700/50 dark:shadow-gray-700/50 dark:shadow-gray-700/50 dark:shadow-gray-700/50 dark:shadow-gray-700/50 dark:shadow-gray-700/50 dark:shadow-gray-700/50 dark:shadow-gray-700/50 dark:shadow-gray-700/50 dark:shadow-gray-700/50 dark:shadow-gray-700/50 dark:shadow-gray-700/50 dark:shadow-gray-700/50 dark:shadow-gray-700/50 dark:shadow-gray-700/50 dark:shadow-gray-700/50 dark:shadow-gray-700/50 dark:shadow-gray-700/50 dark:shadow-gray-800/50">
+    <div className="dark flex flex-col gap-2 rounded-lg bg-gray-200 p-2 text-center text-red-500 shadow-md shadow-gray-300/50">
       {!confirmMessage && (
         <button
           className="rounded-lg bg-gray-700 p-2 text-white"

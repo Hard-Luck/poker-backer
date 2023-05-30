@@ -6,6 +6,8 @@ export interface PotNameWithID {
 }
 export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
   const [pot, setPot] = useState(pots[0]);
+  console.log(pots);
+
   const [amount, setAmount] = useState("");
   const [sessionLength, setSessionLength] = useState("");
   const [created_at, setCreated_at] = useState(new Date());
@@ -19,9 +21,13 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
 
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = event.target.value;
-    setPot(() => {
-      return pots.find((pot) => pot.name === selectedValue);
-    });
+    console.log(event.target);
+
+    const filteredPot = pots.find((pot) => pot.name === selectedValue);
+    if (filteredPot) {
+      setPot(filteredPot);
+      console.log(filteredPot);
+    }
   };
 
   function handleAmountChange(event: ChangeEvent<HTMLInputElement>) {
@@ -75,7 +81,7 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
             onChange={handleChange}
           >
             {pots.map((pot, index) => (
-              <option key={index} value={index}>
+              <option key={index} value={pot.name}>
                 {pot.name}
               </option>
             ))}

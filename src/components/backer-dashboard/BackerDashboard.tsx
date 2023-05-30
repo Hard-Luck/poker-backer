@@ -58,10 +58,7 @@ export default function BackerDashboard({ userId }: { userId: string }) {
         <h2 className="text-center text-2xl font-bold">Backed Players</h2>
         {data.players.length > 0 ? (
           data.players.map((player) => (
-            <PlayerOverview
-              key={player.user_id || uniqueId()}
-              player={player}
-            />
+            <PlayerOverview key={uniqueId()} player={player} />
           ))
         ) : (
           <p>No players found.</p>

@@ -1,7 +1,5 @@
 import { prisma } from "~/server/db";
-import * as _ from "lodash"
 import type { BackedPlayer } from "types/dashboard";
-import { Pots } from "@prisma/client";
 
 export async function getBackedPlayerOverview(user_id: string) {
     const result = await prisma.potAccess.findMany({
@@ -24,11 +22,7 @@ export async function getBackedPlayerOverview(user_id: string) {
 
         },
     });
-    // const chopAdjust = result.reduce((acc: { [key: string]: Chops }, pot) => {
-    //     if (!pot.pot.chops[0]) return acc
-    //     acc[pot.pot.id] = pot.pot.chops[0]
-    //     return acc
-    // }, {})
+
     return result.map((pot) => {
         const topUpAmount = pot.pot.sessions[0]?.top_ups_total ?? 0
         const username = pot.pot.sessions[0]?.user.username
