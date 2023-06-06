@@ -50,9 +50,9 @@ export function PercentageWithSliders({
   const ctx = api.useContext();
   const { mutate, data, isError, error, isSuccess } =
     api.potAccess.patchPercent.useMutation();
-  const percentagesForState: { [key: string]: number } = {};
+  const percentagesForState: { [key: string]: string } = {};
   access.forEach(({ user_id, percent }) => {
-    percentagesForState[user_id] = percent;
+    percentagesForState[user_id] = percent.toString();
   });
   const [percentages, setPercentages] = useState(percentagesForState);
   if (isSuccess) void ctx.potAccess.getAccessByPotId.invalidate();
@@ -64,23 +64,24 @@ export function PercentageWithSliders({
     const formattedPercentages = Object.entries(percentages).map(
       ([user_id, percent]) => ({
         user_id,
-        percent,
+        percent: +percent,
       })
     );
     mutate({ pot_id, percentages: formattedPercentages });
   }
-
   function handleSliderChange(id: string, value: number) {
-    setPercentages((prevPercentages) => ({ ...prevPercentages, [id]: value }));
+    setPercentages((prevPercentages) => ({
+      ...prevPercentages,
+      [id]: value.toFixed(1),
+    }));
   }
 
   function handleInputChange(id: string, value: string) {
-    // Convert string input to number
-    const percentValue = parseInt(value);
-    if (!isNaN(percentValue)) {
+    // Allow for deletion of values from the input box
+    if (!isNaN(parseFloat(value)) || value === "") {
       setPercentages((prevPercentages) => ({
         ...prevPercentages,
-        [id]: percentValue,
+        [id]: value === "" ? "" : value,
       }));
     }
   }
@@ -91,8 +92,9 @@ export function PercentageWithSliders({
           <p>{player.username}</p>
           <InputSlider
             axis="x"
+            xstep={10}
             xmin={0}
-            x={percentages[player.user_id]}
+            x={parseFloat(percentages[player.user_id] || "")}
             onChange={({ x }: { x: number }) =>
               handleSliderChange(player.user_id, x)
             }
