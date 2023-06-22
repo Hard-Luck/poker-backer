@@ -1,6 +1,6 @@
 import { SignedIn, useUser } from "@clerk/clerk-react";
 import { useRouter } from "next/router";
-import { use, useState } from "react";
+import { useState } from "react";
 import { api } from "~/utils/api";
 
 export default function NewSignUpPage() {

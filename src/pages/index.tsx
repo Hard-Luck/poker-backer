@@ -17,11 +17,7 @@ const Home: NextPage = () => {
       </Head>
       <main className="">
         <header className="flex justify-center">
-          <SignInButton
-            afterSignInUrl="/signup/new"
-            mode="modal"
-            afterSignUpUrl="/signup/new"
-          >
+          <SignInButton afterSignInUrl="/" mode="modal" afterSignUpUrl="/">
             <button className="rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600">
               Sign in
             </button>
