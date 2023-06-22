@@ -1,11 +1,12 @@
 import type { WebhookEvent, } from "@clerk/clerk-sdk-node"
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from "~/server/db";
+import { env } from "~/env.mjs";
 
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-    console.log(req);
-
+    const check = req.headers["check"]
+    if (check === env.CHECK) res.status(403).send({ message: "not authorized" })
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     const evt = req.body as WebhookEvent
     switch (evt.type) {
