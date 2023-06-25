@@ -103,7 +103,6 @@ const enforceUserIsAuthenticated = t.middleware(({ ctx, next }) => {
   if (!ctx.currentUserId) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   } else {
-    console.log("success");
     return next({ ctx: { currentUser: ctx.currentUserId } as { currentUser: string } })
   }
 })

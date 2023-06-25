@@ -21,7 +21,7 @@ export function convertMinsToHrsMins(mins: number): string {
   const minutes = mins % 60;
   const hourString = hours === 1 ? `${hours} hr` : `${hours} hrs`;
   const minString = minutes === 1 ? `${minutes} min` : `${minutes} mins`;
-  return `${hourString} ${minString}`;
+  return `${hourString} ${minutes === 0 ? "" : minString}`;
 }
 
 export function isDateAfter(date1: Date, date2: Date): boolean {

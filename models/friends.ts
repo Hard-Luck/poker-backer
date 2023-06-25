@@ -49,8 +49,6 @@ export async function sendFriendRequest(user_id: string, friend_id: string) {
 }
 export async function acceptFriendRequest(sender: string, receiver: string) {
     const [user_id, friend_id] = [sender, receiver]
-    console.log(user_id, friend_id);
-
     if (!await friendRequestExists(user_id, friend_id)) throw new Error("Request not found");
     return prisma.friendship.update({
         where: {

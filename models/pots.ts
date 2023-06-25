@@ -16,11 +16,23 @@ export async function createPot(pot: InputPot) {
     return newPot
 }
 
-export function getAllUsersPots(user_id: string) {
-    return prisma.potAccess.findMany({
-        where: { user_id },
-        include: { pot: { select: { name: true, id: true } } }
+export async function getAllUsersPots(user_id: string) {
+    const pots = await prisma.potAccess.findMany({
+        where: { user_id, type: 1 },
+        select: { pot_id: true }
     })
+    const potIds = pots.map(pot => pot.pot_id)
+    const potData = await prisma.potAccess.findMany({
+        where: { pot_id: { in: potIds } },
+        include: { pot: { select: { name: true, float: true } } },
+        distinct: ['pot_id']
+    })
+
+
+    return potData
+
+
+
 }
 
 export async function chop(pot_id: number, user_id: string) {

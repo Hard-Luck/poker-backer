@@ -1,3 +1,4 @@
+import getDashboard from "models/dashboard";
 import { createNewUserInfo, getUserById, getUserByUsername, getUsernameById } from "models/users";
 import { z } from "zod";
 
@@ -5,6 +6,11 @@ import { createTRPCRouter, privateProcedure, publicProcedure } from "~/server/ap
 import { prisma } from "~/server/db";
 
 export const userRouter = createTRPCRouter({
+    getDashboard: privateProcedure.input(z.object({ isBacker: z.boolean() })).query(async ({ input, ctx }) => {
+        const id = ctx.currentUser
+        const { isBacker } = input
+        return getDashboard(id, isBacker)
+    }),
     create: privateProcedure.input(z.object({ username: z.string().max(30).min(3), isBacker: z.boolean() })).mutation(async ({ input, ctx }) => {
         const { username } = input
         const id = ctx.currentUser

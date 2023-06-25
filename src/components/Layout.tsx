@@ -1,13 +1,11 @@
 import React, { type PropsWithChildren } from "react";
-import { Header } from "./Header";
-import NavBar from "./Navbar";
+import Header from "./Header";
 
 const Layout = ({ children }: PropsWithChildren) => {
   return (
     <>
       <Header />
       <>{children}</>
-      <NavBar />
     </>
   );
 };

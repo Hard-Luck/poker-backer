@@ -1,7 +1,15 @@
 import { prisma } from "~/server/db";
-import type { BackedPlayer } from "types/dashboard";
 
-export async function getBackedPlayerOverview(user_id: string) {
+export default async function getDashboard(id: string, isBacker: boolean) {
+    const total = getTotalProfitOrLoss(id);
+    const sessions = getRecentSessions(id, isBacker);
+    const sessionCount = await getSessionCount(id, isBacker);
+    const data = await Promise.all([total, sessions, sessionCount]);
+    return { total: data[0], sessions: data[1], sessionCount: data[2] }
+
+}
+
+export async function getTotalProfitOrLoss(user_id: string) {
     const result = await prisma.potAccess.findMany({
         where: {
             user_id: user_id,
@@ -15,7 +23,6 @@ export async function getBackedPlayerOverview(user_id: string) {
                     sessions: {
                         orderBy: { created_at: 'desc' },
                         take: 1,
-                        include: { user: true }
                     }
                 },
             },
@@ -23,51 +30,59 @@ export async function getBackedPlayerOverview(user_id: string) {
         },
     });
 
-    return result.map((pot) => {
-        const topUpAmount = pot.pot.sessions[0]?.top_ups_total ?? 0
-        const username = pot.pot.sessions[0]?.user.username
-        const pot_id = pot.pot.id
-        const float = pot.pot.float + topUpAmount
-        const total = pot.pot.sessions[0]?.total ?? float
-        const percentage = pot.percent
-        const user_id = pot.pot.sessions[0]?.user_id
-        return { username, pot_id, float, total, percentage, user_id } as BackedPlayer
-    })
+    return result.reduce((acc, curr) => {
+        if (!curr.pot.sessions[0]) return acc
+        return acc + curr.pot.sessions[0].total ?? 0
+    }, 0)
 }
 
-export async function getRecentSessionsForBacker(user_id: string) {
-    const potAccess = await prisma.potAccess.findMany({ where: { user_id: user_id, AND: { type: 1 } } })
+export async function getRecentSessions(user_id: string, isBacker: boolean) {
+    const potAccess = await prisma.potAccess.findMany({
+        where:
+            { user_id: user_id, AND: { type: isBacker ? 1 : 0 } }
+    })
     const potAccessIds = potAccess.map(access => access.pot_id)
     const sessions = await prisma.sessions.findMany({
         where: { pot_id: { in: potAccessIds } },
-        take: 5,
+        take: 3,
         include: { user: { select: { username: true } } },
     });
     return sessions
 }
-export async function getBackerDashboard(user_id: string) {
-    const players = await getBackedPlayerOverview(user_id)
-    const sessions = await getRecentSessionsForBacker(user_id)
-    return { players, sessions }
+
+async function getSessionCount(userId: string, isBacker: boolean) {
+    const date = new Date();
+    const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
+
+    const potsWithAccess = await prisma.potAccess.findMany({
+        where: {
+            user_id: userId,
+            type: isBacker ? 1 : 0,
+        },
+        select: {
+            pot_id: true,
+        },
+    });
+
+    let totalSessions = 0;
+
+    for (let i = 0; i < potsWithAccess.length; i++) {
+        const sessionCount = await prisma.sessions.count({
+            where: {
+                pot_id: potsWithAccess[i]?.pot_id,
+                created_at: {
+                    gte: firstDayOfMonth,
+                },
+            },
+        });
+
+        totalSessions += sessionCount;
+    }
+
+    return totalSessions;
 }
 
 
-export async function getHorseDashboard(id: string) {
-
-    const horseOverview = await prisma.potAccess.findMany({
-        where: { user_id: id, AND: { type: 0 } },
-        include: {
-            pot: {
-                include: {
-                    sessions: {
-                        take: 10
-                    },
-                }
-            }
-        }
-    })
-    return horseOverview
-}
 
 
 

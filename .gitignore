@@ -5,7 +5,7 @@ user-stories.txt
 /node_modules
 /.pnp
 .pnp.js
-
+*archived*
 # testing
 /coverage
 
