@@ -42,7 +42,7 @@ function Dashboard({ user }: { user: UserInfo }) {
   if (!data) return <p>Missing data</p>;
   return (
     // 2x2 grid css tailwind classes
-    <main className="dark:bg-opacity- flex min-h-screen flex-col items-center ">
+    <main className="dark:bg-opacity- bg-theme-black flex min-h-screen flex-col items-center ">
       <div id="dashboard-top-container" className=" grid grid-cols-2 gap-1">
         <SessionsThisMonth sessions={data.sessionCount} />
         <TotalAllFloats total={data.total} />

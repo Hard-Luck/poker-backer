@@ -11,8 +11,8 @@ export default function RecentSession({
   sessions: Array<Sessions & UsernameAndId>;
 }) {
   return (
-    <div className="rounded-lg border-2 border-black p-2">
-      <h2 className="text-center text-2xl">Recent Sessions</h2>
+    <div className="w-screen rounded-lg border-2 border-black p-2 text-theme-white">
+      <h2 className="text-center text-2xl font-black">Recent Sessions</h2>
       {sessions.map((session) => {
         return (
           <div
@@ -25,7 +25,7 @@ export default function RecentSession({
             </div>
             <div
               className={`col-auto self-end ${
-                session.amount < 0 ? "text-red-500" : "text-green-500"
+                session.amount < 0 ? "text-theme-red" : "text-theme-green"
               }`}
             >
               {session.amount}
