@@ -12,7 +12,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     switch (evt.type) {
         case 'user.created': // this is typed
             const user_id = evt.data.id
-            const name = evt.data.first_name + `${Date.now() % 17}`
+            const name = evt.data.first_name + `${Date.now() % 9797}`
             await prisma.userInfo.create({
                 data: {
                     username: name,

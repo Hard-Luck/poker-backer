@@ -1,5 +1,5 @@
 import getDashboard from "models/dashboard";
-import { createNewUserInfo, getUserById, getUserByUsername, getUsernameById } from "models/users";
+import { changeIsBacker, changeUsername, createNewUserInfo, getUserById, getUserByUsername, getUsernameById } from "models/users";
 import { z } from "zod";
 
 import { createTRPCRouter, privateProcedure, publicProcedure } from "~/server/api/trpc";
@@ -34,6 +34,22 @@ export const userRouter = createTRPCRouter({
         }),
     getUsernameById: publicProcedure.input(z.object({ id: z.string() })).query(async ({ input }) => {
         return prisma.userInfo.findFirstOrThrow({ where: { id: input.id } })
-    })
+    }),
+    updateUsername: privateProcedure
+        .input(z.object({ username: z.string().max(30).min(5) }))
+        .mutation(async ({ input, ctx }) => {
+            const { username } = input
+            const id = ctx.currentUser
+            return changeUsername(id, username)
+        }),
+    updateIsBacker: privateProcedure
+        .input(z.object({ isBacker: z.boolean() }))
+        .mutation(async ({ input, ctx }) => {
+            const id = ctx.currentUser
+            const { isBacker } = input
+            return changeIsBacker(id, isBacker)
+        })
 
 })
+
+

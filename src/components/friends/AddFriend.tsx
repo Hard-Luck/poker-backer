@@ -24,19 +24,16 @@ export default function AddFriend() {
   }
 
   return (
-    <div className="flex min-h-min flex-col items-center justify-center bg-gray-200 p-1">
-      <div className="w-full max-w-md">
+    <div className="border-2 border-black p-4">
+      <div className="">
         <input
           type="text"
           value={search}
           onChange={handleChange}
           placeholder="Search for friends"
-          className="mb-4 w-full rounded border border-gray-300 px-4 py-2"
+          className="border-2 border-black"
         />
-        <button
-          onClick={handleClick}
-          className="mb-4 w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
-        >
+        <button onClick={handleClick} className="border-2 border-black">
           Search
         </button>
         {data &&

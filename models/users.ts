@@ -20,5 +20,10 @@ export async function getUsernameById(id: string) {
     const { username } = user;
     return username
 }
+export async function changeUsername(id: string, newUsername: string) {
+    return prisma.userInfo.update({ where: { id: id }, data: { username: newUsername } })
+}
 
-
+export async function changeIsBacker(id: string, isBacker: boolean) {
+    return prisma.userInfo.update({ where: { id: id }, data: { is_backer: isBacker } })
+}
