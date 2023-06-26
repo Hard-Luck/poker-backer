@@ -17,7 +17,7 @@ export default function Header() {
   const pages = ["home", "settings", "sessions", "stats", "friends"];
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-16 flex-col">
       <div className="flex h-full items-center bg-black p-0 text-white">
         <span className="my-3 pl-4">
           {user.isSignedIn && user.isLoaded && (

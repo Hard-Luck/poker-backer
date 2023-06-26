@@ -5,7 +5,7 @@ export default function TotalAllFloats({ total }: { total: number }) {
     circumference - (percentage / 100) * circumference;
   // Im not married to this being the way of representing the data!
   return (
-    <div className="h m-2 flex  h-48 w-48 flex-col items-center justify-center rounded-lg border-2 border-black">
+    <div className="h m-2 flex  h-48 w-48 flex-col items-center justify-center rounded-lg  bg-theme-grey text-white">
       <svg width="100" height="100" viewBox="0 0 120 120">
         <circle
           cx="60"
@@ -33,7 +33,7 @@ export default function TotalAllFloats({ total }: { total: number }) {
           dominantBaseline="middle"
           textAnchor="middle"
           fontSize="20"
-          fill="black" // Set the text color to white
+          fill="white"
         >
           {total}
         </text>

@@ -18,22 +18,41 @@ const BurgerMenu = ({
   return (
     <SignedIn>
       <div className="p-4">
-        <button onClick={toggleMenu}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            className="h-6 w-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
-        </button>
+        {isOpen ? (
+          <button onClick={toggleMenu}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="h-6 w-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={3}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        ) : (
+          <button onClick={toggleMenu}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              className="h-6 w-6"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={3}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          </button>
+        )}
 
         <div
           className={`absolute left-0 right-0 bg-black py-4 transition-opacity duration-300 ${
@@ -44,13 +63,18 @@ const BurgerMenu = ({
             {pages.map((page) => {
               if (page === currentPage) {
                 return (
-                  <p key={page} className="border-b-2">
+                  <p key={page} className="border-b-2 p-4">
                     {page}
                   </p>
                 );
               }
               return (
-                <Link key={page} className="border-b-2" href={`/${page}`}>
+                <Link
+                  onClick={toggleMenu}
+                  key={page}
+                  className="p-2"
+                  href={`/${page}`}
+                >
                   {page}
                 </Link>
               );
