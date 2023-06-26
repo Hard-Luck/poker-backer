@@ -10,10 +10,7 @@ import BurgerMenu from "./BurgerMenu";
 export default function Header() {
   const user = useUser();
   const router = useRouter();
-  const [isOpen, setIsOpen] = useState(false);
-  const currentPage = router.pathname.split("/")[1];
-  const closeMenu = () => setIsOpen(false);
-  const handleStateChange = () => setIsOpen(!isOpen);
+  const currentPage = router.pathname.split("/")[1] ?? "";
 
   if (!user.isSignedIn) return null;
 
@@ -30,7 +27,7 @@ export default function Header() {
         <h1 className="my-3 flex-1 text-center text-2xl font-bold">
           Poker Backer
         </h1>
-        <BurgerMenu pages={pages} />
+        <BurgerMenu pages={pages} currentPage={currentPage} />
       </div>
     </div>
   );
