@@ -12,33 +12,38 @@ export default function RecentSession({
   sessions: Array<Sessions & UsernameAndId>;
 }) {
   return (
-    <div className="rounded-lg bg-theme-grey text-theme-white">
+    <div className="w-80 rounded-lg bg-theme-grey p-2 text-theme-white">
       <h2 className="text-center text-2xl font-black">Recent Sessions</h2>
-      {sessions.map((session) => {
-        return (
-          <div
-            key={session.id}
-            className="mx-auto my-4 grid max-w-xl grid-cols-5 flex-col gap-1 rounded-lg p-2"
-          >
-            <div className="col-auto self-end">{session.user.username}</div>
-            <div className="col-auto self-end">
-              {convertMinsToHrsMins(session.session_length ?? 0)}
-            </div>
-            <div
-              className={`col-auto flex items-center self-end ${
-                session.amount < 0 ? "text-theme-red" : "text-theme-green"
-              }`}
-            >
-              {session.amount}
-              {session.amount < 0 ? <ImArrowDown /> : <ImArrowUp />}
-            </div>
-            <div className="col-auto self-end">{session.total}</div>
-            <div className="col-auto self-end">
-              {formatShortDate(session.created_at)}
-            </div>
-          </div>
-        );
-      })}
+      <div className=" mx-auto my-4 grid  grid-cols-5 flex-col gap-2 rounded-lg pb-2 pl-6">
+        <div></div>
+        <div className="col-auto self-end">Session Length</div>
+        <div className={`col-auto flex items-center self-end`}>somethins</div>
+        <div className="col-auto self-end">Total</div>
+        <div className="col-auto self-end">Date</div>
+
+        {sessions.map((session) => {
+          return (
+            <>
+              <div className="col-auto self-end">{session.user.username}</div>
+              <div className="col-auto self-end">
+                {convertMinsToHrsMins(session.session_length ?? 0)}
+              </div>
+              <div
+                className={`col-auto flex items-center self-end ${
+                  session.amount < 0 ? "text-theme-red" : "text-theme-green"
+                }`}
+              >
+                {session.amount}
+                {session.amount < 0 ? <ImArrowDown /> : <ImArrowUp />}
+              </div>
+              <div className="col-auto self-end">{session.total}</div>
+              <div className="col-auto self-end">
+                {formatShortDate(session.created_at)}
+              </div>
+            </>
+          );
+        })}
+      </div>
     </div>
   );
 }

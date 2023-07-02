@@ -14,6 +14,10 @@ export default {
         "theme-accent-silver": "#C1BDB3",
         "theme-red": "#E94F37",
       },
+      margin: {
+        '0': '0',
+      },
+      boxSizing: ['responsive', 'border-box'],
     },
   },
   plugins: [],

@@ -5,7 +5,7 @@ export default function StableButton({ isBacker }: { isBacker: boolean }) {
   const router = useRouter();
   const path = isBacker ? "stable" : "me";
   return (
-    <div className="m-2 flex h-24 w-48 justify-center rounded-lg bg-theme-grey text-6xl text-white ">
+    <div className="h-7/16 w-7/16 m-2 flex justify-center  rounded-lg bg-theme-grey p-2 text-6xl text-white ">
       <button onClick={() => void router.push(`/${path}`)}>
         <GiPokerHand />
         <div className="text-xl">Stable</div>
