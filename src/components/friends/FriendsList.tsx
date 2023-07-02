@@ -25,18 +25,20 @@ export default function FriendsList({ username }: { username: string }) {
           );
         })}
       </ul>
-      <h2 className="mb-2 text-center text-xl font-semibold">Friends</h2>
-      <ul>
-        {friends.map((friendInfo) => {
-          return (
-            <FriendCard
-              username={username}
-              key={friendInfo.id}
-              friendRequest={friendInfo}
-            />
-          );
-        })}
-      </ul>
+      <div>
+        <h2 className="mb-2 text-center text-xl font-semibold">Friends</h2>
+        <ul>
+          {friends.map((friendInfo) => {
+            return (
+              <FriendCard
+                username={username}
+                key={friendInfo.id}
+                friendRequest={friendInfo}
+              />
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 }

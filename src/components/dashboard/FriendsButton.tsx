@@ -10,7 +10,7 @@ export default function FriendsButton() {
         onClick={() => void router.push("/friends")}
       >
         <FaUserFriends />
-        <div className="text-xl">friends</div>
+        <div className="text-xl">Friends</div>
       </button>
     </div>
   );

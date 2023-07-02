@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { api } from "~/utils/api";
 import ConfirmButton from "../confirm-button/ConfirmButton";
+import ReactModal from "react-modal";
 
 export default function AddFriend() {
+  const [modalOpen, setModalOpen] = useState(false);
   const [search, setSearch] = useState<string>("");
   const [username, setUsername] = useState<string>("");
   const [searched, setSearched] = useState<boolean>(false);
@@ -23,39 +25,66 @@ export default function AddFriend() {
     }
   }
 
+  function openModal() {
+    setModalOpen(true);
+  }
+
+  function closeModal() {
+    setModalOpen(false);
+  }
+
   return (
-    <div className="border-2 border-black p-4">
-      <div className="">
-        <input
-          type="text"
-          value={search}
-          onChange={handleChange}
-          placeholder="Search for friends"
-          className="border-2 border-black"
-        />
-        <button onClick={handleClick} className="border-2 border-black">
-          Search
-        </button>
-        {data &&
-          data.map((person) => {
-            return (
-              <div
-                key={person.id}
-                className="mb-2 flex items-center justify-between rounded bg-white p-1 shadow"
-              >
-                <p className="text-lg font-semibold">{person.username}</p>
-                <AddFriendButton friend_id={person.id} />
-              </div>
-            );
-          })}
-        {searched && data?.length === 0 && (
-          <p className="text-red-500">No results</p>
-        )}
-      </div>
+    <div>
+      <button
+        onClick={openModal}
+        className="rounded bg-blue-500 px-4 py-2 text-white"
+      >
+        Add Friend
+      </button>
+
+      <ReactModal
+        isOpen={modalOpen}
+        onRequestClose={closeModal}
+        className="ReactModal__Content"
+        overlayClassName="ReactModal__Overlay"
+      >
+        <div className="border-2 border-black p-4">
+          <button onClick={closeModal} className="border-2 border-black">
+            Close
+          </button>
+
+          <div className="">
+            <input
+              type="text"
+              value={search}
+              onChange={handleChange}
+              placeholder="Search for friends"
+              className="border-2 border-black"
+            />
+            <button onClick={handleClick} className="border-2 border-black">
+              Search
+            </button>
+            {data &&
+              data.map((person) => {
+                return (
+                  <div
+                    key={person.id}
+                    className="mb-2 flex items-center justify-between rounded bg-white p-1 shadow"
+                  >
+                    <p className="text-lg font-semibold">{person.username}</p>
+                    <AddFriendButton friend_id={person.id} />
+                  </div>
+                );
+              })}
+            {searched && data?.length === 0 && (
+              <p className="text-red-500">No results</p>
+            )}
+          </div>
+        </div>
+      </ReactModal>
     </div>
   );
 }
-
 export function AddFriendButton({ friend_id }: { friend_id: string }) {
   const { data: status, isLoading } = api.friends.getFriendStatus.useQuery({
     friend_id,

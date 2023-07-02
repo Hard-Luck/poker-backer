@@ -10,7 +10,7 @@ export default function Header() {
 
   if (!user.isSignedIn) return null;
 
-  const pages = ["home", "settings", "sessions", "stats", "friends"];
+  const pages = ["home", "settings", "sessions", "friends"]; // I removed stats because I'm not sure about what I want on the page yet
 
   return (
     <div className="flex h-16 flex-col">
