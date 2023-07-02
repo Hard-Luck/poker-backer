@@ -55,7 +55,7 @@ const BurgerMenu = ({
         )}
 
         <div
-          className={`absolute left-0 right-0 bg-black py-4 transition-opacity duration-300 ${
+          className={`absolute left-0 right-0 bg-theme-header py-4 transition-opacity duration-300 ${
             isOpen ? "opacity-100" : "pointer-events-none opacity-0"
           }`}
         >

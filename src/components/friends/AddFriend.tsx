@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { api } from "~/utils/api";
 import ConfirmButton from "../confirm-button/ConfirmButton";
-import ReactModal from "react-modal";
+import {
+  BsPersonFillAdd,
+  BsXCircleFill,
+  BsSearch,
+  BsPersonPlusFill,
+} from "react-icons/bs";
 
 export default function AddFriend() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -25,63 +30,55 @@ export default function AddFriend() {
     }
   }
 
-  function openModal() {
-    setModalOpen(true);
-  }
-
-  function closeModal() {
-    setModalOpen(false);
+  function toggleModal() {
+    setModalOpen(!modalOpen);
   }
 
   return (
-    <div>
-      <button
-        onClick={openModal}
-        className="rounded bg-blue-500 px-4 py-2 text-white"
-      >
-        Add Friend
-      </button>
+    <div className="">
+      <div className="absolute right-0 top-2.5 flex justify-end pr-4">
+        <button
+          onClick={toggleModal}
+          className="rounded-lg bg-theme-header px-4 py-2 text-2xl text-white transition duration-300"
+        >
+          {modalOpen ? <BsXCircleFill /> : <BsPersonFillAdd />}
+        </button>
+      </div>
 
-      <ReactModal
-        isOpen={modalOpen}
-        onRequestClose={closeModal}
-        className="ReactModal__Content"
-        overlayClassName="ReactModal__Overlay"
-      >
-        <div className="border-2 border-black p-4">
-          <button onClick={closeModal} className="border-2 border-black">
-            Close
-          </button>
-
-          <div className="">
+      {modalOpen && (
+        <div className="m-4 rounded-lg bg-theme-grey p-2">
+          <div className="flex justify-center p-2 text-theme-black">
             <input
               type="text"
               value={search}
               onChange={handleChange}
               placeholder="Search for friends"
-              className="border-2 border-black"
+              className="w-full rounded-l-lg pl-4 "
             />
-            <button onClick={handleClick} className="border-2 border-black">
-              Search
+            <button
+              onClick={handleClick}
+              className="rounded-r-lg bg-white p-4 text-xl text-theme-header"
+            >
+              <BsSearch />
             </button>
-            {data &&
-              data.map((person) => {
-                return (
-                  <div
-                    key={person.id}
-                    className="mb-2 flex items-center justify-between rounded bg-white p-1 shadow"
-                  >
-                    <p className="text-lg font-semibold">{person.username}</p>
-                    <AddFriendButton friend_id={person.id} />
-                  </div>
-                );
-              })}
-            {searched && data?.length === 0 && (
-              <p className="text-red-500">No results</p>
-            )}
           </div>
+          {data &&
+            data.map((person) => {
+              return (
+                <div
+                  key={person.id}
+                  className="m-2 flex items-center justify-between rounded-lg bg-white p-2 text-theme-black"
+                >
+                  <p className="text-lg font-semibold">{person.username}</p>
+                  <AddFriendButton friend_id={person.id} />
+                </div>
+              );
+            })}
+          {searched && data?.length === 0 && (
+            <p className="text-theme-red p-4 text-center">No results</p>
+          )}
         </div>
-      </ReactModal>
+      )}
     </div>
   );
 }
@@ -109,7 +106,7 @@ export function AddFriendButton({ friend_id }: { friend_id: string }) {
         className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
         disabled={disabled}
         onConfirm={() => mutate({ friend_id })}
-        buttonLabel="AddFriend"
+        buttonLabel={<BsPersonPlusFill />} // TS ERROR
         confirmMessage="Send Friend Request"
       />
     );

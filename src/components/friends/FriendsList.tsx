@@ -11,9 +11,9 @@ export default function FriendsList({ username }: { username: string }) {
     return !request.status;
   });
   const friends = data.filter((request) => !!request.status);
+
   return (
-    <div>
-      <h2 className="">Pending Requests</h2>
+    <div className="">
       <ul>
         {pendingRequests.map((friendInfo) => {
           return (
@@ -25,8 +25,8 @@ export default function FriendsList({ username }: { username: string }) {
           );
         })}
       </ul>
+
       <div>
-        <h2 className="mb-2 text-center text-xl font-semibold">Friends</h2>
         <ul>
           {friends.map((friendInfo) => {
             return (
@@ -53,20 +53,29 @@ function FriendCard({
   const { user_id, status, created_at, friend, user } = friendRequest;
   if (user.username === username)
     return (
-      <li className=" flex border-2 border-black p-1 ">
-        <div className="mr-2">{friend.username} </div>
-        <div className="mr-2">{formatShortDate(created_at)}</div>
-        {!status && <div>pending</div>}
+      <li className="m-4 flex justify-between rounded-lg bg-theme-grey p-2">
+        <div className="flex">
+          <div className="pl-2 pr-2 font-semibold">{friend.username} </div>
+          <div className="pl-2 pr-2">{formatShortDate(created_at)}</div>
+        </div>
+        {!status && (
+          <div className="flex items-center rounded-lg bg-theme-white pl-2 pr-2 text-xs text-theme-black">
+            PENDING
+          </div>
+        )}
       </li>
     );
   return (
-    <li className="flex border-2 border-black p-1">
-      <div className="">{user.username}</div>
-      <div className="">{formatShortDate(created_at)}</div>
+    <li className=" m-4 flex  justify-between rounded-lg bg-theme-grey p-2 ">
+      <div className="flex">
+        <div className="pl-2 pr-2 font-semibold">{user.username}</div>
+        <div className="pl-2 pr-2">{formatShortDate(created_at)}</div>
+      </div>
       {!status && <FriendRequestButton user_id={user_id} />}
     </li>
   );
 }
+
 function FriendRequestButton({ user_id }: { user_id: string }) {
   const ctx = api.useContext();
   const { mutate, isLoading, isSuccess } = api.friends.accept.useMutation();
@@ -75,7 +84,7 @@ function FriendRequestButton({ user_id }: { user_id: string }) {
   }
   return (
     <button
-      className="border-2 border-black p-1"
+      className="flex items-center rounded-lg bg-theme-white pl-2 pr-2 text-xs text-theme-black"
       disabled={isLoading}
       onClick={() => mutate({ sender: user_id })}
     >
