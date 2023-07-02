@@ -1,9 +1,5 @@
-import Link from "next/link";
-import { slide as Menu } from "react-burger-menu";
-import { useState } from "react";
 import { UserButton, useUser } from "@clerk/nextjs";
 import * as React from "react";
-import { SignedIn } from "@clerk/clerk-react";
 import { useRouter } from "next/router";
 import BurgerMenu from "./BurgerMenu";
 
