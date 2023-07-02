@@ -13,7 +13,7 @@ export default function FriendsList({ username }: { username: string }) {
   const friends = data.filter((request) => !!request.status);
 
   return (
-    <div className="">
+    <div className="h-[calc(100vh-4rem)]">
       <ul>
         {pendingRequests.map((friendInfo) => {
           return (

@@ -75,7 +75,7 @@ export default function AddFriend() {
               );
             })}
           {searched && data?.length === 0 && (
-            <p className="text-theme-red p-4 text-center">No results</p>
+            <p className="p-4 text-center text-theme-red">No results</p>
           )}
         </div>
       )}
@@ -106,7 +106,7 @@ export function AddFriendButton({ friend_id }: { friend_id: string }) {
         className="rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
         disabled={disabled}
         onConfirm={() => mutate({ friend_id })}
-        buttonLabel={<BsPersonPlusFill />} // TS ERROR
+        buttonLabel={<BsPersonPlusFill />}
         confirmMessage="Send Friend Request"
       />
     );

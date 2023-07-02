@@ -16,8 +16,8 @@ export default function RecentSession({
       <h2 className="text-center text-2xl font-black">Recent Sessions</h2>
       <div className=" mx-auto my-4 grid  grid-cols-5 flex-col gap-2 rounded-lg pb-2 pl-6">
         <div></div>
-        <div className="col-auto self-end">Session Length</div>
-        <div className={`col-auto flex items-center self-end`}>somethins</div>
+        <div className="col-auto self-end">Mins</div>
+        <div className={`col-auto flex items-center self-end`}>+/-</div>
         <div className="col-auto self-end">Total</div>
         <div className="col-auto self-end">Date</div>
 

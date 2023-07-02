@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 interface ConfirmButtonProps {
   confirmMessage: string;
-  buttonLabel: string;
+  buttonLabel: React.ReactNode | string;
   onConfirm: () => void;
   className?: string;
   disabled: boolean;

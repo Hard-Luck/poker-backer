@@ -12,10 +12,15 @@ export default {
         "theme-red": "#A34E4E",
         "theme-header": "#3F88C5",
         "theme-accent-silver": "#C1BDB3",
-        "theme-red": "#E94F37",
+        "theme-red2": "#E94F37",
       },
       margin: {
         '0': '0',
+      },
+      zIndex: {
+        '0': '0',
+        '10': '10',
+        '20': '20',
       },
       boxSizing: ['responsive', 'border-box'],
     },
