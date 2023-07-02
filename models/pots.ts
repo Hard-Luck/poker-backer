@@ -8,7 +8,15 @@ export async function getPotBasicInfo(pot_id: number) {
     return prisma.pots.findUnique({ where: { id: pot_id } })
 }
 export async function getPotById(pot_id: number) {
-    return prisma.pots.findUnique({ where: { id: pot_id }, include: { sessions: { orderBy: { created_at: 'desc' } } }, })
+    return prisma.pots.findUnique({
+        where: { id: pot_id },
+        include: {
+            sessions: {
+                orderBy: { created_at: 'desc' },
+                include: { _count: { select: { comments: true } } }
+            }
+        },
+    })
 }
 export async function createPot(pot: InputPot) {
     const newPot = await prisma.pots.create({ data: pot })

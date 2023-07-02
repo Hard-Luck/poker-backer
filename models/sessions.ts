@@ -26,7 +26,7 @@ export async function addSession(user_id: string, session: AddSessionInput) {
 
 export async function getSessionsSinceLastChop(pot_id: number) {
     const lastChop = await getLastChop(pot_id)
-    const sessions = await prisma.sessions.findFirst({
+    const sessions = await prisma.sessions.findMany({
         where: {
             pot_id: pot_id, AND: { created_at: { gt: lastChop?.created_at } }
         }
@@ -90,3 +90,22 @@ export async function canDeleteSession(session_id: number, user_id: string) {
     return false
 }
 
+export async function getSessionWithComments(session_id: number) {
+    return prisma.sessions.findFirst({
+        where: { "id": session_id }, include: {
+            comments: {
+                include: {
+                    user: {
+                        select: { username: true }
+                    }
+                }
+            }
+        }
+    })
+}
+export async function addComment(user_id: string, session_id: number, body: string) {
+    return prisma.sessionComments.create({ data: { user_id, session_id, body } })
+}
+export async function deleteComment(comment_id: number) {
+    return prisma.sessionComments.delete({ where: { id: comment_id } })
+}

@@ -82,6 +82,7 @@ model Sessions {
   chop_split     Json?
   transaction_type transactionType @default(cash_game)
   likes          Int             @default(0)
+  comments SessionComments[]
 
   @@index([pot_id])
   @@index([user_id])
@@ -91,11 +92,14 @@ model SessionComments {
   id Int @id @default(autoincrement())
   user_id String
   user UserInfo @relation(fields: [user_id], references: [id])
-  comment String
+  session_id Int
+  session Sessions @relation(fields: [session_id], references: [id])
+  body String
   likes Int @default(0)
   created_at DateTime @default(now())
 
   @@index([user_id])
+  @@index([session_id])
 }
 
 enum transactionType {

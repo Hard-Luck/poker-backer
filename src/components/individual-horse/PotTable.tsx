@@ -1,10 +1,13 @@
 import { api } from "~/utils/api";
 import Loading from "../Loading";
 import NotFound404 from "~/components/errors/NotFound";
-import { type Sessions } from "@prisma/client";
 import { convertMinsToHrsMins, formatShortDate } from "~/utils/timestamp";
 import { formatCurrency } from "~/utils/currency";
 import ConfirmButton from "../confirm-button/ConfirmButton";
+import type { Sessions } from "@prisma/client";
+import Link from "next/link";
+
+type SessionWithCount = Sessions & { _count: { comments: number } };
 
 export function PotTable({ pot_id }: { pot_id: number }) {
   const { data, isLoading, error } = api.pots.getById.useQuery(
@@ -38,7 +41,7 @@ export function PotTable({ pot_id }: { pot_id: number }) {
     </div>
   );
 }
-export function SessionsTableRow({ session }: { session: Sessions }) {
+export function SessionsTableRow({ session }: { session: SessionWithCount }) {
   const { mutate, isLoading, isSuccess } = api.sessions.delete.useMutation();
   const ctx = api.useContext();
   if (isSuccess) {
@@ -65,6 +68,11 @@ export function SessionsTableRow({ session }: { session: Sessions }) {
           onConfirm={() => mutate({ id: session.id })}
           className="text-red-500"
         />
+      </td>
+      <td>
+        <Link href={`/sessions/${session.id}`}>
+          Comments: {session._count.comments}
+        </Link>
       </td>
     </tr>
   );

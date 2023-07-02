@@ -68,8 +68,8 @@ function FriendCard({
   );
 }
 function FriendRequestButton({ user_id }: { user_id: string }) {
-  const { mutate, isLoading, isSuccess } = api.friends.accept.useMutation();
   const ctx = api.useContext();
+  const { mutate, isLoading, isSuccess } = api.friends.accept.useMutation();
   if (isSuccess) {
     void ctx.friends.invalidate();
   }
