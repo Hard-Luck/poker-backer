@@ -10,7 +10,11 @@ export default function Pot() {
   if (!pot_id) return <Loading />;
   return (
     <SignedIn>
-      <div className="flex flex-col gap-4  border-2 border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 ">
+      <div className="flex flex-col  border-2 border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 ">
+        <div className="flex items-center justify-center">
+          <div className="m-2 h-20 w-20 bg-white">sessions (needs doing)</div>
+          <div className="m-2 h-20 w-20 bg-white">total (needs doing)</div>
+        </div>
         <IsBacker pot_id={pot_id}>
           <Modals pot_id={pot_id} />
         </IsBacker>
