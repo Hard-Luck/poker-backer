@@ -7,7 +7,7 @@ import { api } from "~/utils/api";
 export default function Pots() {
   return (
     <SignedIn>
-      <div className="mt-128 overflow-y-auto">
+      <div className="mt-128 h-screen overflow-y-auto bg-theme-black text-white">
         <PotsList />
         <CreatePotWizard />
       </div>
@@ -20,12 +20,12 @@ export function PotsList() {
   if (isLoading) return <Loading />;
   if (!data) return <p>No pots yet</p>;
   return (
-    <div className="m-2 flex flex-col">
+    <div className="m-2 flex flex-col ">
       <h2 className="text-center">Pots you have access to</h2>
       {data.map((pot) => {
         return (
           <Link
-            className="m-2 flex w-full justify-around self-center border-2 border-black p-2 text-center"
+            className="m-2 flex justify-center rounded-lg bg-theme-grey p-4 "
             key={pot.id}
             passHref={true}
             href={`/stable/${pot.pot_id}`}
