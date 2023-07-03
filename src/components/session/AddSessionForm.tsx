@@ -67,12 +67,12 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-200">
+    <div className="flex min-h-screen flex-col items-center bg-theme-black pt-12 text-white">
       <span className="mb-4 text-lg font-bold">Backer Pot Name:</span>
       {pots?.length && (
         <div className="w-64">
           <select
-            className="w-full rounded border border-gray-300 p-2"
+            className="w-full rounded-lg p-2 text-theme-black"
             value={pot?.name}
             onChange={handleChange}
           >
@@ -99,7 +99,7 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
             type="number"
             value={amount === "" ? "" : +amount}
             onChange={handleAmountChange}
-            className="mt-2 w-full rounded border border-gray-300 p-2"
+            className="mt-2 w-full rounded-lg border border-gray-300 p-2 text-theme-black"
           />
         </label>
         <label className="mb-2 w-full">
@@ -108,7 +108,7 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
             type="number"
             value={sessionLength}
             onChange={handleSessionLengthChange}
-            className="mt-2 w-full rounded border border-gray-300 p-2"
+            className="mt-2 w-full rounded-lg border border-gray-300 p-2 text-theme-black"
           />
         </label>
         <label className="mb-4 w-full">
@@ -117,12 +117,12 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
             type="datetime-local"
             value={created_at.toISOString().slice(0, -8)}
             onChange={handleCreated_atChange}
-            className="mt-2 w-full rounded border border-gray-300 p-2"
+            className="mt-2 w-full rounded-lg border border-gray-300 p-2 text-theme-black"
           />
         </label>
         <button
           type="submit"
-          className="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-700"
+          className="w-full  rounded-lg bg-theme-header px-4 py-2 text-white hover:bg-blue-700"
         >
           Submit
         </button>
