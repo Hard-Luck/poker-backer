@@ -26,18 +26,18 @@ export default function Settings() {
   };
 
   return (
-    <div className="mx-auto mt-10 flex w-1/3 flex-col items-center justify-center space-y-4 rounded-lg bg-white p-10 shadow-lg">
-      <h2>Settings</h2>
+    <div className="mx-auto flex h-screen flex-col items-center bg-theme-black text-white">
+      <h2 className="m-2 text-2xl">Settings</h2>
+      <span>Update Username</span>
       <input
-        className=" border-2 border-black text-right"
+        className="m-2 rounded-lg p-4"
         type="text"
         value={username}
         onChange={handleUsernameChange}
         placeholder="Enter Username"
       />
-      <span>Update Username</span>
       <button
-        className="m-2 border-2 border-black p-2"
+        className="m-4 rounded-lg bg-theme-header p-3"
         disabled={usernameLoading || isError}
         onClick={handleUsernameSubmit}
       >
@@ -70,7 +70,7 @@ export function IsBackerSettingCheckBox({
     updateIsBacker({ isBacker });
   };
   return (
-    <div className="flex flex-col items-center justify-center space-y-4 rounded-lg bg-white p-10 ">
+    <div className="flex flex-col items-center justify-center space-y-4 rounded-lg bg-theme-grey p-10 ">
       <input
         type="checkbox"
         className="h-10 w-10"
@@ -79,13 +79,13 @@ export function IsBackerSettingCheckBox({
       />
       <span>I am a backer? Tick and submit</span>
       <button
-        className="m-2 border-2 border-black p-2"
+        className="m-4 rounded-lg bg-theme-header p-3"
         disabled={isBackerLoading}
         onClick={handleIsBackerSubmit}
       >
         Submit
       </button>
-      {isBackerError && <p className="text-red-500">Error, please try again</p>}
+      {isBackerError && <p className="text-theme-red">Error, please try again</p>}
     </div>
   );
 }
