@@ -1,6 +1,6 @@
 
 
-import { createPotAccess, getAccessByPotId, patchPercentages } from "models/potAceess";
+import { createPotAccess, getAccessByPotId, patchPercentages } from "~/models/potAceess";
 import { z } from "zod";
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 

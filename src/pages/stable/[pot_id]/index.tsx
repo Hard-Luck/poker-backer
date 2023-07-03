@@ -4,6 +4,8 @@ import Loading from "~/components/Loading";
 import IsBacker from "~/components/confirm-button/IsBacker";
 import { Modals } from "~/components/individual-horse/Modals";
 import { PotTable } from "~/components/individual-horse/PotTable";
+import { PotTotal } from "~/components/individual-horse/PotTotal";
+import SessionCount from "~/components/individual-horse/SessionCount";
 
 export default function Pot() {
   const pot_id = Number(useRouter().query.pot_id);
@@ -12,8 +14,8 @@ export default function Pot() {
     <SignedIn>
       <div className="flex flex-col  border-2 border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800 ">
         <div className="flex items-center justify-center">
-          <div className="m-2 h-20 w-20 bg-white">sessions (needs doing)</div>
-          <div className="m-2 h-20 w-20 bg-white">total (needs doing)</div>
+          <SessionCount pot_id={pot_id} />
+          <PotTotal pot_id={pot_id} />
         </div>
         <IsBacker pot_id={pot_id}>
           <Modals pot_id={pot_id} />

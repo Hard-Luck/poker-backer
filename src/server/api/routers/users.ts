@@ -1,5 +1,5 @@
-import getDashboard from "models/dashboard";
-import { changeIsBacker, changeUsername, createNewUserInfo, getUserById, getUserByUsername, getUsernameById } from "models/users";
+import getDashboard from "~/models/dashboard";
+import { changeIsBacker, changeUsername, createNewUserInfo, getUserById, getUserByUsername, getUsernameById } from "~/models/users";
 import { z } from "zod";
 
 import { createTRPCRouter, privateProcedure, publicProcedure } from "~/server/api/trpc";

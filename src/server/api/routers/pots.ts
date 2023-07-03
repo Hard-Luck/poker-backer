@@ -1,9 +1,9 @@
 
 
 import { TRPCError } from "@trpc/server";
-import { hasAccessToPot, isBackerOfPot } from "models/potAceess";
-import { chop, createPot, deletePot, getAllUsersPots, getChopHistory, getPotById, isPotOwner, topUpPot, } from "models/pots";
-import { z } from "zod";
+import { hasAccessToPot, isBackerOfPot } from "~/models/potAceess";
+import { chop, createPot, deletePot, getAllUsersPots, getChopHistory, getPotById, isPotOwner, topUpPot, } from "~/models/pots";
+import { late, z } from "zod";
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 import { prisma } from "~/server/db";
 
@@ -63,6 +63,16 @@ export const potsRouter = createTRPCRouter({
         if (!(await isPotOwner(pot_id, user_id))) throw new TRPCError({ code: "FORBIDDEN" })
         return deletePot(pot_id)
     }),
+    getTotal: privateProcedure.input(z.object({ pot_id: z.number() })).query(async ({ input }) => {
+        const { pot_id } = input
+        const pot = await getPotById(pot_id)
+        const latestSession = pot?.sessions[0]
+        if (latestSession?.transaction_type === "chop") return 0
+        return (latestSession?.total || 0) - (latestSession?.top_ups_total || 0)
+    })
+
+
 })
+
 
 

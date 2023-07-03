@@ -1,5 +1,5 @@
 
-import { acceptFriendRequest, getAcceptedFriends, getAllFriends, getFriendStatus, sendFriendRequest } from "models/friends";
+import { acceptFriendRequest, getAcceptedFriends, getAllFriends, getFriendStatus, sendFriendRequest } from "~/models/friends";
 import { z } from "zod";
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 

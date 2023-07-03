@@ -1,5 +1,5 @@
 import { TRPCError } from "@trpc/server";
-import { addComment, addSession, canDeleteSession, deleteSession, getSessionWithComments } from "models/sessions";
+import { addComment, addSession, canDeleteSession, deleteSession, getSessionWithComments, getSessionsSinceLastChop } from "~/models/sessions";
 import { z } from "zod";
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 
@@ -39,8 +39,17 @@ export const sessionRouter = createTRPCRouter({
     listComments: privateProcedure.input(z.object({ session_id: z.number() })).query(async ({ input }) => {
         const { session_id } = input
         return getSessionWithComments(session_id)
+    }),
+    sessionsSinceLastChop: privateProcedure.input(z.object({
+        pot_id: z.number()
+    })).query(async ({ input }) => {
+        const { pot_id } = input
+        const sessions = await getSessionsSinceLastChop(pot_id)
+        const playedSessions = sessions.filter(session => session.transaction_type !== "top_up")
+        return playedSessions.length
     })
 })
+
 
 
 
