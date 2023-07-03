@@ -2,6 +2,7 @@ import { UserButton, useUser } from "@clerk/nextjs";
 import * as React from "react";
 import { useRouter } from "next/router";
 import BurgerMenu from "./BurgerMenu";
+import Link from "next/link";
 
 export default function Header() {
   const user = useUser();
@@ -20,9 +21,9 @@ export default function Header() {
             <UserButton afterSignOutUrl="/" />
           )}
         </span>
-        <h1 className="my-3 flex-1 text-center text-2xl font-bold">
-          Poker Backer
-        </h1>
+        <Link className="my-3 flex-1 text-center text-2xl font-bold" href="/home">
+          <h1>Poker Backer</h1>
+        </Link>
         <BurgerMenu pages={pages} currentPage={currentPage} />
       </div>
     </div>
