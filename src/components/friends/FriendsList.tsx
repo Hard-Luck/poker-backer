@@ -2,6 +2,8 @@ import type { FriendRequest } from "types/api";
 import { api } from "~/utils/api";
 import { formatShortDate } from "~/utils/timestamp";
 import Loading from "../Loading";
+import { BsCheck } from "react-icons/bs";
+import { RiPassPendingFill } from "react-icons/ri";
 
 export default function FriendsList({ username }: { username: string }) {
   const { data, isLoading } = api.friends.getUserFriendsWithStatus.useQuery();
@@ -14,18 +16,6 @@ export default function FriendsList({ username }: { username: string }) {
 
   return (
     <div className="h-[calc(100vh-4rem)]">
-      <ul>
-        {pendingRequests.map((friendInfo) => {
-          return (
-            <FriendCard
-              username={username}
-              key={friendInfo.id}
-              friendRequest={friendInfo}
-            />
-          );
-        })}
-      </ul>
-
       <div>
         <ul>
           {friends.map((friendInfo) => {
@@ -39,6 +29,19 @@ export default function FriendsList({ username }: { username: string }) {
           })}
         </ul>
       </div>
+
+      <h3 className="text-l p-2 pl-4 font-semibold">Pending Requests</h3>
+      <ul>
+        {pendingRequests.map((friendInfo) => {
+          return (
+            <FriendCard
+              username={username}
+              key={friendInfo.id}
+              friendRequest={friendInfo}
+            />
+          );
+        })}
+      </ul>
     </div>
   );
 }
@@ -59,8 +62,8 @@ function FriendCard({
           <div className="pl-2 pr-2">{formatShortDate(created_at)}</div>
         </div>
         {!status && (
-          <div className="flex items-center rounded-lg bg-theme-white pl-2 pr-2 text-xs text-theme-black">
-            PENDING
+          <div className="flex items-center rounded-lg bg-[#FFBF8A] pl-2 pr-2 text-xl text-white">
+            <RiPassPendingFill />
           </div>
         )}
       </li>
@@ -84,11 +87,11 @@ function FriendRequestButton({ user_id }: { user_id: string }) {
   }
   return (
     <button
-      className="flex items-center rounded-lg bg-theme-white pl-2 pr-2 text-xs text-theme-black"
+      className="flex items-center rounded-lg bg-theme-green pl-2 pr-2 text-xl text-white"
       disabled={isLoading}
       onClick={() => mutate({ sender: user_id })}
     >
-      Accept?
+      <BsCheck />
     </button>
   );
 }
