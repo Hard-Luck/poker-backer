@@ -26,3 +26,8 @@ export async function changeUsername(id: string, newUsername: string) {
 export async function changeIsBacker(id: string, isBacker: boolean) {
     return prisma.userInfo.update({ where: { id: id }, data: { is_backer: isBacker } })
 }
+
+export async function changeImgUrl(url: string, user_id: string) {
+    if (!url.match(/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}/)) throw new Error("Invalid URL")
+    return prisma.userInfo.update({ where: { id: user_id }, data: { img_url: url } })
+}

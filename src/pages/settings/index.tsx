@@ -44,6 +44,7 @@ export default function Settings() {
         Submit
       </button>
       <IsBackerSettingCheckBox isBackerProp={data?.is_backer ?? false} />
+      <UpdateImgUrl />
     </div>
   );
 }
@@ -85,7 +86,54 @@ export function IsBackerSettingCheckBox({
       >
         Submit
       </button>
-      {isBackerError && <p className="text-theme-red">Error, please try again</p>}
+      {isBackerError && (
+        <p className="text-theme-red">Error, please try again</p>
+      )}
+    </div>
+  );
+}
+
+export function UpdateImgUrl() {
+  const [imgUrl, setImgUrl] = useState("");
+  const {
+    mutate: updateImgUrl,
+    isLoading: imgUrlLoading,
+    isError: imgUrlError,
+    isSuccess,
+  } = api.users.updateImgUrl.useMutation();
+  const ctx = api.useContext();
+  if (isSuccess) {
+    void ctx.users.invalidate();
+  }
+
+  const handleImgUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setImgUrl(event.target.value);
+  };
+
+  const handleImgUrlSubmit = () => {
+    updateImgUrl({ img_url: imgUrl });
+    setImgUrl("");
+  };
+
+  return (
+    <div className="mx-auto flex h-screen flex-col items-center bg-theme-black text-black">
+      <h2 className="m-2 text-2xl">Settings</h2>
+      <span>Update Img Url</span>
+      <input
+        className="m-2 rounded-lg p-4"
+        type="text"
+        value={imgUrl}
+        onChange={handleImgUrlChange}
+        placeholder="Enter Img Url"
+      />
+      <button
+        className="m-4 rounded-lg bg-theme-header p-3"
+        disabled={imgUrlLoading}
+        onClick={handleImgUrlSubmit}
+      >
+        Update Img
+      </button>
+      {imgUrlError && <p className="text-theme-red">Error, please try again</p>}
     </div>
   );
 }

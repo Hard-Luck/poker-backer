@@ -48,8 +48,15 @@ export const userRouter = createTRPCRouter({
             const id = ctx.currentUser
             const { isBacker } = input
             return changeIsBacker(id, isBacker)
-        })
+        }),
+    updateImgUrl: privateProcedure.input(z.object({ img_url: z.string() })).mutation(async ({ input, ctx }) => {
+        const { img_url } = input
+        const id = ctx.currentUser
+        return prisma.userInfo.update({ where: { id }, data: { img_url } })
 
-})
+    })
+}
+
+)
 
 
