@@ -16,7 +16,7 @@ export default function Pots() {
 
   return (
     <SignedIn>
-      <div className="mt-128 h-screen overflow-y-auto bg-theme-black text-white">
+      <div className="mt-128 h-[calc(100vh-4rem)] overflow-y-auto bg-theme-black text-white">
         <PotsList setModalIsOpen={setModalIsOpen} />
         <CreatePotWizard
           modalIsOpen={modalIsOpen}

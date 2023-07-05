@@ -11,26 +11,24 @@ type SessionWithCount = Sessions & { _count: { comments: number } };
 
 export function PotTable({ sessions }: { sessions: SessionWithCount[] }) {
   return (
-    <div className=" gap-4 overflow-x-auto rounded-lg bg-theme-grey p-4">
-      <div className="overflow-x-auto">
-        <table className=" text-white ">
-          <thead className="text-sm font-bold">
-            <tr>
-              <td className="text-center">Date</td>
-              <td className="text-center">Session</td>
-              <td className="text-center">Amount</td>
-              <td className="text-center">Total</td>
-              <td className="text-center">Comments</td>
-              <td className="text-center"></td>
-            </tr>
-          </thead>
-          <tbody>
-            {sessions?.map((session) => {
-              return <SessionsTableRow key={session.id} session={session} />;
-            })}
-          </tbody>
-        </table>
-      </div>
+    <div className=" h-[calc(100vh-17rem)] gap-4 overflow-y-auto rounded-lg bg-theme-grey p-4">
+      <table className=" text-white">
+        <thead>
+          <tr className="sticky top-0 bg-theme-grey text-sm font-bold">
+            <td className="text-center">Date</td>
+            <td className="text-center">Session</td>
+            <td className="text-center">Amount</td>
+            <td className="text-center">Total</td>
+            <td className="text-center">Comments</td>
+            <td className="text-center"></td>
+          </tr>
+        </thead>
+        <tbody>
+          {sessions?.map((session) => {
+            return <SessionsTableRow key={session.id} session={session} />;
+          })}
+        </tbody>
+      </table>
     </div>
   );
 }
@@ -48,7 +46,7 @@ export function SessionsTableRow({ session }: { session: SessionWithCount }) {
     ? convertMinsToHrsMins(session_length)
     : transaction_type;
   return (
-    <tr className="border-b-2 border-[#6b6b6b] ">
+    <tr className="border-b-2 border-[#6b6b6b] text-sm">
       <td className="text-center">{formatShortDate(created_at)}</td>
       <td className="text-center">{sessionDisplay}</td>
       <td className={`text-center text-${color}-500`}>
