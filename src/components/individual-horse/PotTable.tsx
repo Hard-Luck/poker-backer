@@ -11,8 +11,8 @@ type SessionWithCount = Sessions & { _count: { comments: number } };
 
 export function PotTable({ sessions }: { sessions: SessionWithCount[] }) {
   return (
-    <div className=" h-[calc(100vh-17rem)] gap-4 overflow-y-auto rounded-lg bg-theme-grey p-4">
-      <table className=" text-white">
+    <div className=" h-[calc(100vh-17rem)] gap-4 overflow-y-auto rounded-lg bg-theme-grey p-4 flex justify-center">
+      <table className=" text-white ">
         <thead>
           <tr className="sticky top-0 bg-theme-grey text-sm font-bold">
             <td className="text-center">Date</td>
