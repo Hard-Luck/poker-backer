@@ -61,7 +61,7 @@ model PotAccess {
   pot_id  Int
   type    Int
   percent Float    @default(0)
-  user    UserInfo @relation(fields: [user_id], references: [id])
+  user    UserInfo @relation(fields: [user_id], references: [id], onDelete: Cascade)
   pot     Pots     @relation("PotAccess", fields: [pot_id], references: [id], onDelete: Cascade)
 
   @@unique([user_id, pot_id])
@@ -69,10 +69,11 @@ model PotAccess {
   @@index([user_id])
 }
 
+
 model Sessions {
   id             Int             @id @default(autoincrement())
-  user_id        String
-  user           UserInfo        @relation(fields: [user_id], references: [id])
+  user_id        String         @default("N/A")
+  user           UserInfo        @relation(fields: [user_id], references: [id], onDelete: Cascade )
   pot            Pots            @relation(fields: [pot_id], references: [id], onDelete: Cascade)
   pot_id         Int
   amount         Int
