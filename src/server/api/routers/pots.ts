@@ -6,6 +6,7 @@ import { chop, createPot, deletePot, getAllUsersPots, getChopHistory, getPotById
 import { z } from "zod";
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 import { prisma } from "~/server/db";
+import { getUserById } from "~/models/users";
 
 export const potsRouter = createTRPCRouter({
     getCurrentUserPot: privateProcedure
@@ -24,8 +25,11 @@ export const potsRouter = createTRPCRouter({
             return createPot({ ...input, owner: id })
         }),
     list: privateProcedure.query(async ({ ctx }) => {
-        return getAllUsersPots(ctx.currentUser)
+        const id = ctx.currentUser
+        const user = await getUserById(id)
+        return getAllUsersPots(ctx.currentUser, user.is_backer)
     }),
+
     getById: privateProcedure.input(z.object({ pot_id: z.number() })).query(async ({ ctx, input }) => {
         const id = ctx.currentUser
         const { pot_id } = input

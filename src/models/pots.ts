@@ -24,9 +24,9 @@ export async function createPot(pot: InputPot) {
     return newPot
 }
 
-export async function getAllUsersPots(user_id: string) {
+export async function getAllUsersPots(user_id: string, backer: boolean) {
     const pots = await prisma.potAccess.findMany({
-        where: { user_id, type: 1 },
+        where: { user_id, type: backer ? 1 : 0 },
         select: { pot_id: true }
     })
     const potIds = pots.map(pot => pot.pot_id)

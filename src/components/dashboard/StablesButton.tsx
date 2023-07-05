@@ -8,7 +8,7 @@ export default function StableButton({ isBacker }: { isBacker: boolean }) {
     <div className="h-7/16 w-7/16 m-2 flex justify-center  rounded-lg bg-theme-grey p-2 text-6xl text-white ">
       <button onClick={() => void router.push(`/${path}`)}>
         <GiPokerHand />
-        <div className="text-xl">Stable</div>
+        <div className="text-xl">{isBacker ? "Stable" : "Me"}</div>
       </button>
     </div>
   );

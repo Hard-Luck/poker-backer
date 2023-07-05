@@ -17,7 +17,7 @@ export default function Pots() {
   return (
     <SignedIn>
       <div className="mt-128 h-[calc(100vh-4rem)] overflow-y-auto bg-theme-black text-white">
-        <PotsList setModalIsOpen={setModalIsOpen} />
+        <PotsList setModalIsOpen={setModalIsOpen} isBacker={true} />
         <CreatePotWizard
           modalIsOpen={modalIsOpen}
           setModalIsOpen={setModalIsOpen}
@@ -29,8 +29,10 @@ export default function Pots() {
 
 export function PotsList({
   setModalIsOpen,
+  isBacker,
 }: {
   setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isBacker: boolean;
 }) {
   const { data, isLoading } = api.pots.list.useQuery();
   if (isLoading) return <Loading />;
@@ -38,12 +40,12 @@ export function PotsList({
   return (
     <div className="m-2 flex flex-col ">
       <div className="flex justify-between p-2">
-        <h2 className="p-3 text-xl font-semibold">My Pots</h2>
+        <h2 className="p-3 text-xl font-semibold">Floats</h2>
         <button
           className="rounded-lg bg-theme-header px-2 text-2xl text-white"
           onClick={() => setModalIsOpen(true)}
         >
-          <AiOutlineFileAdd />
+          {isBacker && <AiOutlineFileAdd />}
         </button>
       </div>
       {data.map((pot) => {
