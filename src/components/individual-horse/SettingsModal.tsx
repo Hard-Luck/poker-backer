@@ -15,7 +15,10 @@ export default function SettingsModal({
   const { data, isLoading, isError } = api.potAccess.getAccessByPotId.useQuery({
     pot_id,
   });
-  if (!data || isLoading) return <div>Loading...</div>;
+  if (!data || isLoading)
+    return (
+      <div className="bg-theme-black text-center text-white">Loading...</div>
+    );
   if (isError) return <p>Error: refresh, if error persists contact admin</p>;
   return (
     <div
@@ -95,7 +98,7 @@ export function PercentageWithSliders({
     }
   }
   return (
-    <div className="flex flex-col gap-2 text-center items-center justify-center ">
+    <div className="flex flex-col items-center justify-center gap-2 text-center ">
       {access.map((player: Access) => (
         <div key={player.user_id}>
           <p>{player.username}</p>
@@ -117,7 +120,10 @@ export function PercentageWithSliders({
           />
         </div>
       ))}
-      <button className="w-fit m-2 rounded-lg bg-theme-header p-2" onClick={handleClick}>
+      <button
+        className="m-2 w-fit rounded-lg bg-theme-header p-2"
+        onClick={handleClick}
+      >
         Update
       </button>
       {!!data && <p>Updated</p>}
