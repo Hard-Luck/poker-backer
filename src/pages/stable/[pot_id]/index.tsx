@@ -20,7 +20,7 @@ export default function Pot() {
 
   return (
     <SignedIn>
-      <div className="h-[calc(100vh - 4rem)]  bg-theme-black p-4 ">
+      <div className="h-screen bg-theme-black p-4 ">
         <div className="mb-2 grid grid-cols-7 rounded-lg bg-theme-grey p-4 text-white">
           <div className="col-span-5 flex flex-col ">
             <div className=" text-xs">Pot Name</div>
@@ -41,7 +41,12 @@ export default function Pot() {
 
         <div className="flex items-center justify-center"></div>
 
-        <PotTable error={error} data={data} isLoading={isLoading} pot_id={pot_id} />
+        <PotTable
+          error={error}
+          data={data}
+          isLoading={isLoading}
+          pot_id={pot_id}
+        />
       </div>
     </SignedIn>
   );
