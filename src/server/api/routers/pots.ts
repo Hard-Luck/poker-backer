@@ -3,7 +3,7 @@
 import { TRPCError } from "@trpc/server";
 import { hasAccessToPot, isBackerOfPot } from "~/models/potAceess";
 import { chop, createPot, deletePot, getAllUsersPots, getChopHistory, getPotById, isPotOwner, topUpPot, } from "~/models/pots";
-import { late, z } from "zod";
+import { z } from "zod";
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
 import { prisma } from "~/server/db";
 

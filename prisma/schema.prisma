@@ -16,9 +16,10 @@ model UserInfo {
   username            String
   is_backer           Boolean      @default(false)
   admin               Boolean      @default(false)
+  img_url             String @default("/public/defaultUser.jpg")
   potAccess           PotAccess[]
   Sessions            Sessions[]
-  sentFriendships     Friendship[] @relation(name: "sent")
+  sentFriendships     Friendship[] @relation(name: "sent" )
   receivedFriendships Friendship[] @relation(name: "received")
   SessionComments  SessionComments[]
 
@@ -30,9 +31,9 @@ model UserInfo {
 model Friendship {
   id         Int      @id @default(autoincrement())
   user_id    String
-  user       UserInfo @relation(name: "sent", fields: [user_id], references: [id])
+  user       UserInfo @relation(name: "sent", fields: [user_id], references: [id], onDelete: Cascade)
   friend_id  String
-  friend     UserInfo @relation(name: "received", fields: [friend_id], references: [id])
+  friend     UserInfo @relation(name: "received", fields: [friend_id], references: [id], onDelete: Cascade)
   status     Boolean  @default(false)
   created_at DateTime @default(now())
 
