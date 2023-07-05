@@ -57,13 +57,13 @@ function FriendCard({
 }) {
   const imageStyle = { borderRadius: "50%" };
   const { user_id, status, created_at, friend, user } = friendRequest;
-  if (user.username === username)
+  if (user.username === username) {
     return (
       <li className="m-4 flex justify-between rounded-lg bg-theme-grey p-2">
         <div className="flex items-center">
           <Image
             alt={`${username}'s profile picture`}
-            src={placeHolderImage}
+            src={friend.img_url || placeHolderImage}
             style={imageStyle}
             height={0}
             width={30}
@@ -79,12 +79,14 @@ function FriendCard({
         )}
       </li>
     );
+  }
+
   return (
     <li className=" m-4 flex  justify-between rounded-lg bg-theme-grey p-2 ">
       <div className="flex items-center">
         <Image
           alt={`${username}'s profile picture`}
-          src={placeHolderImage}
+          src={user.img_url || placeHolderImage}
           style={imageStyle}
           height={0}
           width={30}

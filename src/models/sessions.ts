@@ -96,7 +96,7 @@ export async function getSessionWithComments(session_id: number) {
             comments: {
                 include: {
                     user: {
-                        select: { username: true }
+                        select: { username: true, img_url: true }
                     }
                 }
             }

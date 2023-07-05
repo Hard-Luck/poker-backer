@@ -3,9 +3,12 @@ import type { Friendship, PotAccess, Pots, Prisma, UserInfo } from "@prisma/clie
 export type FriendRequest = Friendship & {
     user: {
         username: string;
+        img_url: string | null;
     };
     friend: {
         username: string;
+        img_url: string | null;
+
     };
 }
 

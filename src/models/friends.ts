@@ -6,8 +6,8 @@ export async function getAllFriends(userId: string) {
             OR: [{ user_id: userId }, { friend_id: userId }],
         },
         include: {
-            friend: { select: { username: true } },
-            user: { select: { username: true } }
+            friend: { select: { username: true, img_url: true } },
+            user: { select: { username: true, img_url: true } }
         }
     })
     return friends

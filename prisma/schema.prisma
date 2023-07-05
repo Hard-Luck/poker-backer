@@ -16,7 +16,7 @@ model UserInfo {
   username            String
   is_backer           Boolean      @default(false)
   admin               Boolean      @default(false)
-  img_url             String @default("/public/defaultUser.jpg")
+  img_url             String? 
   potAccess           PotAccess[]
   Sessions            Sessions[]
   sentFriendships     Friendship[] @relation(name: "sent" )
