@@ -4,40 +4,47 @@ import NotFound404 from "~/components/errors/NotFound";
 import { convertMinsToHrsMins, formatShortDate } from "~/utils/timestamp";
 import { formatCurrency } from "~/utils/currency";
 import ConfirmButton from "../confirm-button/ConfirmButton";
-import type { Sessions } from "@prisma/client";
+import type { Pots, Sessions } from "@prisma/client";
 import Link from "next/link";
+import { FiTrash2 } from "react-icons/fi";
 
 type SessionWithCount = Sessions & { _count: { comments: number } };
 
-export function PotTable({ pot_id }: { pot_id: number }) {
-  const { data, isLoading, error } = api.pots.getById.useQuery(
-    { pot_id },
-    { retry: false, refetchOnWindowFocus: false, refetchOnReconnect: false }
-  );
+export function PotTable({
+  pot_id,
+  data,
+  isLoading,
+  error,
+}: {
+  pot_id: number;
+  data: Pots | undefined | null;
+  isLoading: boolean;
+  error: Pots;
+}) {
   if (error) return <NotFound404 page="player" />;
   if (isLoading) return <Loading />;
   const sessions = data?.sessions;
   return (
-    <div className="flex  w-full flex-col gap-4 border-2 border-gray-200 bg-white p-4 dark:border-gray-700 dark:bg-gray-800">
-      <h2 className="text-center text-2xl font-bold text-white">
-        Pot Name: {data?.name} Float: {data?.float}
-      </h2>
-      <table className="mr-4 text-white">
-        <thead>
-          <tr>
-            <td className="text-center">Date Played</td>
-            <td className="text-end">Session Length</td>
-            <td className="text-end">Amount</td>
-            <td className="text-end">Total</td>
-            <td className="text-center"></td>
-          </tr>
-        </thead>
-        <tbody>
-          {sessions?.map((session) => {
-            return <SessionsTableRow key={session.id} session={session} />;
-          })}
-        </tbody>
-      </table>
+    <div className=" gap-4 overflow-x-auto rounded-lg bg-theme-grey p-4">
+      <div className="overflow-x-auto">
+        <table className=" text-white ">
+          <thead className="text-sm font-bold">
+            <tr>
+              <td className="text-center">Date</td>
+              <td className="text-center">Session</td>
+              <td className="text-center">Amount</td>
+              <td className="text-center">Total</td>
+              <td className="text-center">Comments</td>
+              <td className="text-center"></td>
+            </tr>
+          </thead>
+          <tbody>
+            {sessions?.map((session) => {
+              return <SessionsTableRow key={session.id} session={session} />;
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
@@ -55,24 +62,24 @@ export function SessionsTableRow({ session }: { session: SessionWithCount }) {
     ? convertMinsToHrsMins(session_length)
     : transaction_type;
   return (
-    <tr>
+    <tr className="border-b-2 border-[#6b6b6b] ">
       <td className="text-center">{formatShortDate(created_at)}</td>
-      <td className="text-end">{sessionDisplay}</td>
-      <td className={`text-end text-${color}-500`}>{formatCurrency(amount)}</td>
-      <td className="text-end">{formatCurrency(total)}</td>
-      <td>
-        <ConfirmButton
-          buttonLabel="🚮"
-          confirmMessage="permanantly delete session?"
-          disabled={isLoading}
-          onConfirm={() => mutate({ id: session.id })}
-          className="text-red-500"
-        />
+      <td className="text-center">{sessionDisplay}</td>
+      <td className={`text-center text-${color}-500`}>
+        {formatCurrency(amount)}
+      </td>
+      <td className="text-center">{formatCurrency(total)}</td>
+      <td className="text-center">
+        <Link href={`/sessions/${session.id}`}>{session._count.comments}</Link>
       </td>
       <td>
-        <Link href={`/sessions/${session.id}`}>
-          Comments: {session._count.comments}
-        </Link>
+        <ConfirmButton
+          buttonLabel={<FiTrash2 />}
+          // confirmMessage="permanantly delete session?"
+          disabled={isLoading}
+          onConfirm={() => mutate({ id: session.id })}
+          className="m-2 rounded-lg bg-theme-red p-1 text-white"
+        />
       </td>
     </tr>
   );

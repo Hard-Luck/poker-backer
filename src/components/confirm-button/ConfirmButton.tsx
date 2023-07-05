@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import { FiX, FiCheck } from "react-icons/fi";
 
 interface ConfirmButtonProps {
-  confirmMessage: string;
+  confirmMessage?: string;
   buttonLabel: React.ReactNode | string;
   onConfirm: () => void;
   className?: string;
@@ -32,21 +33,23 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({
   return (
     <div>
       {showConfirmation ? (
-        <div>
-          <p className="text-center text-white">{confirmMessage}</p>
-          <button
-            className={`${className || ""} bg-green-500`}
-            onClick={handleConfirm}
-            disabled={disabled}
-          >
-            Confirm
-          </button>
-          <button
-            className={`${className || ""} bg-red-500`}
-            onClick={handleCancel}
-          >
-            Cancel
-          </button>
+        <div className="flex flex-col items-center">
+          <p className="text-center text-sm text-white">{confirmMessage}</p>
+          <div className="flex">
+            <button
+              className="my-2 mb-2 mr-2 rounded-lg  bg-theme-green px-2 py-2 text-center text-sm font-medium text-white"
+              onClick={handleConfirm}
+              disabled={disabled}
+            >
+              <FiCheck />
+            </button>
+            <button
+              className="my-2 mb-2 mr-2 rounded-lg  bg-theme-red px-2 py-2 text-center text-sm font-medium text-white"
+              onClick={handleCancel}
+            >
+              <FiX />
+            </button>
+          </div>
         </div>
       ) : (
         <button className={className} onClick={handleClick} disabled={disabled}>

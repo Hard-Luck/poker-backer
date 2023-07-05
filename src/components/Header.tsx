@@ -15,7 +15,7 @@ export default function Header() {
 
   return (
     <div className="flex h-16 flex-col">
-      <div className="flex h-full items-center bg-theme-header p-0 text-white">
+      <div className="flex h-full items-center bg-theme-green p-0 text-theme-black">
         <span className="my-3 pl-4">
           {user.isSignedIn && user.isLoaded && (
             <UserButton afterSignOutUrl="/" />

@@ -62,7 +62,7 @@ function FriendCard({
           <div className="pl-2 pr-2">{formatShortDate(created_at)}</div>
         </div>
         {!status && (
-          <div className="flex items-center rounded-lg bg-[#FFBF8A] pl-2 pr-2 text-xl text-white">
+          <div className="flex items-center rounded-lg bg-[#eca46a] pl-2 pr-2 text-xl text-white">
             <RiPassPendingFill />
           </div>
         )}
