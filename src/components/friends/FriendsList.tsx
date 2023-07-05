@@ -4,6 +4,8 @@ import { formatShortDate } from "~/utils/timestamp";
 import Loading from "../Loading";
 import { BsCheck } from "react-icons/bs";
 import { RiPassPendingFill } from "react-icons/ri";
+import placeHolderImage from "../../../public/defaultUser.jpg";
+import Image from "next/image";
 
 export default function FriendsList({ username }: { username: string }) {
   const { data, isLoading } = api.friends.getUserFriendsWithStatus.useQuery();
@@ -15,7 +17,7 @@ export default function FriendsList({ username }: { username: string }) {
   const friends = data.filter((request) => !!request.status);
 
   return (
-    <div className="h-[calc(100vh-4rem)]">
+    <>
       <div>
         <ul>
           {friends.map((friendInfo) => {
@@ -42,7 +44,7 @@ export default function FriendsList({ username }: { username: string }) {
           );
         })}
       </ul>
-    </div>
+    </>
   );
 }
 
@@ -53,11 +55,20 @@ function FriendCard({
   friendRequest: FriendRequest;
   username: string;
 }) {
+  const imageStyle = { borderRadius: "50%" };
   const { user_id, status, created_at, friend, user } = friendRequest;
   if (user.username === username)
     return (
       <li className="m-4 flex justify-between rounded-lg bg-theme-grey p-2">
-        <div className="flex">
+        <div className="flex items-center">
+          <Image
+            alt={`${username}'s profile picture`}
+            src={placeHolderImage}
+            style={imageStyle}
+            height={0}
+            width={30}
+          />
+
           <div className="pl-2 pr-2 font-semibold">{friend.username} </div>
           <div className="pl-2 pr-2">{formatShortDate(created_at)}</div>
         </div>
@@ -70,7 +81,14 @@ function FriendCard({
     );
   return (
     <li className=" m-4 flex  justify-between rounded-lg bg-theme-grey p-2 ">
-      <div className="flex">
+      <div className="flex items-center">
+        <Image
+          alt={`${username}'s profile picture`}
+          src={placeHolderImage}
+          style={imageStyle}
+          height={0}
+          width={30}
+        />
         <div className="pl-2 pr-2 font-semibold">{user.username}</div>
         <div className="pl-2 pr-2">{formatShortDate(created_at)}</div>
       </div>

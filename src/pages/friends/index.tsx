@@ -9,7 +9,7 @@ export default function FriendsPage() {
   const { data, isLoading } = api.users.getCurrentUserName.useQuery();
   if (!isLoaded || !data || isLoading) return <Loading />;
   return (
-    <div className="relative h-full bg-theme-black text-theme-white">
+    <div className="relative h-[calc(100vh-4rem)] bg-theme-black text-theme-white">
       <h2 className="p-4 text-xl font-semibold">Friends</h2>
       <AddFriend />
       <FriendsList username={data} />
