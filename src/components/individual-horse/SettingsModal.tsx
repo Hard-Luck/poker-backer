@@ -3,6 +3,7 @@ import { useState } from "react";
 import InputSlider from "react-input-slider";
 import { api } from "~/utils/api";
 import { sumValues } from "~/utils/helper";
+import { FiX } from "react-icons/fi";
 
 export default function SettingsModal({
   pot_id,
@@ -18,16 +19,24 @@ export default function SettingsModal({
   if (isError) return <p>Error: refresh, if error persists contact admin</p>;
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+      className="fixed inset-0 flex items-center justify-center bg-theme-black bg-opacity-90"
       onClick={onClose}
     >
       <div
-        className="rounded-lg bg-white p-6"
+        className="rounded-lg bg-theme-black p-6 text-center text-white"
         onClick={(e) => e.stopPropagation()}
       >
-        <p>Setting</p>
+        <div className="relative">
+          <p className="text-2xl font-bold">Settings</p>
+
+          <button
+            className="absolute right-0 top-0 rounded-lg bg-theme-header p-1 text-2xl"
+            onClick={onClose}
+          >
+            <FiX />
+          </button>
+        </div>
         <PercentageWithSliders pot_id={pot_id} access={data} />
-        <button onClick={onClose}>Close</button>
       </div>
     </div>
   );
@@ -86,7 +95,7 @@ export function PercentageWithSliders({
     }
   }
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 text-center items-center justify-center ">
       {access.map((player: Access) => (
         <div key={player.user_id}>
           <p>{player.username}</p>
@@ -100,6 +109,7 @@ export function PercentageWithSliders({
             }
           />
           <input
+            className="rounded-lg p-2 text-theme-black"
             type="number"
             min={0}
             value={percentages[player.user_id]}
@@ -107,7 +117,9 @@ export function PercentageWithSliders({
           />
         </div>
       ))}
-      <button onClick={handleClick}>Update</button>
+      <button className="w-fit m-2 rounded-lg bg-theme-header p-2" onClick={handleClick}>
+        Update
+      </button>
       {!!data && <p>Updated</p>}
       {isError && <p>{error.message}</p>}
       {!!sliderError && <p>{sliderError}</p>}
@@ -131,24 +143,24 @@ export function DeletePotButton({ pot_id }: { pot_id: number }) {
   }
   if (error) console.error(error);
   return (
-    <div className="dark flex flex-col gap-2 rounded-lg bg-gray-200 p-2 text-center text-red-500 shadow-md shadow-gray-300/50">
+    <div className="dark flex flex-col gap-2 rounded-lg  p-2 text-center text-red-500">
       {!confirmMessage && (
         <button
-          className="rounded-lg bg-gray-700 p-2 text-white"
+          className="rounded-lg bg-theme-red p-2 text-white"
           onClick={() => setConfirmMessage(true)}
         >
           Delete Pot?
         </button>
       )}
-      {confirmMessage && <p>This cannot be undone, click below to delete</p>}
       {confirmMessage && (
         <button
           onClick={() => delete_pot({ pot_id })}
-          className="bg-red-500 text-white"
+          className="rounded-lg bg-theme-red p-2 text-white"
         >
           DELETE
         </button>
       )}
+      {confirmMessage && <p>This cannot be undone, click below to delete</p>}
     </div>
   );
 }
