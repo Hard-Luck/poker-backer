@@ -6,7 +6,11 @@ import { env } from "~/env.mjs";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const check = req.headers["check"]
-    if (check === env.CHECK) res.status(403).send({ message: "not authorized" })
+    console.log(check)
+    console.log(env.CHECK);
+    console.log(req.headers)
+
+    if (check !== env.CHECK) return res.status(403).send({ message: "not authorized" })
     const evt = req.body as WebhookEvent
     switch (evt.type) {
         case 'user.created': // this is typed
