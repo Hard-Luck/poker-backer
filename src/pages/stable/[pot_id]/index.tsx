@@ -7,7 +7,7 @@ import { PotTable } from "~/components/individual-horse/PotTable";
 import { PotTotal } from "~/components/individual-horse/PotTotal";
 import SessionCount from "~/components/individual-horse/SessionCount";
 import { api } from "~/utils/api";
-import { FiSettings, FiUserPlus } from "react-icons/fi";
+import NotFound404 from "~/components/errors/NotFound";
 
 export default function Pot() {
   const pot_id = Number(useRouter().query.pot_id);
@@ -17,7 +17,8 @@ export default function Pot() {
     { pot_id },
     { retry: false, refetchOnWindowFocus: false, refetchOnReconnect: false }
   );
-
+  if (error) return <NotFound404 page="player" />;
+  if (isLoading) return <Loading />;
   return (
     <SignedIn>
       <div className="h-screen bg-theme-black p-4 ">
@@ -41,12 +42,7 @@ export default function Pot() {
 
         <div className="flex items-center justify-center"></div>
 
-        <PotTable
-          error={error}
-          data={data}
-          isLoading={isLoading}
-          pot_id={pot_id}
-        />
+        {data?.sessions && <PotTable sessions={data.sessions} />}
       </div>
     </SignedIn>
   );

@@ -1,29 +1,15 @@
 import { api } from "~/utils/api";
-import Loading from "../Loading";
-import NotFound404 from "~/components/errors/NotFound";
+
 import { convertMinsToHrsMins, formatShortDate } from "~/utils/timestamp";
 import { formatCurrency } from "~/utils/currency";
 import ConfirmButton from "../confirm-button/ConfirmButton";
-import type { Pots, Sessions } from "@prisma/client";
+import type { Sessions } from "@prisma/client";
 import Link from "next/link";
 import { FiTrash2 } from "react-icons/fi";
 
 type SessionWithCount = Sessions & { _count: { comments: number } };
 
-export function PotTable({
-  pot_id,
-  data,
-  isLoading,
-  error,
-}: {
-  pot_id: number;
-  data: Pots | undefined | null;
-  isLoading: boolean;
-  error: Pots;
-}) {
-  if (error) return <NotFound404 page="player" />;
-  if (isLoading) return <Loading />;
-  const sessions = data?.sessions;
+export function PotTable({ sessions }: { sessions: SessionWithCount[] }) {
   return (
     <div className=" gap-4 overflow-x-auto rounded-lg bg-theme-grey p-4">
       <div className="overflow-x-auto">
