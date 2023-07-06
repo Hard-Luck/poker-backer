@@ -38,7 +38,7 @@ export default function Session() {
               <div className="flex items-center">
                 <Image
                   alt={`${comment.user.username}'s profile picture`}
-                  src={comment.img_url || placeHolderImage}
+                  src={comment.user.img_url || placeHolderImage}
                   style={imageStyle}
                   height={0}
                   width={30}
