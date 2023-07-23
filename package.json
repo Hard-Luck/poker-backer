@@ -8,8 +8,7 @@
     "dev": "next dev",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "start": "next start",
-    "setup-dbs": "psql -f prisma/setup-dbs.sql"
+    "start": "next start"
   },
   "prisma": {
     "seed": "node --experimental-specifier-resolution=node --loader ts-node/esm/transpile-only prisma/seed.mjs"

@@ -33,7 +33,6 @@ export default function Pot() {
               <Modals pot_id={pot_id} />
             </IsBacker>
           </div>
-
           <div className="col-span-2">
             <SessionCount pot_id={pot_id} />
             <PotTotal pot_id={pot_id} />
