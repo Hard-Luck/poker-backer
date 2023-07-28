@@ -13,15 +13,21 @@ export default function ChopCard({
   };
 }) {
   return (
-    <div className="border-black-100">
-      <p>{formatShortDate(chop?.created_at || new Date())}</p>
+    <div className="mx-4 my-8">
+      <h3 className="m-2 rounded-lg bg-slate-300 p-2 font-bold text-theme-black">
+        {formatShortDate(chop?.created_at || new Date())}
+      </h3>
       {chop?.chop_split &&
         Object.entries(chop?.chop_split)
           .filter(([id, amount]) => amount !== 0 && id != null)
           .map(([id, amount]) => {
             return (
-              <div key={uniqueId()}>
-                {<Username user_id={id} />} - {amount}
+              <div
+                className="m-2 flex justify-between rounded-lg bg-theme-grey p-2"
+                key={uniqueId()}
+              >
+                <div className="px-2">{<Username user_id={id} />} </div>
+                <div className="px-2"> {amount}</div>
               </div>
             );
           })}

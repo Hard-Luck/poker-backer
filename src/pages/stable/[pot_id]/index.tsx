@@ -8,6 +8,7 @@ import { PotTotal } from "~/components/individual-horse/PotTotal";
 import SessionCount from "~/components/individual-horse/SessionCount";
 import { api } from "~/utils/api";
 import NotFound404 from "~/components/errors/NotFound";
+import Link from "next/link";
 
 export default function Pot() {
   const pot_id = Number(useRouter().query.pot_id);
@@ -22,20 +23,26 @@ export default function Pot() {
   return (
     <SignedIn>
       <div className="h-[calc(100vh-4rem)] bg-theme-black p-4 ">
-        <div className="mb-2 grid grid-cols-7 rounded-lg bg-theme-grey p-4 text-white">
-          <div className="col-span-5 flex flex-col ">
-            <div className=" text-xs">Pot Name</div>
-            <div className="text-xl font-bold">{data?.name}</div>
-            <div className=" text-xs">Float</div>
-            <div className="text-xl font-bold">{data?.float}</div>
-
-            <IsBacker pot_id={pot_id}>
-              <Modals pot_id={pot_id} />
-            </IsBacker>
+        <div className=" mb-2 grid grid-cols-7 rounded-lg bg-theme-grey p-4 text-white">
+          <div className="col-span-4 flex flex-col justify-between ">
+            <div>
+              <div className=" text-xs">Pot Name</div>
+              <div className="text-xl font-bold">{data?.name}</div>
+              <div className=" text-xs">Float</div>
+              <div className="text-xl font-bold">{data?.float}</div>
+            </div>
+            <div className="">
+              <IsBacker pot_id={pot_id}>
+                <Modals pot_id={pot_id} />
+              </IsBacker>
+            </div>
           </div>
-          <div className="col-span-2">
+          <div className="col-span-3">
             <SessionCount pot_id={pot_id} />
             <PotTotal pot_id={pot_id} />
+            <button className="w-full rounded-lg bg-theme-green p-2 text-center text-sm text-white">
+              <Link href={`/stable/${pot_id}/chops`} >Chop History</Link>
+            </button>
           </div>
         </div>
 
