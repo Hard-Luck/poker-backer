@@ -1,6 +1,6 @@
 import { type Sessions } from "@prisma/client";
 import { uniqueId } from "lodash";
-import { formatShortDate } from "~/utils/timestamp";
+import { formatLongDate } from "~/utils/timestamp";
 import { Username } from "./ChopHistory";
 
 export default function ChopCard({
@@ -15,7 +15,7 @@ export default function ChopCard({
   return (
     <div className="mx-4 my-8">
       <h3 className="m-2 rounded-lg bg-slate-300 p-2 font-bold text-theme-black">
-        {formatShortDate(chop?.created_at || new Date())}
+        {formatLongDate(chop?.created_at || new Date())}
       </h3>
       {chop?.chop_split &&
         Object.entries(chop?.chop_split)
