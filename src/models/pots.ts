@@ -60,7 +60,18 @@ export async function chop(pot_id: number, user_id: string) {
         return acc
     }, {})
     topUps.forEach(topUp => {
-        split.user_id += topUp.amount
+        console.log(topUp);
+
+        split[topUp.user_id] += topUp.amount
+    })
+    console.log({
+        user_id,
+        pot_id,
+        transaction_type: "chop",
+        amount,
+        chop_split: split,
+        top_ups_total: 0,
+        total: float
     })
     return prisma.sessions.create({
         data: {
