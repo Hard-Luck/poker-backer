@@ -21,7 +21,7 @@ export async function addSession(user_id: string, session: AddSessionInput) {
     let total = potMostRecentSession?.total ?? potInfo.float
     total += amount
 
-    return prisma.sessions.create({ data: { user_id, amount, pot_id, session_length, created_at, total } })
+    return prisma.sessions.create({ data: { user_id, amount, pot_id, session_length, created_at, total, top_ups_total: potMostRecentSession?.top_ups_total } })
 }
 
 export async function getSessionsSinceLastChop(pot_id: number) {

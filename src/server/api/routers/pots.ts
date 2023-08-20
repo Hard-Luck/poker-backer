@@ -71,8 +71,9 @@ export const potsRouter = createTRPCRouter({
         const { pot_id } = input
         const pot = await getPotById(pot_id)
         const latestSession = pot?.sessions[0]
+        console.log(latestSession)
         if (latestSession?.transaction_type === "chop") return 0
-        return (latestSession?.total || 0) - (latestSession?.top_ups_total || 0)
+        return (latestSession?.total || 0) - (latestSession?.top_ups_total || 0) - (pot?.float || 0)
     })
 
 
