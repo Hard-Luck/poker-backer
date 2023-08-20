@@ -10,7 +10,7 @@ export function extractSessions(backedPots: PotAccessWithPotAndSession[]) {
   const sessionsWithFloats = backedPots.reduce(
     (acc, { pot }) => {
       const { float, sessions } = pot;
-      acc.float += float;
+      acc.float += sessions.length ? float : 0;
       acc.sessions.push(...sessions);
       return acc;
     },
