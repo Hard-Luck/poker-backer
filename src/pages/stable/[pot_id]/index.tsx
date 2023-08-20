@@ -9,6 +9,7 @@ import SessionCount from "~/components/individual-horse/SessionCount";
 import { api } from "~/utils/api";
 import NotFound404 from "~/components/errors/NotFound";
 import Link from "next/link";
+import { HasAccess } from "~/components/utils/HasAccess";
 
 export default function Pot() {
   const pot_id = Number(useRouter().query.pot_id);
@@ -21,7 +22,7 @@ export default function Pot() {
   if (error) return <NotFound404 page="player" />;
   if (isLoading) return <Loading />;
   return (
-    <SignedIn>
+    <HasAccess pot_id={pot_id}>
       <div className="h-[calc(100vh-4rem)] bg-theme-black p-4 ">
         <div className=" mb-2 grid grid-cols-7 rounded-lg bg-theme-grey p-4 text-white">
           <div className="col-span-4 flex flex-col justify-between ">
@@ -41,7 +42,7 @@ export default function Pot() {
             <SessionCount pot_id={pot_id} />
             <PotTotal pot_id={pot_id} />
             <button className="w-full rounded-lg bg-theme-green p-2 text-center text-sm text-white">
-              <Link href={`/stable/${pot_id}/chops`} >Chop History</Link>
+              <Link href={`/stable/${pot_id}/chops`}>Chop History</Link>
             </button>
           </div>
         </div>
@@ -50,6 +51,6 @@ export default function Pot() {
 
         {data?.sessions && <PotTable sessions={data.sessions} />}
       </div>
-    </SignedIn>
+    </HasAccess>
   );
 }
