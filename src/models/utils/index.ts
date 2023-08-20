@@ -1,12 +1,29 @@
 import type { PotAccess, Pots, Sessions } from "@prisma/client";
 import type { PotAccessWithPotAndSession } from "types/dashboard";
 
+interface SessionsWithFloatsTotal {
+  sessions: Array<Sessions>;
+  float: number;
+}
 // untested
 export function extractSessions(backedPots: PotAccessWithPotAndSession[]) {
-  return backedPots.reduce((sessions, access) => {
-    const potSessions = access.pot.sessions ?? [];
-    return [...sessions, ...potSessions];
-  }, [] as Sessions[]);
+  const sessionsWithFloats = backedPots.reduce(
+    (acc, { pot }) => {
+      const { float, sessions } = pot;
+      acc.float += float;
+      acc.sessions.push(...sessions);
+      return acc;
+    },
+    { float: 0, sessions: [] } as SessionsWithFloatsTotal
+  );
+  return sessionsWithFloats;
+}
+export function getTotalDashboardProfit({
+  float,
+  sessions,
+}: SessionsWithFloatsTotal) {
+  const total = sumSessionsTotal(sessions);
+  return total - float;
 }
 
 export function sumSessionsTotal(sessions: Sessions[]) {

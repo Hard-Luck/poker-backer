@@ -1,5 +1,5 @@
 import { prisma } from "~/server/db";
-import { extractSessions, sumSessionsTotal } from "./utils";
+import { extractSessions, getTotalDashboardProfit } from "./utils";
 
 export default async function getDashboard(id: string, isBacker: boolean) {
   const total = getTotalProfitOrLoss(id);
@@ -29,7 +29,7 @@ export async function getTotalProfitOrLoss(user_id: string) {
     },
   });
   const sessions = extractSessions(allBackedPots);
-  return sumSessionsTotal(sessions);
+  return getTotalDashboardProfit(sessions);
 }
 
 export async function getRecentSessions(user_id: string, isBacker: boolean) {
