@@ -19,7 +19,7 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
     isSuccess,
   } = api.sessions.create.useMutation();
   const router = useRouter();
-  if (isSuccess) void router.push(`/stable/${pot?.id}`);
+  if (isSuccess && pot?.id) void router.push(`/stable/${pot.id}`);
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = event.target.value;
 

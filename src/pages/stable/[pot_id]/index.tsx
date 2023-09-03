@@ -1,4 +1,3 @@
-import { SignedIn } from "@clerk/nextjs";
 import { useRouter } from "next/router";
 import Loading from "~/components/Loading";
 import IsBacker from "~/components/confirm-button/IsBacker";
@@ -13,12 +12,12 @@ import { HasAccess } from "~/components/utils/HasAccess";
 
 export default function Pot() {
   const pot_id = Number(useRouter().query.pot_id);
-  if (!pot_id) return <Loading />;
 
   const { data, isLoading, error } = api.pots.getById.useQuery(
     { pot_id },
     { retry: false, refetchOnWindowFocus: false, refetchOnReconnect: false }
   );
+  if (!pot_id) return <Loading />;
   if (error) return <NotFound404 page="player" />;
   if (isLoading) return <Loading />;
   return (

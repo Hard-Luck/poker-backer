@@ -1,7 +1,6 @@
 import { api } from "~/utils/api";
 import AddSessionForm from "./AddSessionForm";
 import Loading from "../Loading";
-import { useRouter } from "next/router";
 
 export default function AddSession() {
   const { data, isLoading } = api.pots.getCurrentUserPot.useQuery();

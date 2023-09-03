@@ -1,12 +1,10 @@
 import { useRouter } from "next/router";
 import React from "react";
 
-type Props = {};
-
-export default function AddSessionButton({}: Props) {
+export default function AddSessionButton() {
   const router = useRouter();
   function handleClick() {
-    router.push("/sessions");
+    void router.push("/sessions");
   }
   return (
     <button

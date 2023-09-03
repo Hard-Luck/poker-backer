@@ -2,8 +2,7 @@ import { api } from "~/utils/api";
 import ConfirmButton from "../confirm-button/ConfirmButton";
 
 export default function ChopButton({ pot_id }: { pot_id: number }) {
-  const { mutate, data, isLoading, isError, isSuccess } =
-    api.pots.chop.useMutation();
+  const { mutate, data, isLoading, isError } = api.pots.chop.useMutation();
   if (isLoading) return null;
   return (
     <div className="flex items-center">
