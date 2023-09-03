@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { type ChangeEvent, type FormEvent, useState } from "react";
 import { api } from "~/utils/api";
 export interface PotNameWithID {
@@ -15,8 +16,10 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
     mutate: postSession,
     data,
     isError,
+    isSuccess,
   } = api.sessions.create.useMutation();
-
+  const router = useRouter();
+  if (isSuccess) void router.push(`/stable/${pot?.id}`);
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = event.target.value;
 

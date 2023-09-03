@@ -1,6 +1,6 @@
 export const sessions = [
   {
-    "user_id": "user_2OnHBVsZEN4fbOHF6a50RhsN3AW",
+    "user_id": "user_2OmeUZBsdKseCxgxXDbo7Pe0fLD",
     "pot_id": 1,
     "amount": 500,
     "total": 1500,
@@ -8,7 +8,7 @@ export const sessions = [
     "session_length": 240
   },
   {
-    "user_id": "user_2OnHBVsZEN4fbOHF6a50RhsN3AW",
+    "user_id": "user_2OmeUZBsdKseCxgxXDbo7Pe0fLD",
     "pot_id": 1,
     "amount": 200,
     "total": 1700,

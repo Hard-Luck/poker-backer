@@ -26,7 +26,7 @@ export default function Settings() {
   };
 
   return (
-    <div className="mx-auto flex h-screen flex-col items-center bg-theme-black text-white">
+    <div className="mx-auto flex h-screen flex-col items-center bg-theme-black text-black">
       <h2 className="m-2 text-2xl">Settings</h2>
       <span>Update Username</span>
       <input

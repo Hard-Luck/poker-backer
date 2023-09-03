@@ -10,6 +10,7 @@ import SessionsThisMonth from "~/components/dashboard/SessionsThisMonth";
 import TotalAllFloats from "~/components/dashboard/TotalAllFloats";
 import StableButton from "~/components/dashboard/StablesButton";
 import RecentSession from "~/components/dashboard/LatestSessions";
+import AddSessionButton from "~/components/dashboard/AddSessionButton";
 
 export default function Home() {
   const user = useUser().user;
@@ -57,6 +58,7 @@ function Dashboard({ user }: { user: UserInfo }) {
           <RecentSession sessions={data.sessions} />
         </div>
       </div>
+      <AddSessionButton />
     </main>
   );
 }

@@ -1,13 +1,13 @@
 import { api } from "~/utils/api";
 import AddSessionForm from "./AddSessionForm";
 import Loading from "../Loading";
+import { useRouter } from "next/router";
 
 export default function AddSession() {
-  const { data, isLoading, isSuccess } = api.pots.getCurrentUserPot.useQuery();
-  const ctx = api.useContext();
+  const { data, isLoading } = api.pots.getCurrentUserPot.useQuery();
   if (isLoading) return <Loading />;
   if (!data) return <p>No pot</p>;
-  if (isSuccess) void ctx.pots.invalidate();
+
   const pots = data.map((pot) => {
     return {
       id: pot.pot_id,
