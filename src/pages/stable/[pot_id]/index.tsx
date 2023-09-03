@@ -20,6 +20,8 @@ export default function Pot() {
   if (!pot_id) return <Loading />;
   if (error) return <NotFound404 page="player" />;
   if (isLoading) return <Loading />;
+  const topUps = data?.sessions[0]?.top_ups_total ?? 0;
+  const float = data?.float ?? 0;
   return (
     <HasAccess pot_id={pot_id}>
       <div className="h-[calc(100vh-4rem)] bg-theme-black p-4 ">
@@ -29,7 +31,7 @@ export default function Pot() {
               <div className=" text-xs">Pot Name</div>
               <div className="text-xl font-bold">{data?.name}</div>
               <div className=" text-xs">Float</div>
-              <div className="text-xl font-bold">{data?.float}</div>
+              <div className="text-xl font-bold">{float + topUps}</div>
             </div>
             <div className="">
               <IsBacker pot_id={pot_id}>
