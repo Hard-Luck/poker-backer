@@ -1,11 +1,13 @@
 import {
   createPotAccess,
+  deleteAccessToPot,
   getAccessByPotId,
   hasAccessToPot,
   patchPercentages,
 } from "~/models/potAceess";
 import { z } from "zod";
 import { createTRPCRouter, privateProcedure } from "~/server/api/trpc";
+
 
 export const potAccessRouter = createTRPCRouter({
   create: privateProcedure
@@ -47,4 +49,10 @@ export const potAccessRouter = createTRPCRouter({
       const user_id = ctx.currentUser;
       return hasAccessToPot(user_id, input.pot_id);
     }),
-});
+  deletePotAccess: privateProcedure.input(z.object({ pot_id: z.number(), user_id: z.string() })).mutation(async ({ input, ctx }) => {
+
+    const ownerId = ctx.currentUser;
+    const { user_id, pot_id } = input;
+    return deleteAccessToPot(ownerId, user_id, pot_id)
+  })
+})

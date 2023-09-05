@@ -1,5 +1,6 @@
 import type { InputPotAccess } from "types/api";
 import { prisma } from "~/server/db";
+import { isPotOwner } from "./pots";
 
 export async function hasAccessToPot(userId: string, potId: number) {
     const potAccess = await prisma.potAccess.findFirst({
@@ -52,6 +53,27 @@ export async function getAccessByPotId(potId: number) {
         const { id, username } = access.user
         return { user_id: id, username, percent, type }
     })
+}
+
+export async function deleteAccessToPot(ownerId: string, userId: string, potId: number) {
+    const isOwner = await isPotOwner(potId, ownerId)
+    if (!isOwner) throw new Error('UNAUTHOIRISED')
+    const access = await prisma.potAccess.findFirst({
+        where: {
+            user_id: userId,
+            pot_id: potId,
+        }
+    })
+    if (access?.percent !== 0) throw new Error("PERCENT_ERROR")
+    const { count } = await prisma.potAccess.deleteMany({
+        where: {
+            user_id: userId,
+            pot_id: potId,
+            percent: 0
+        }
+    })
+    if (count === 0) throw new Error('NO_ACCESS')
+
 }
 
 

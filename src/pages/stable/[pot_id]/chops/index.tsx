@@ -8,7 +8,7 @@ export default function Chops() {
   if (typeof pot_id !== "string") return null;
   return (
     <HasAccess pot_id={+pot_id}>
-      <ChopHistory pot_id={+pot_id} />;
+      <ChopHistory pot_id={+pot_id} />
     </HasAccess>
   );
 }

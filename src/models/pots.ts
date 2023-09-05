@@ -87,7 +87,7 @@ export async function getChopHistory(pot_id: number, take = 10) {
     take: take,
     include: {
       user: { select: { username: true } },
-    },
+    }, orderBy: { created_at: "desc" }
   });
   return history;
 }

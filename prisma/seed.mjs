@@ -6,8 +6,6 @@ const { potAccess, pots, friends, users, sessions } = data;
 const prisma = new PrismaClient();
 
 async function seed(seedUsers = false) {
-  console.log(data);
-  await prisma.userInfo.deleteMany();
   await prisma.potAccess.deleteMany();
   await prisma.pots.deleteMany();
   await prisma.friendship.deleteMany();
@@ -18,6 +16,7 @@ async function seed(seedUsers = false) {
   await prisma.$queryRaw`ALTER TABLE Friendship AUTO_INCREMENT = 1;`;
 
   if (seedUsers) {
+    await prisma.userInfo.deleteMany();
     await prisma.userInfo.createMany({
       data: users,
     });
