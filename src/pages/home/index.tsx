@@ -56,15 +56,6 @@ function Dashboard({ user }: { user: UserInfo }) {
       <h2 className="p-8 text-4xl font-bold text-white">
         Hey, {user.username}
       </h2>
-      <button
-        onClick={() => {
-          runOneSignal().catch((err) => {
-            console.log(err);
-          });
-        }}
-      >
-        notis
-      </button>
       <div id="dashboard-top-container" className="mb-2 grid grid-cols-2 gap-1">
         <SessionsThisMonth sessions={data.sessionCount} />
         <TotalAllFloats total={data.total} />
