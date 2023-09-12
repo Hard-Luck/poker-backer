@@ -1,9 +1,11 @@
 import { useState } from "react";
 import Loading from "~/components/Loading";
 import { api } from "~/utils/api";
+import { runOneSignal } from "~/utils/onesignal";
 
 export default function Settings() {
   const { data, isLoading, isError } = api.users.getCurrentUserInfo.useQuery();
+  const [init, setInit] = useState(false);
   const {
     mutate: updateUsername,
     isLoading: usernameLoading,
@@ -28,6 +30,7 @@ export default function Settings() {
   return (
     <div className="mx-auto flex h-screen flex-col items-center bg-theme-black text-black">
       <h2 className="m-2 text-2xl">Settings</h2>
+
       <span>Update Username</span>
       <input
         className="m-2 rounded-lg p-4"

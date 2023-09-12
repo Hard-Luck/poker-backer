@@ -1,19 +1,19 @@
 export const pots = [
   {
     "name": "Backed By 1 and 2",
-    "owner": "user_2OmeUZBsdKseCxgxXDbo7Pe0fLD",
+    "owner": "user_2PqJQNE9wZgv7EkXitAu5Uo8RsM",
     "float": 1000,
     "created_at": new Date("2022-01-05 12:49")
   },
   {
     "name": "Backed by 1",
-    "owner": "user_2OmeUZBsdKseCxgxXDbo7Pe0fLD",
+    "owner": "user_2PqJQNE9wZgv7EkXitAu5Uo8RsM",
     "float": 1000,
     "created_at": new Date("2022-02-03 12:50")
   },
   {
     "name": "Backed by 1 (2)",
-    "owner": "user_2OmeUZBsdKseCxgxXDbo7Pe0fLD",
+    "owner": "user_2PqJQNE9wZgv7EkXitAu5Uo8RsM",
     "float": 500,
     "created_at": new Date("2023-01-04 12:33")
   },

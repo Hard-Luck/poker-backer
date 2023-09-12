@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": ["dom", "dom.iterable", "esnext", "WebWorker", "ES6"],
     "allowJs": true,
     "checkJs": true,
     "skipLibCheck": true,
@@ -27,7 +27,8 @@
     "**/*.ts",
     "**/*.tsx",
     "**/*.cjs",
-    "**/*.mjs"
+    "**/*.mjs",
+    "public/OneSignalSDKWorker.js"
   ],
   "exclude": ["node_modules"]
 }
