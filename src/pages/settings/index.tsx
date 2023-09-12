@@ -5,7 +5,6 @@ import { runOneSignal } from "~/utils/onesignal";
 
 export default function Settings() {
   const { data, isLoading, isError } = api.users.getCurrentUserInfo.useQuery();
-  const [init, setInit] = useState(false);
   const {
     mutate: updateUsername,
     isLoading: usernameLoading,
@@ -27,13 +26,26 @@ export default function Settings() {
     updateUsername({ username });
   };
 
+  const handleNotifications = () => {
+    runOneSignal().catch((err) => {
+      console.log(err);
+    });
+  };
+
   return (
-    <div className="mx-auto flex h-screen flex-col items-center bg-theme-black text-black">
+    <div className="mx-auto flex h-screen flex-col items-center bg-theme-black text-white">
       <h2 className="m-2 text-2xl">Settings</h2>
+
+      {/* <button
+        className="m-4 rounded-lg bg-theme-header p-3"
+        onClick={handleNotifications}
+      >
+        notifications
+      </button> */}
 
       <span>Update Username</span>
       <input
-        className="m-2 rounded-lg p-4"
+        className="m-2 rounded-lg p-4 text-theme-black"
         type="text"
         value={username}
         onChange={handleUsernameChange}
@@ -119,11 +131,11 @@ export function UpdateImgUrl() {
   };
 
   return (
-    <div className="mx-auto flex h-screen flex-col items-center bg-theme-black text-black">
+    <div className="mx-auto flex h-screen flex-col items-center bg-theme-black text-white">
       <h2 className="m-2 text-2xl">Settings</h2>
       <span>Update Img Url</span>
       <input
-        className="m-2 rounded-lg p-4"
+        className="m-2 rounded-lg p-4 text-theme-black"
         type="text"
         value={imgUrl}
         onChange={handleImgUrlChange}

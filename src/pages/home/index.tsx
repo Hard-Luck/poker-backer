@@ -18,10 +18,17 @@ export default function Home() {
   const { data, isLoading, isError } = api.users.getCurrentUserInfo.useQuery();
   const router = useRouter();
 
+  React.useEffect(() => {
+    runOneSignal().catch((err) => {
+      console.log(err);
+    });
+  }, []);
+
   if (!user) return null;
   if (isError) void router.push("/settings");
   if (isLoading) return <Loading />;
   if (!data) return <p>missing data</p>;
+
   return (
     <SignedIn>
       <Dashboard user={data} />
@@ -49,15 +56,6 @@ function Dashboard({ user }: { user: UserInfo }) {
       <h2 className="p-8 text-4xl font-bold text-white">
         Hey, {user.username}
       </h2>
-      <button
-        onClick={() => {
-          runOneSignal().catch((err) => {
-            console.log(err);
-          });
-        }}
-      >
-        notis
-      </button>
       <div id="dashboard-top-container" className="mb-2 grid grid-cols-2 gap-1">
         <SessionsThisMonth sessions={data.sessionCount} />
         <TotalAllFloats total={data.total} />
