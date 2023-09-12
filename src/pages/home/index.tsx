@@ -18,10 +18,17 @@ export default function Home() {
   const { data, isLoading, isError } = api.users.getCurrentUserInfo.useQuery();
   const router = useRouter();
 
+  React.useEffect(() => {
+    runOneSignal().catch((err) => {
+      console.log(err);
+    });
+  }, []);
+
   if (!user) return null;
   if (isError) void router.push("/settings");
   if (isLoading) return <Loading />;
   if (!data) return <p>missing data</p>;
+
   return (
     <SignedIn>
       <Dashboard user={data} />

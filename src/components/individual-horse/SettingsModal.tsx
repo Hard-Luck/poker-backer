@@ -4,6 +4,7 @@ import InputSlider from "react-input-slider";
 import { api } from "~/utils/api";
 import { sumValues } from "~/utils/helper";
 import { FiX } from "react-icons/fi";
+import DeleteAccessButton from "./DeleteAccessButton";
 
 export default function SettingsModal({
   pot_id,
@@ -118,6 +119,7 @@ export function PercentageWithSliders({
             value={percentages[player.user_id]}
             onChange={(e) => handleInputChange(player.user_id, e.target.value)}
           />
+          <DeleteAccessButton user_id={player.user_id} pot_id={pot_id} />
         </div>
       ))}
       <button

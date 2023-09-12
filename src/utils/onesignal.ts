@@ -18,5 +18,5 @@ export function runOneSignal(): Promise<void | null> {
         console.log(err);
       });
   }
-  return Promise.resolve(null);
+  return Promise.reject("No Onesignal Key Set");
 }
