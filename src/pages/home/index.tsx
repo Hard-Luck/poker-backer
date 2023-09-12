@@ -11,11 +11,13 @@ import TotalAllFloats from "~/components/dashboard/TotalAllFloats";
 import StableButton from "~/components/dashboard/StablesButton";
 import RecentSession from "~/components/dashboard/LatestSessions";
 import AddSessionButton from "~/components/dashboard/AddSessionButton";
+import { runOneSignal } from "~/utils/onesignal";
 
 export default function Home() {
   const user = useUser().user;
   const { data, isLoading, isError } = api.users.getCurrentUserInfo.useQuery();
   const router = useRouter();
+
   if (!user) return null;
   if (isError) void router.push("/settings");
   if (isLoading) return <Loading />;
@@ -47,6 +49,15 @@ function Dashboard({ user }: { user: UserInfo }) {
       <h2 className="p-8 text-4xl font-bold text-white">
         Hey, {user.username}
       </h2>
+      <button
+        onClick={() => {
+          runOneSignal().catch((err) => {
+            console.log(err);
+          });
+        }}
+      >
+        notis
+      </button>
       <div id="dashboard-top-container" className="mb-2 grid grid-cols-2 gap-1">
         <SessionsThisMonth sessions={data.sessionCount} />
         <TotalAllFloats total={data.total} />
