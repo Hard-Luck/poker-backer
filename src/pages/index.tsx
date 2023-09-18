@@ -16,7 +16,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="poker.png" />
       </Head>
       <main className="flex h-screen items-center justify-center bg-theme-black">
-        <SignInButton afterSignInUrl="/" mode="modal" afterSignUpUrl="/">
+        <SignInButton afterSignInUrl="/" afterSignUpUrl="/">
           <button className="rounded-lg bg-theme-header px-5 py-2.5 text-center text-sm font-medium text-white  focus:outline-none focus:ring-4 ">
             Sign in
           </button>
