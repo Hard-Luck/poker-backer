@@ -5,6 +5,7 @@ const path = require("path");
 const config = {
   overrides: [
     {
+      excludedFiles: ["/poker-backer/service-worker.js"],
       extends: [
         "plugin:@typescript-eslint/recommended-requiring-type-checking",
       ],
@@ -14,6 +15,7 @@ const config = {
       },
     },
   ],
+
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: path.join(__dirname, "tsconfig.json"),
