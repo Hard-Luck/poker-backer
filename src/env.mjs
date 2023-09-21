@@ -8,6 +8,8 @@ const server = z.object({
   DATABASE_URL: z.string().url(),
   NODE_ENV: z.enum(["development", "test", "production"]),
   CHECK: z.string(),
+  PUSHER_INSTANCE_ID: z.string(),
+  PUSHER_SECRET_KEY: z.string(),
 });
 
 /**
@@ -33,6 +35,8 @@ const processEnv = {
   NODE_ENV: process.env.NODE_ENV,
   // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
   CHECK: process.env.CHECK,
+  PUSHER_INSTANCE_ID: process.env.PUSHER_INSTANCE_ID,
+  PUSHER_SECRET_KEY: process.env.PUSHER_SECRET_KEY,
 };
 
 // Don't touch the part below
