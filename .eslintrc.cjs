@@ -12,6 +12,7 @@ const config = {
       parserOptions: {
         project: path.join(__dirname, "tsconfig.json"),
       },
+      excludedFiles: ["/service-worker.js"],
     },
   ],
   parser: "@typescript-eslint/parser",

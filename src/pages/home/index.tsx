@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { useUser } from "@clerk/clerk-react";
 import * as React from "react";
 import { api } from "~/utils/api";
@@ -11,6 +13,7 @@ import TotalAllFloats from "~/components/dashboard/TotalAllFloats";
 import StableButton from "~/components/dashboard/StablesButton";
 import RecentSession from "~/components/dashboard/LatestSessions";
 import AddSessionButton from "~/components/dashboard/AddSessionButton";
+import Pushy from "pushy-sdk-web";
 
 export default function Home() {
   const user = useUser().user;
@@ -38,6 +41,24 @@ function Dashboard({ user }: { user: UserInfo }) {
       refetchInterval: 100000,
     }
   );
+
+  const registerPushy = () => {
+    Pushy.register({ appId: "650d438826fd5b0367fa535c" })
+      .then(function (deviceToken) {
+        // Print device token to console
+        console.log("Pushy device token: " + deviceToken);
+
+        // Send the token to your backend server via an HTTP GET request
+        //fetch('https://your.api.hostname/register/device?token=' + deviceToken);
+
+        // Succeeded, optionally do something to alert the user
+      })
+      .catch(function (err) {
+        // Notify user of failure
+        alert("Registration failed: " + err.message);
+      });
+  };
+
   if (isLoading) return <Loading />;
   if (isError) return <p>Error</p>;
   if (!data) return <p>Missing data</p>;
@@ -47,6 +68,7 @@ function Dashboard({ user }: { user: UserInfo }) {
       <h2 className="p-8 text-4xl font-bold text-white">
         Hey, {user.username}
       </h2>
+      <button onClick={registerPushy}>NOTIS</button>
       <div id="dashboard-top-container" className="mb-2 grid grid-cols-2 gap-1">
         <SessionsThisMonth sessions={data.sessionCount} />
         <TotalAllFloats total={data.total} />

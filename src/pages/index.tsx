@@ -14,6 +14,7 @@ const Home: NextPage = () => {
         <title>Poker Backer</title>
         <meta name="description" content="Poker Backer" />
         <link rel="icon" href="poker.png" />
+        <link rel="manifest" href="/manifest.json" />
       </Head>
       <main className="flex h-screen items-center justify-center bg-theme-black">
         <SignInButton afterSignInUrl="/" afterSignUpUrl="/">
