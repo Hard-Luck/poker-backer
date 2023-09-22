@@ -31,6 +31,7 @@ export default function Home() {
 }
 
 function Dashboard({ user }: { user: UserInfo }) {
+  const [token, setToken] = React.useState('')
   const { data, isLoading, isError } = api.users.getDashboard.useQuery(
     {
       isBacker: user.is_backer,
@@ -47,6 +48,8 @@ function Dashboard({ user }: { user: UserInfo }) {
       .then(function (deviceToken) {
         // Print device token to console
         console.log("Pushy device token: " + deviceToken);
+        setToken(deviceToken)
+
 
         // Send the token to your backend server via an HTTP GET request
         //fetch('https://your.api.hostname/register/device?token=' + deviceToken);
@@ -69,6 +72,7 @@ function Dashboard({ user }: { user: UserInfo }) {
         Hey, {user.username}
       </h2>
       <button onClick={registerPushy}>NOTIS</button>
+      <p>{token}</p>
       <div id="dashboard-top-container" className="mb-2 grid grid-cols-2 gap-1">
         <SessionsThisMonth sessions={data.sessionCount} />
         <TotalAllFloats total={data.total} />
