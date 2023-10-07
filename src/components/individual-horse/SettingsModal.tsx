@@ -67,7 +67,7 @@ export function PercentageWithSliders({
   const ctx = api.useContext();
   const { mutate } = api.potAccess.patchPercent.useMutation({
     onSuccess: () => {
-      ctx.potAccess.getAccessByPotId.invalidate();
+      void ctx.potAccess.getAccessByPotId.invalidate();
       toastDefaultSuccess("Updated split");
     },
     onError: (error) => {
@@ -149,10 +149,10 @@ export function DeletePotButton({ pot_id }: { pot_id: number }) {
   const [confirmMessage, setConfirmMessage] = useState(false);
   const ctx = api.useContext();
   const router = useRouter();
-  const { mutate: delete_pot, error } = api.pots.delete.useMutation({
+  const { mutate: delete_pot } = api.pots.delete.useMutation({
     onSuccess: () => {
-      router.push("/stable");
-      ctx.invalidate();
+      void ctx.invalidate();
+      void router.push("/stable");
       toastDefaultSuccess("Pot deleted");
     },
     onError: (error) => {

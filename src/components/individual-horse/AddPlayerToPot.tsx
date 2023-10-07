@@ -65,7 +65,7 @@ export function AddToPotButton({
   const { mutate, data, isLoading } = api.potAccess.create.useMutation({
     onSuccess: () => {
       toastDefaultSuccess("Player added to pot");
-      ctx.friends.invalidate();
+      void ctx.friends.invalidate();
     },
     onError: () => {
       toastDefaultError("Error adding player to pot");

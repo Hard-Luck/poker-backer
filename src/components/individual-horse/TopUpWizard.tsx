@@ -16,7 +16,7 @@ export function TopUpWizard({
   const ctx = api.useContext();
   const { isLoading, mutate } = api.pots.topUp.useMutation({
     onSuccess: () => {
-      ctx.pots.invalidate();
+      void ctx.pots.invalidate();
       onClose();
       toast.message("Topped up pot", {
         duration: 3000,

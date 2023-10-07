@@ -15,7 +15,7 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
   const [sessionLengthError, setSessionLengthError] = useState(false);
   const { mutate: postSession, data } = api.sessions.create.useMutation({
     onSuccess: () => {
-      pot?.id && router.push(`/stable/${pot.id}`);
+      pot?.id && void router.push(`/stable/${pot.id}`);
     },
     onError: () => {
       toastDefaultError("Error: are all inputs correct?");

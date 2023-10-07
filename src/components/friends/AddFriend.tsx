@@ -7,7 +7,6 @@ import {
   BsSearch,
   BsPersonPlusFill,
 } from "react-icons/bs";
-import { toastDefaultSuccess } from "../utils/default-toasts";
 import { toast } from "sonner";
 
 export default function AddFriend() {
@@ -99,7 +98,7 @@ export function AddFriendButton({ friend_id }: { friend_id: string }) {
         duration: 3000,
         position: "bottom-center",
       });
-      ctx.friends.invalidate();
+      void ctx.friends.invalidate();
     },
   });
 

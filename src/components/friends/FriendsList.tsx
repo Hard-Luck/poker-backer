@@ -104,7 +104,7 @@ function FriendRequestButton({ user_id }: { user_id: string }) {
   const ctx = api.useContext();
   const { mutate, isLoading } = api.friends.accept.useMutation({
     onSuccess: () => {
-      ctx.friends.invalidate();
+      void ctx.friends.invalidate();
     },
     onError: () => {
       toastDefaultError("Error accepting friend request");
