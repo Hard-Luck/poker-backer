@@ -24,7 +24,7 @@ export default function Header() {
         </span>
         <Link className="my-3 text-2xl font-bold" href="/home">
           <Image
-            src="/logo-no-background.svg"
+            src="/poker-backer-high-resolution-logo-black-on-transparent-background.png"
             alt="logo"
             width={200}
             height={200}
