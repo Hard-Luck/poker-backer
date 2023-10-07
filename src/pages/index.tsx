@@ -11,11 +11,6 @@ const Home: NextPage = () => {
   if (user.isSignedIn) void router.push("/home");
   return (
     <>
-      <Head>
-        <title>Poker Backer</title>
-        <meta name="description" content="Poker Backer" />
-        <link rel="icon" href="poker.png" />
-      </Head>
       <main className="flex h-screen flex-col items-center justify-center bg-theme-black">
         <Image
           src="/logo-white.png"
