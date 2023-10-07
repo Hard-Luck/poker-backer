@@ -70,6 +70,7 @@ export const potsRouter = createTRPCRouter({
     getTotal: privateProcedure.input(z.object({ pot_id: z.number() })).query(async ({ input }) => {
         const { pot_id } = input
         const pot = await getPotById(pot_id)
+        if (pot?.sessions.length === 0) return 0
         const latestSession = pot?.sessions[0]
         if (latestSession?.transaction_type === "chop") return 0
         return (latestSession?.total || 0) - (latestSession?.top_ups_total || 0) - (pot?.float || 0)

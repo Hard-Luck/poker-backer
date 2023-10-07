@@ -6,6 +6,7 @@ import { BsCheck } from "react-icons/bs";
 import { RiPassPendingFill } from "react-icons/ri";
 import placeHolderImage from "../../../public/defaultUser.jpg";
 import Image from "next/image";
+import { toastDefaultError } from "../utils/default-toasts";
 
 export default function FriendsList({ username }: { username: string }) {
   const { data, isLoading } = api.friends.getUserFriendsWithStatus.useQuery();
@@ -101,10 +102,15 @@ function FriendCard({
 
 function FriendRequestButton({ user_id }: { user_id: string }) {
   const ctx = api.useContext();
-  const { mutate, isLoading, isSuccess } = api.friends.accept.useMutation();
-  if (isSuccess) {
-    void ctx.friends.invalidate();
-  }
+  const { mutate, isLoading } = api.friends.accept.useMutation({
+    onSuccess: () => {
+      ctx.friends.invalidate();
+    },
+    onError: () => {
+      toastDefaultError("Error accepting friend request");
+    },
+  });
+
   return (
     <button
       className="flex items-center rounded-lg bg-theme-green pl-2 pr-2 text-xl text-white"

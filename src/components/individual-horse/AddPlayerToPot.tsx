@@ -3,6 +3,10 @@ import { api } from "~/utils/api";
 import Loading from "../Loading";
 import ConfirmButton from "../confirm-button/ConfirmButton";
 import { FiUserPlus } from "react-icons/fi";
+import {
+  toastDefaultError,
+  toastDefaultSuccess,
+} from "../utils/default-toasts";
 
 export default function AddPlayerToPot({
   pot_id,
@@ -58,17 +62,21 @@ export function AddToPotButton({
 }) {
   const [isBacker, setIsBacker] = useState(0);
   const ctx = api.useContext();
-  const { mutate, data, isError, isSuccess, isLoading } =
-    api.potAccess.create.useMutation();
+  const { mutate, data, isLoading } = api.potAccess.create.useMutation({
+    onSuccess: () => {
+      toastDefaultSuccess("Player added to pot");
+      ctx.friends.invalidate();
+    },
+    onError: () => {
+      toastDefaultError("Error adding player to pot");
+    },
+  });
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsBacker(event.target.checked ? 1 : 0);
   };
   const handleClick = () => {
     mutate({ user_id, pot_id, type: isBacker });
   };
-  if (isSuccess) {
-    void ctx.friends.invalidate();
-  }
   return (
     <div className="flex items-center">
       <div className="flex flex-col">
@@ -87,7 +95,6 @@ export function AddToPotButton({
         // confirmMessage="Confirm?"
       />
       {!!data && <p className="text-green-500">Player Added</p>}
-      {isError && <p className="text-red-500">Error</p>}
     </div>
   );
 }

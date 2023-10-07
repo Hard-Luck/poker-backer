@@ -13,6 +13,7 @@ export default {
         "theme-header": "#3F88C5",
         "theme-accent-silver": "#C1BDB3",
         "theme-red2": "#E94F37",
+        "theme-gold": "#FFD700"
       },
       margin: {
         '0': '0',

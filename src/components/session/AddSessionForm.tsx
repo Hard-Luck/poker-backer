@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { type ChangeEvent, type FormEvent, useState } from "react";
 import { api } from "~/utils/api";
+import { toastDefaultError } from "../utils/default-toasts";
 export interface PotNameWithID {
   name: string;
   id: number;
@@ -12,14 +13,15 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
   const [created_at, setCreated_at] = useState(new Date());
   const [amountError, setAmountError] = useState(false);
   const [sessionLengthError, setSessionLengthError] = useState(false);
-  const {
-    mutate: postSession,
-    data,
-    isError,
-    isSuccess,
-  } = api.sessions.create.useMutation();
+  const { mutate: postSession, data } = api.sessions.create.useMutation({
+    onSuccess: () => {
+      pot?.id && router.push(`/stable/${pot.id}`);
+    },
+    onError: () => {
+      toastDefaultError("Error: are all inputs correct?");
+    },
+  });
   const router = useRouter();
-  if (isSuccess && pot?.id) void router.push(`/stable/${pot.id}`);
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = event.target.value;
 
@@ -61,11 +63,6 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
         session_length: +sessionLength,
         created_at,
       });
-      if (!isError) {
-        setAmount("");
-        setCreated_at(new Date());
-        setSessionLength("");
-      }
     }
   }
 
@@ -90,7 +87,6 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
       {!!data && (
         <div className="mb-4 text-green-500">Session added successfully!</div>
       )}
-      {isError && <div className="mb-4 text-red-500">An Error Occurred!</div>}
       <form
         id="add-session-form"
         onSubmit={handleSubmit}

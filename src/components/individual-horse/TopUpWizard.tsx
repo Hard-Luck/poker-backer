@@ -3,6 +3,7 @@ import { api } from "~/utils/api";
 import ConfirmButton from "../confirm-button/ConfirmButton";
 import { formatCurrency } from "~/utils/currency";
 import { FiX } from "react-icons/fi";
+import { toast } from "sonner";
 
 export function TopUpWizard({
   pot_id,
@@ -12,13 +13,19 @@ export function TopUpWizard({
   onClose: () => void;
 }) {
   const [amount, setAmount] = useState<number | "">("");
-  const { isSuccess, isLoading, mutate } = api.pots.topUp.useMutation();
   const ctx = api.useContext();
+  const { isLoading, mutate } = api.pots.topUp.useMutation({
+    onSuccess: () => {
+      ctx.pots.invalidate();
+      onClose();
+      toast.message("Topped up pot", {
+        duration: 3000,
+        position: "bottom-center",
+      });
+    },
+  });
   if (!mutate) return null;
-  if (isSuccess) {
-    void ctx.pots.invalidate();
-    onClose();
-  }
+
   const handleConfirm = () => {
     if (amount !== "") {
       mutate({ pot_id, amount });

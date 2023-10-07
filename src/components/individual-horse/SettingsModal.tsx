@@ -5,6 +5,10 @@ import { api } from "~/utils/api";
 import { sumValues } from "~/utils/helper";
 import { FiX } from "react-icons/fi";
 import DeleteAccessButton from "./DeleteAccessButton";
+import {
+  toastDefaultError,
+  toastDefaultSuccess,
+} from "../utils/default-toasts";
 
 export default function SettingsModal({
   pot_id,
@@ -61,14 +65,21 @@ export function PercentageWithSliders({
 }) {
   const [sliderError, setSliderError] = useState<string | null>(null);
   const ctx = api.useContext();
-  const { mutate, data, isError, error, isSuccess } =
-    api.potAccess.patchPercent.useMutation();
+  const { mutate } = api.potAccess.patchPercent.useMutation({
+    onSuccess: () => {
+      ctx.potAccess.getAccessByPotId.invalidate();
+      toastDefaultSuccess("Updated split");
+    },
+    onError: (error) => {
+      toastDefaultError(error.message);
+    },
+  });
   const percentagesForState: { [key: string]: string } = {};
   access.forEach(({ user_id, percent }) => {
     percentagesForState[user_id] = percent.toString();
   });
   const [percentages, setPercentages] = useState(percentagesForState);
-  if (isSuccess) void ctx.potAccess.getAccessByPotId.invalidate();
+
   function handleClick() {
     const sum = sumValues(percentages);
     if (sum !== 100) {
@@ -128,8 +139,6 @@ export function PercentageWithSliders({
       >
         Update
       </button>
-      {!!data && <p>Updated</p>}
-      {isError && <p>{error.message}</p>}
       {!!sliderError && <p>{sliderError}</p>}
       <DeletePotButton pot_id={pot_id} />
     </div>
@@ -140,16 +149,16 @@ export function DeletePotButton({ pot_id }: { pot_id: number }) {
   const [confirmMessage, setConfirmMessage] = useState(false);
   const ctx = api.useContext();
   const router = useRouter();
-  const {
-    mutate: delete_pot,
-    error,
-    isSuccess,
-  } = api.pots.delete.useMutation();
-  if (isSuccess) {
-    void ctx.invalidate();
-    void router.push("/pots");
-  }
-  if (error) console.error(error);
+  const { mutate: delete_pot, error } = api.pots.delete.useMutation({
+    onSuccess: () => {
+      router.push("/stable");
+      ctx.invalidate();
+      toastDefaultSuccess("Pot deleted");
+    },
+    onError: (error) => {
+      toastDefaultError(error.message);
+    },
+  });
   return (
     <div className="dark flex flex-col gap-2 rounded-lg  p-2 text-center text-red-500">
       {!confirmMessage && (

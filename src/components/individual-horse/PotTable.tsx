@@ -6,12 +6,13 @@ import ConfirmButton from "../confirm-button/ConfirmButton";
 import type { Sessions } from "@prisma/client";
 import Link from "next/link";
 import { FiTrash2 } from "react-icons/fi";
+import { toastDefaultSuccess } from "../utils/default-toasts";
 
 type SessionWithCount = Sessions & { _count: { comments: number } };
 
 export function PotTable({ sessions }: { sessions: SessionWithCount[] }) {
   return (
-    <div className=" h-[calc(100vh-17rem)] gap-4 overflow-y-auto rounded-lg bg-theme-grey p-4 flex justify-center">
+    <div className=" flex h-[calc(100vh-17rem)] justify-center gap-4 overflow-y-auto rounded-lg bg-theme-grey p-4">
       <table className=" text-white ">
         <thead>
           <tr className="sticky top-0 bg-theme-grey text-sm font-bold">
@@ -33,23 +34,36 @@ export function PotTable({ sessions }: { sessions: SessionWithCount[] }) {
   );
 }
 export function SessionsTableRow({ session }: { session: SessionWithCount }) {
-  const { mutate, isLoading, isSuccess } = api.sessions.delete.useMutation();
   const ctx = api.useContext();
-  if (isSuccess) {
-    void ctx.invalidate();
-  }
+  const { mutate, isLoading } = api.sessions.delete.useMutation({
+    onSuccess: () => {
+      void ctx.invalidate();
+      toastDefaultSuccess("Session deleted");
+    },
+  });
+
   const { created_at, session_length, amount, total, transaction_type } =
     session;
-  let color = amount > 0 ? "green" : "red";
-  if (["chop", "top_up"].includes(transaction_type)) color = "white";
+  let colorSetting = amount > 0 ? "green" : "red";
+  const style: {
+    [key: string]: string;
+  } = {
+    green: `text-center text-theme-green`,
+    red: `text-center text-theme-red`,
+    top_up: `text-center text-lg`,
+    chop: `text-center text-theme-gold text-lg`,
+  };
+  if (transaction_type === "top_up" || transaction_type === "chop") {
+    colorSetting = transaction_type;
+  }
   const sessionDisplay = !!session_length
     ? convertMinsToHrsMins(session_length)
-    : transaction_type;
+    : transaction_type.replace("_", " ").toUpperCase();
   return (
     <tr className="border-b-2 border-[#6b6b6b] text-sm">
       <td className="text-center">{formatShortDate(created_at)}</td>
       <td className="text-center">{sessionDisplay}</td>
-      <td className={`text-center text-${color}-500`}>
+      <td className={style[colorSetting] || `text-center`}>
         {formatCurrency(amount)}
       </td>
       <td className="text-center">{formatCurrency(total)}</td>

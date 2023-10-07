@@ -7,6 +7,8 @@ import {
   BsSearch,
   BsPersonPlusFill,
 } from "react-icons/bs";
+import { toastDefaultSuccess } from "../utils/default-toasts";
+import { toast } from "sonner";
 
 export default function AddFriend() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -91,11 +93,16 @@ export function AddFriendButton({ friend_id }: { friend_id: string }) {
     mutate,
     isLoading: disabled,
     data,
-    isSuccess,
-  } = api.friends.create.useMutation();
-  if (isSuccess) {
-    void ctx.friends.invalidate();
-  }
+  } = api.friends.create.useMutation({
+    onSuccess: () => {
+      toast.message("Friend request sent", {
+        duration: 3000,
+        position: "bottom-center",
+      });
+      ctx.friends.invalidate();
+    },
+  });
+
   if (isLoading) return null;
   if (data) return <p>{data.status ? "Friend" : "Pending"}</p>;
   if (status === true) return <p>Friend</p>;
