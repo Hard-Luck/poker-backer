@@ -13,6 +13,7 @@ export function createMockSession(options: Partial<Sessions> = {}): Sessions {
     session_length: 100,
     chop_split: null,
     created_at: new Date('2022-01-01'),
+    location: null,
     ...options,
   };
 }
