@@ -1,11 +1,11 @@
-import React from "react";
+import React from 'react';
 
 interface NotFoundProps {
   page: string | undefined;
 }
 
 export default function NotFound({ page }: NotFoundProps) {
-  page ??= "page";
+  page ??= 'page';
   return (
     <div className="flex min-h-screen flex-col items-center justify-center text-center">
       <h1 className="text-6xl font-bold text-gray-800">404</h1>

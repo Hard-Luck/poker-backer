@@ -1,18 +1,18 @@
-import { useState } from "react";
-import { api } from "~/utils/api";
-import ConfirmButton from "../confirm-button/ConfirmButton";
+import { useState } from 'react';
+import { api } from '~/utils/api';
+import ConfirmButton from '../confirm-button/ConfirmButton';
 import {
   BsPersonFillAdd,
   BsXCircleFill,
   BsSearch,
   BsPersonPlusFill,
-} from "react-icons/bs";
-import { toast } from "sonner";
+} from 'react-icons/bs';
+import { toast } from 'sonner';
 
 export default function AddFriend() {
   const [modalOpen, setModalOpen] = useState(false);
-  const [search, setSearch] = useState<string>("");
-  const [username, setUsername] = useState<string>("");
+  const [search, setSearch] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
   const [searched, setSearched] = useState<boolean>(false);
 
   const { data } = api.users.getUserByUsername.useQuery({
@@ -64,7 +64,7 @@ export default function AddFriend() {
             </button>
           </div>
           {data &&
-            data.map((person) => {
+            data.map(person => {
               return (
                 <div
                   key={person.id}
@@ -94,16 +94,16 @@ export function AddFriendButton({ friend_id }: { friend_id: string }) {
     data,
   } = api.friends.create.useMutation({
     onSuccess: () => {
-      toast.message("Friend request sent", {
+      toast.message('Friend request sent', {
         duration: 3000,
-        position: "bottom-center",
+        position: 'bottom-center',
       });
       void ctx.friends.invalidate();
     },
   });
 
   if (isLoading) return null;
-  if (data) return <p>{data.status ? "Friend" : "Pending"}</p>;
+  if (data) return <p>{data.status ? 'Friend' : 'Pending'}</p>;
   if (status === true) return <p>Friend</p>;
   if (status === false) return <p>Pending</p>;
   if (status === null)

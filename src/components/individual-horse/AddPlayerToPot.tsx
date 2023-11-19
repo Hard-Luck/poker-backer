@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { api } from "~/utils/api";
-import Loading from "../Loading";
-import ConfirmButton from "../confirm-button/ConfirmButton";
-import { FiUserPlus } from "react-icons/fi";
+import { useState } from 'react';
+import { api } from '~/utils/api';
+import Loading from '../Loading';
+import ConfirmButton from '../confirm-button/ConfirmButton';
+import { FiUserPlus } from 'react-icons/fi';
 import {
   toastDefaultError,
   toastDefaultSuccess,
-} from "../utils/default-toasts";
+} from '../utils/default-toasts';
 
 export default function AddPlayerToPot({
   pot_id,
@@ -27,7 +27,7 @@ export default function AddPlayerToPot({
     >
       <div
         className="rounded-lg bg-theme-black p-6 text-white"
-        onClick={(e) => e.stopPropagation()}
+        onClick={e => e.stopPropagation()}
       >
         <label htmlFor="search-add-pot">Add a friend</label>
         {/* <input
@@ -38,7 +38,7 @@ export default function AddPlayerToPot({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         /> */}
-        {data.map((user) => {
+        {data.map(user => {
           return (
             <div
               className="m-2 flex justify-between rounded-lg bg-theme-grey p-2"
@@ -64,11 +64,11 @@ export function AddToPotButton({
   const ctx = api.useContext();
   const { mutate, data, isLoading } = api.potAccess.create.useMutation({
     onSuccess: () => {
-      toastDefaultSuccess("Player added to pot");
+      toastDefaultSuccess('Player added to pot');
       void ctx.friends.invalidate();
     },
     onError: () => {
-      toastDefaultError("Error adding player to pot");
+      toastDefaultError('Error adding player to pot');
     },
   });
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {

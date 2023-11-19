@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { FiX, FiCheck } from "react-icons/fi";
+import React, { useState } from 'react';
+import { FiX, FiCheck } from 'react-icons/fi';
 
 interface ConfirmButtonProps {
   confirmMessage?: string;

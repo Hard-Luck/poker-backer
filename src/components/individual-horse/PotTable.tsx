@@ -1,12 +1,12 @@
-import { api } from "~/utils/api";
+import { api } from '~/utils/api';
 
-import { convertMinsToHrsMins, formatShortDate } from "~/utils/timestamp";
-import { formatCurrency } from "~/utils/currency";
-import ConfirmButton from "../confirm-button/ConfirmButton";
-import type { Sessions } from "@prisma/client";
-import Link from "next/link";
-import { FiTrash2 } from "react-icons/fi";
-import { toastDefaultSuccess } from "../utils/default-toasts";
+import { convertMinsToHrsMins, formatShortDate } from '~/utils/timestamp';
+import { formatCurrency } from '~/utils/currency';
+import ConfirmButton from '../confirm-button/ConfirmButton';
+import type { Sessions } from '@prisma/client';
+import Link from 'next/link';
+import { FiTrash2 } from 'react-icons/fi';
+import { toastDefaultSuccess } from '../utils/default-toasts';
 
 type SessionWithCount = Sessions & { _count: { comments: number } };
 
@@ -25,7 +25,7 @@ export function PotTable({ sessions }: { sessions: SessionWithCount[] }) {
           </tr>
         </thead>
         <tbody>
-          {sessions?.map((session) => {
+          {sessions?.map(session => {
             return <SessionsTableRow key={session.id} session={session} />;
           })}
         </tbody>
@@ -38,13 +38,13 @@ export function SessionsTableRow({ session }: { session: SessionWithCount }) {
   const { mutate, isLoading } = api.sessions.delete.useMutation({
     onSuccess: () => {
       void ctx.invalidate();
-      toastDefaultSuccess("Session deleted");
+      toastDefaultSuccess('Session deleted');
     },
   });
 
   const { created_at, session_length, amount, total, transaction_type } =
     session;
-  let colorSetting = amount > 0 ? "green" : "red";
+  let colorSetting = amount > 0 ? 'green' : 'red';
   const style: {
     [key: string]: string;
   } = {
@@ -53,12 +53,12 @@ export function SessionsTableRow({ session }: { session: SessionWithCount }) {
     top_up: `text-center text-lg`,
     chop: `text-center text-theme-gold text-lg`,
   };
-  if (transaction_type === "top_up" || transaction_type === "chop") {
+  if (transaction_type === 'top_up' || transaction_type === 'chop') {
     colorSetting = transaction_type;
   }
   const sessionDisplay = !!session_length
     ? convertMinsToHrsMins(session_length)
-    : transaction_type.replace("_", " ").toUpperCase();
+    : transaction_type.replace('_', ' ').toUpperCase();
   return (
     <tr className="border-b-2 border-[#6b6b6b] text-sm">
       <td className="text-center">{formatShortDate(created_at)}</td>

@@ -1,4 +1,4 @@
-import { FiArrowUpRight, FiArrowDownLeft } from "react-icons/fi";
+import { FiArrowUpRight, FiArrowDownLeft } from 'react-icons/fi';
 
 export default function TotalAllFloats({ total }: { total: number }) {
   return (
@@ -6,7 +6,7 @@ export default function TotalAllFloats({ total }: { total: number }) {
       <span className="text-sm font-bold text-white">Total</span>
       <div
         className={`text-${
-          total >= 0 ? "theme-green" : "theme-red"
+          total >= 0 ? 'theme-green' : 'theme-red'
         } flex items-center text-4xl font-bold`}
       >
         {total}

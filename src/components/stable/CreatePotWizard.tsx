@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { api } from "~/utils/api";
-import Modal from "react-modal";
-import { BsXCircleFill } from "react-icons/bs";
+import { useState } from 'react';
+import { api } from '~/utils/api';
+import Modal from 'react-modal';
+import { BsXCircleFill } from 'react-icons/bs';
 import {
   toastDefaultError,
   toastDefaultSuccess,
-} from "../utils/default-toasts";
+} from '../utils/default-toasts';
 
 export default function CreatePotWizard({
   modalIsOpen,
@@ -14,7 +14,7 @@ export default function CreatePotWizard({
   modalIsOpen: boolean;
   setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [newPot, setNewPot] = useState({ name: "", float: 0 });
+  const [newPot, setNewPot] = useState({ name: '', float: 0 });
   const ctx = api.useContext();
   const { data: userData, isLoading: userLoading } =
     api.users.getCurrentUserInfo.useQuery();
@@ -27,12 +27,12 @@ export default function CreatePotWizard({
   if (userLoading || !userData?.is_backer) return null;
   function handleSuccess() {
     void ctx.pots.invalidate();
-    setNewPot({ name: "", float: 0 });
+    setNewPot({ name: '', float: 0 });
     setModalIsOpen(false);
-    toastDefaultSuccess("Pot created successfully");
+    toastDefaultSuccess('Pot created successfully');
   }
   function handleError() {
-    toastDefaultError("Error creating pot. Could be duplicate name.");
+    toastDefaultError('Error creating pot. Could be duplicate name.');
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -45,8 +45,8 @@ export default function CreatePotWizard({
     <>
       <Modal
         style={{
-          overlay: { background: "#232931" },
-          content: { background: "#393e46" },
+          overlay: { background: '#232931' },
+          content: { background: '#393e46' },
         }}
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
@@ -69,7 +69,7 @@ export default function CreatePotWizard({
               id="nameInput"
               type="text"
               value={newPot.name}
-              onChange={(e) => setNewPot({ ...newPot, name: e.target.value })}
+              onChange={e => setNewPot({ ...newPot, name: e.target.value })}
               className="w-72 self-center rounded-lg p-2"
             />
 
@@ -83,7 +83,7 @@ export default function CreatePotWizard({
               id="floatInput"
               type="number"
               value={newPot.float}
-              onChange={(e) =>
+              onChange={e =>
                 setNewPot({ ...newPot, float: parseFloat(e.target.value) })
               }
               className="w-72 self-center rounded-lg p-2 text-right"

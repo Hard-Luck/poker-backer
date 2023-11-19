@@ -1,14 +1,14 @@
-import { useRouter } from "next/router";
-import Loading from "~/components/Loading";
-import IsBacker from "~/components/confirm-button/IsBacker";
-import { Modals } from "~/components/individual-horse/Modals";
-import { PotTable } from "~/components/individual-horse/PotTable";
-import { PotTotal } from "~/components/individual-horse/PotTotal";
-import SessionCount from "~/components/individual-horse/SessionCount";
-import { api } from "~/utils/api";
-import NotFound404 from "~/components/errors/NotFound";
-import Link from "next/link";
-import { HasAccess } from "~/components/utils/HasAccess";
+import { useRouter } from 'next/router';
+import Loading from '~/components/Loading';
+import IsBacker from '~/components/confirm-button/IsBacker';
+import { Modals } from '~/components/individual-horse/Modals';
+import { PotTable } from '~/components/individual-horse/PotTable';
+import { PotTotal } from '~/components/individual-horse/PotTotal';
+import SessionCount from '~/components/individual-horse/SessionCount';
+import { api } from '~/utils/api';
+import NotFound404 from '~/components/errors/NotFound';
+import Link from 'next/link';
+import { HasAccess } from '~/components/utils/HasAccess';
 
 export default function Pot() {
   const pot_id = Number(useRouter().query.pot_id);
@@ -22,6 +22,7 @@ export default function Pot() {
   if (isLoading) return <Loading />;
   const topUps = data?.sessions[0]?.top_ups_total ?? 0;
   const float = data?.float ?? 0;
+  console.log(data?.sessions);
   return (
     <HasAccess pot_id={pot_id}>
       <div className="h-[calc(100vh-4rem)] bg-theme-black p-4 ">

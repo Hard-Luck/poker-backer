@@ -6,8 +6,8 @@ PokerBacker is a robust and user-friendly application designed to assist poker p
 
 Hosted on [Vercel](https://poker-backer.vercel.app/)
 
-
 ## Screenshot
+
 ![image](https://github.com/Hard-Luck/poker-backer/assets/72257311/5882bc47-a7a7-4a7e-bd2c-4d2f3fb7e103)
 
 ## Features
@@ -31,10 +31,13 @@ These instructions will get you a copy of the project up and running on your loc
 ### Installation
 
 1. Clone the repo
+
 ```sh
 git clone https://github.com/hard-luck/poker-backer.git
 ```
+
 2. Install NPM packages
+
 ```sh
 npm install
 ```
@@ -84,5 +87,5 @@ Please feel free to reach out on GitHub if you have any questions or need furthe
 
 ## Acknowlegment
 
-Once again a huge thanks to Theo and the T3 team, this app was built on the shoulders of giants. 
+Once again a huge thanks to Theo and the T3 team, this app was built on the shoulders of giants.
 Much respect to [Vercel](https://vercel.com/) for such a great platform and NextJS.

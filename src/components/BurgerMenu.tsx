@@ -1,6 +1,6 @@
-import { useState } from "react";
-import Link from "next/link";
-import { SignedIn } from "@clerk/nextjs/dist/client-boundary/controlComponents";
+import { useState } from 'react';
+import Link from 'next/link';
+import { SignedIn } from '@clerk/nextjs/dist/client-boundary/controlComponents';
 
 const BurgerMenu = ({
   pages,
@@ -56,11 +56,11 @@ const BurgerMenu = ({
 
         <div
           className={`absolute left-0 right-0 z-10 bg-theme-white py-4 transition-opacity duration-300 ${
-            isOpen ? "opacity-100" : "pointer-events-none opacity-0"
+            isOpen ? 'opacity-100' : 'pointer-events-none opacity-0'
           }`}
         >
           <div className="flex flex-col items-center space-y-2">
-            {pages.map((page) => {
+            {pages.map(page => {
               if (page === currentPage) {
                 return (
                   <p key={page} className="border-b-2 p-4">

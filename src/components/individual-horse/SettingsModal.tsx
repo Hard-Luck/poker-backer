@@ -1,14 +1,14 @@
-import { useRouter } from "next/router";
-import { useState } from "react";
-import InputSlider from "react-input-slider";
-import { api } from "~/utils/api";
-import { sumValues } from "~/utils/helper";
-import { FiX } from "react-icons/fi";
-import DeleteAccessButton from "./DeleteAccessButton";
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import InputSlider from 'react-input-slider';
+import { api } from '~/utils/api';
+import { sumValues } from '~/utils/helper';
+import { FiX } from 'react-icons/fi';
+import DeleteAccessButton from './DeleteAccessButton';
 import {
   toastDefaultError,
   toastDefaultSuccess,
-} from "../utils/default-toasts";
+} from '../utils/default-toasts';
 
 export default function SettingsModal({
   pot_id,
@@ -32,7 +32,7 @@ export default function SettingsModal({
     >
       <div
         className="rounded-lg bg-theme-black p-6 text-center text-white"
-        onClick={(e) => e.stopPropagation()}
+        onClick={e => e.stopPropagation()}
       >
         <div className="relative">
           <p className="text-2xl font-bold">Settings</p>
@@ -68,9 +68,9 @@ export function PercentageWithSliders({
   const { mutate } = api.potAccess.patchPercent.useMutation({
     onSuccess: () => {
       void ctx.potAccess.getAccessByPotId.invalidate();
-      toastDefaultSuccess("Updated split");
+      toastDefaultSuccess('Updated split');
     },
-    onError: (error) => {
+    onError: error => {
       toastDefaultError(error.message);
     },
   });
@@ -83,7 +83,7 @@ export function PercentageWithSliders({
   function handleClick() {
     const sum = sumValues(percentages);
     if (sum !== 100) {
-      return setSliderError("Sum of percentages must be 100");
+      return setSliderError('Sum of percentages must be 100');
     }
     const formattedPercentages = Object.entries(percentages).map(
       ([user_id, percent]) => ({
@@ -94,7 +94,7 @@ export function PercentageWithSliders({
     mutate({ pot_id, percentages: formattedPercentages });
   }
   function handleSliderChange(id: string, value: number) {
-    setPercentages((prevPercentages) => ({
+    setPercentages(prevPercentages => ({
       ...prevPercentages,
       [id]: value.toFixed(1),
     }));
@@ -102,10 +102,10 @@ export function PercentageWithSliders({
 
   function handleInputChange(id: string, value: string) {
     // Allow for deletion of values from the input box
-    if (!isNaN(parseFloat(value)) || value === "") {
-      setPercentages((prevPercentages) => ({
+    if (!isNaN(parseFloat(value)) || value === '') {
+      setPercentages(prevPercentages => ({
         ...prevPercentages,
-        [id]: value === "" ? "" : value,
+        [id]: value === '' ? '' : value,
       }));
     }
   }
@@ -118,7 +118,7 @@ export function PercentageWithSliders({
             axis="x"
             xstep={10}
             xmin={0}
-            x={parseFloat(percentages[player.user_id] || "")}
+            x={parseFloat(percentages[player.user_id] || '')}
             onChange={({ x }: { x: number }) =>
               handleSliderChange(player.user_id, x)
             }
@@ -128,7 +128,7 @@ export function PercentageWithSliders({
             type="number"
             min={0}
             value={percentages[player.user_id]}
-            onChange={(e) => handleInputChange(player.user_id, e.target.value)}
+            onChange={e => handleInputChange(player.user_id, e.target.value)}
           />
           <DeleteAccessButton user_id={player.user_id} pot_id={pot_id} />
         </div>
@@ -152,10 +152,10 @@ export function DeletePotButton({ pot_id }: { pot_id: number }) {
   const { mutate: delete_pot } = api.pots.delete.useMutation({
     onSuccess: () => {
       void ctx.invalidate();
-      void router.push("/stable");
-      toastDefaultSuccess("Pot deleted");
+      void router.push('/stable');
+      toastDefaultSuccess('Pot deleted');
     },
-    onError: (error) => {
+    onError: error => {
       toastDefaultError(error.message);
     },
   });

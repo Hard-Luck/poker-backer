@@ -1,6 +1,6 @@
-import { useState } from "react";
-import Loading from "~/components/Loading";
-import { api } from "~/utils/api";
+import { useState } from 'react';
+import Loading from '~/components/Loading';
+import { api } from '~/utils/api';
 
 export default function Settings() {
   const { data, isLoading, isError } = api.users.getCurrentUserInfo.useQuery();
@@ -12,7 +12,7 @@ export default function Settings() {
   } = api.users.updateUsername.useMutation();
   const ctx = api.useContext();
   if (isSuccess) void ctx.users.invalidate();
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState('');
 
   if (isLoading) return <Loading />;
   if (usernameError) return <p>Error, please refresh</p>;
@@ -94,7 +94,7 @@ export function IsBackerSettingCheckBox({
 }
 
 export function UpdateImgUrl() {
-  const [imgUrl, setImgUrl] = useState("");
+  const [imgUrl, setImgUrl] = useState('');
   const {
     mutate: updateImgUrl,
     isLoading: imgUrlLoading,
@@ -112,7 +112,7 @@ export function UpdateImgUrl() {
 
   const handleImgUrlSubmit = () => {
     updateImgUrl({ img_url: imgUrl });
-    setImgUrl("");
+    setImgUrl('');
   };
 
   return (

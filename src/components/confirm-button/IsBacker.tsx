@@ -1,6 +1,6 @@
-import { api } from "~/utils/api";
+import { api } from '~/utils/api';
 
-import type { ReactNode } from "react";
+import type { ReactNode } from 'react';
 
 interface IsBackerProps {
   pot_id: number;

@@ -1,4 +1,4 @@
-import type { PotAccess, Pots, Sessions } from "@prisma/client";
+import type { PotAccess, Pots, Sessions } from '@prisma/client';
 
 export type BackedPlayer = {
   username: string;

@@ -14,9 +14,9 @@
  *
  * These allow you to access things when processing a request, like the database, the session, etc.
  */
-import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
+import { type CreateNextContextOptions } from '@trpc/server/adapters/next';
 
-import { prisma } from "~/server/db";
+import { prisma } from '~/server/db';
 
 // type CreateContextOptions = Record<string, never>;
 
@@ -41,13 +41,13 @@ import { prisma } from "~/server/db";
  */
 export const createTRPCContext = (opts: CreateNextContextOptions) => {
   const { req } = opts;
-  const user = getAuth(req)
+  const user = getAuth(req);
 
-  const currentUserId = user.userId
+  const currentUserId = user.userId;
   return {
     prisma,
-    currentUserId
-  }
+    currentUserId,
+  };
 };
 
 /**
@@ -57,10 +57,10 @@ export const createTRPCContext = (opts: CreateNextContextOptions) => {
  * ZodErrors so that you get typesafety on the frontend if your procedure fails due to validation
  * errors on the backend.
  */
-import { TRPCError, initTRPC } from "@trpc/server";
-import superjson from "superjson";
-import { ZodError } from "zod";
-import { getAuth } from "@clerk/nextjs/server";
+import { TRPCError, initTRPC } from '@trpc/server';
+import superjson from 'superjson';
+import { ZodError } from 'zod';
+import { getAuth } from '@clerk/nextjs/server';
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
   transformer: superjson,
@@ -101,10 +101,12 @@ export const publicProcedure = t.procedure;
 
 const enforceUserIsAuthenticated = t.middleware(({ ctx, next }) => {
   if (!ctx.currentUserId) {
-    throw new TRPCError({ code: "UNAUTHORIZED" });
+    throw new TRPCError({ code: 'UNAUTHORIZED' });
   } else {
-    return next({ ctx: { currentUser: ctx.currentUserId } as { currentUser: string } })
+    return next({
+      ctx: { currentUser: ctx.currentUserId } as { currentUser: string },
+    });
   }
-})
+});
 
 export const privateProcedure = t.procedure.use(enforceUserIsAuthenticated);

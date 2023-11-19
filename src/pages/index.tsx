@@ -1,13 +1,13 @@
-import { SignInButton } from "@clerk/nextjs";
-import { useUser } from "@clerk/clerk-react";
-import { type NextPage } from "next";
-import { useRouter } from "next/router";
-import Image from "next/image";
+import { SignInButton } from '@clerk/nextjs';
+import { useUser } from '@clerk/clerk-react';
+import { type NextPage } from 'next';
+import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 const Home: NextPage = () => {
   const user = useUser();
   const router = useRouter();
-  if (user.isSignedIn) void router.push("/home");
+  if (user.isSignedIn) void router.push('/home');
   return (
     <>
       <main className="flex h-screen flex-col items-center justify-center bg-theme-black">

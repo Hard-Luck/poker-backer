@@ -1,10 +1,10 @@
-import { SignedIn } from "@clerk/nextjs";
-import Link from "next/link";
-import { useState } from "react";
-import Loading from "~/components/Loading";
-import CreatePotWizard from "~/components/stable/CreatePotWizard";
-import { api } from "~/utils/api";
-import { AiOutlineFileAdd } from "react-icons/ai";
+import { SignedIn } from '@clerk/nextjs';
+import Link from 'next/link';
+import { useState } from 'react';
+import Loading from '~/components/Loading';
+import CreatePotWizard from '~/components/stable/CreatePotWizard';
+import { api } from '~/utils/api';
+import { AiOutlineFileAdd } from 'react-icons/ai';
 
 export type CreatePotWizardType = {
   modalIsOpen: boolean;
@@ -48,7 +48,7 @@ export function PotsList({
           {isBacker && <AiOutlineFileAdd />}
         </button>
       </div>
-      {data.map((pot) => {
+      {data.map(pot => {
         return (
           <Link
             className="m-2 flex justify-center rounded-lg bg-theme-grey p-4 "

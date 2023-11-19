@@ -1,5 +1,5 @@
-import { prisma } from "~/server/db";
-import { extractSessions, getTotalDashboardProfit } from "./utils";
+import { prisma } from '~/server/db';
+import { extractSessions, getTotalDashboardProfit } from './utils';
 
 export default async function getDashboard(id: string, isBacker: boolean) {
   const total = getTotalProfitOrLoss(id);
@@ -21,7 +21,7 @@ export async function getTotalProfitOrLoss(user_id: string) {
       pot: {
         include: {
           sessions: {
-            orderBy: { created_at: "desc" },
+            orderBy: { created_at: 'desc' },
             take: 1,
           },
         },
@@ -36,7 +36,7 @@ export async function getRecentSessions(user_id: string, isBacker: boolean) {
   const potAccess = await prisma.potAccess.findMany({
     where: { user_id: user_id, AND: { type: isBacker ? 1 : 0 } },
   });
-  const potAccessIds = potAccess.map((access) => access.pot_id);
+  const potAccessIds = potAccess.map(access => access.pot_id);
   const sessions = await prisma.sessions.findMany({
     where: { pot_id: { in: potAccessIds } },
     take: 3,

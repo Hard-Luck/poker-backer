@@ -1,9 +1,9 @@
-import { useState } from "react";
-import { api } from "~/utils/api";
-import ConfirmButton from "../confirm-button/ConfirmButton";
-import { formatCurrency } from "~/utils/currency";
-import { FiX } from "react-icons/fi";
-import { toast } from "sonner";
+import { useState } from 'react';
+import { api } from '~/utils/api';
+import ConfirmButton from '../confirm-button/ConfirmButton';
+import { formatCurrency } from '~/utils/currency';
+import { FiX } from 'react-icons/fi';
+import { toast } from 'sonner';
 
 export function TopUpWizard({
   pot_id,
@@ -12,24 +12,24 @@ export function TopUpWizard({
   pot_id: number;
   onClose: () => void;
 }) {
-  const [amount, setAmount] = useState<number | "">("");
+  const [amount, setAmount] = useState<number | ''>('');
   const ctx = api.useContext();
   const { isLoading, mutate } = api.pots.topUp.useMutation({
     onSuccess: () => {
       void ctx.pots.invalidate();
       onClose();
-      toast.message("Topped up pot", {
+      toast.message('Topped up pot', {
         duration: 3000,
-        position: "bottom-center",
+        position: 'bottom-center',
       });
     },
   });
   if (!mutate) return null;
 
   const handleConfirm = () => {
-    if (amount !== "") {
+    if (amount !== '') {
       mutate({ pot_id, amount });
-      setAmount("");
+      setAmount('');
     }
   };
   return (
@@ -44,11 +44,11 @@ export function TopUpWizard({
         <input
           className="m-2 rounded-lg p-3 "
           type="number"
-          value={amount ?? ""}
-          onChange={(e) => {
+          value={amount ?? ''}
+          onChange={e => {
             const value = e.target.value;
-            if (value === "") {
-              setAmount("");
+            if (value === '') {
+              setAmount('');
             } else {
               setAmount(Number(e.target.value));
             }
@@ -60,11 +60,11 @@ export function TopUpWizard({
           disabled={isLoading}
           className="m-2 rounded-lg bg-theme-header p-2 text-white"
           confirmMessage={
-            amount !== ""
+            amount !== ''
               ? `Are you sure you want to top up this pot by ${formatCurrency(
                   amount
                 )}`
-              : "You must enter an amount to top up this pot"
+              : 'You must enter an amount to top up this pot'
           }
         />
       </div>

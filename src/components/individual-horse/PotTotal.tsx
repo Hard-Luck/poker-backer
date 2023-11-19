@@ -1,4 +1,4 @@
-import { api } from "~/utils/api";
+import { api } from '~/utils/api';
 
 export function PotTotal({ pot_id }: { pot_id: number }) {
   const { data, isLoading } = api.pots.getTotal.useQuery({ pot_id });

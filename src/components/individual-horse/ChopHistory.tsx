@@ -1,7 +1,7 @@
-import { api } from "~/utils/api";
-import ChopCard from "./ChopCard";
-import { FiArrowLeft } from "react-icons/fi";
-import Link from "next/link";
+import { api } from '~/utils/api';
+import ChopCard from './ChopCard';
+import { FiArrowLeft } from 'react-icons/fi';
+import Link from 'next/link';
 
 export default function ChopHistory({ pot_id }: { pot_id: number }) {
   const { data, isLoading } = api.pots.getChops.useQuery(
@@ -22,7 +22,7 @@ export default function ChopHistory({ pot_id }: { pot_id: number }) {
         <h2 className="m-2 text-2xl">Chop History</h2>
       </div>
       <ul>
-        {data.map((chop) => {
+        {data.map(chop => {
           return <ChopCard key={chop.id} chop={chop} />;
         })}
       </ul>

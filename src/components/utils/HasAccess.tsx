@@ -1,7 +1,7 @@
-import type { PropsWithChildren } from "react";
-import { api } from "~/utils/api";
-import Loading from "../Loading";
-import NotFound from "../errors/NotFound";
+import type { PropsWithChildren } from 'react';
+import { api } from '~/utils/api';
+import Loading from '../Loading';
+import NotFound from '../errors/NotFound';
 
 export function HasAccess({
   pot_id,

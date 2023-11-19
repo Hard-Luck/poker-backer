@@ -1,5 +1,5 @@
-import { api } from "~/utils/api";
-import ConfirmButton from "../confirm-button/ConfirmButton";
+import { api } from '~/utils/api';
+import ConfirmButton from '../confirm-button/ConfirmButton';
 
 export default function ChopButton({ pot_id }: { pot_id: number }) {
   const { mutate, data, isLoading, isError } = api.pots.chop.useMutation();

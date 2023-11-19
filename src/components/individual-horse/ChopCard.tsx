@@ -1,7 +1,7 @@
-import { type Sessions } from "@prisma/client";
-import { uniqueId } from "lodash";
-import { formatLongDate } from "~/utils/timestamp";
-import { Username } from "./ChopHistory";
+import { type Sessions } from '@prisma/client';
+import { uniqueId } from 'lodash';
+import { formatLongDate } from '~/utils/timestamp';
+import { Username } from './ChopHistory';
 
 export default function ChopCard({
   chop,

@@ -1,5 +1,5 @@
-import type { PotAccess, Pots, Sessions } from "@prisma/client";
-import type { PotAccessWithPotAndSession } from "types/dashboard";
+import type { PotAccess, Pots, Sessions } from '@prisma/client';
+import type { PotAccessWithPotAndSession } from 'types/dashboard';
 
 interface SessionsWithFloatsTotal {
   sessions: Array<Sessions>;
@@ -45,5 +45,5 @@ export function calculateSplit(profit: number, players: PotAccess[]) {
   }, {});
 }
 export function filterTopUps(sessions: Sessions[]) {
-  return sessions.filter((session) => session.transaction_type === "top_up");
+  return sessions.filter(session => session.transaction_type === 'top_up');
 }

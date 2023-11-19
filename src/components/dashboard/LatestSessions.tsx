@@ -1,7 +1,7 @@
-import type { Sessions } from "@prisma/client";
-import { convertMinsToHrsMins, formatShortDate } from "~/utils/timestamp";
-import { ImArrowUp, ImArrowDown } from "react-icons/im";
-import React from "react";
+import type { Sessions } from '@prisma/client';
+import { convertMinsToHrsMins, formatShortDate } from '~/utils/timestamp';
+import { ImArrowUp, ImArrowDown } from 'react-icons/im';
+import React from 'react';
 interface UsernameAndId {
   user: {
     username: string;
@@ -22,7 +22,7 @@ export default function RecentSession({
         <div className="col-auto self-end">Total</div>
         <div className="col-auto self-end">Date</div>
 
-        {sessions.map((session) => {
+        {sessions.map(session => {
           return (
             <React.Fragment key={session.id}>
               <div className="col-auto self-end">{session.user.username}</div>
@@ -31,7 +31,7 @@ export default function RecentSession({
               </div>
               <div
                 className={`col-auto flex items-center self-end ${
-                  session.amount < 0 ? "text-theme-red" : "text-theme-green"
+                  session.amount < 0 ? 'text-theme-red' : 'text-theme-green'
                 }`}
               >
                 {session.amount}

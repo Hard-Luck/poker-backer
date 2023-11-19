@@ -1,23 +1,23 @@
-import { useUser } from "@clerk/clerk-react";
-import * as React from "react";
-import { api } from "~/utils/api";
-import { useRouter } from "next/router";
-import { SignedIn } from "@clerk/nextjs";
-import Loading from "~/components/Loading";
-import type { UserInfo } from "@prisma/client";
-import FriendsButton from "~/components/dashboard/FriendsButton";
-import SessionsThisMonth from "~/components/dashboard/SessionsThisMonth";
-import TotalAllFloats from "~/components/dashboard/TotalAllFloats";
-import StableButton from "~/components/dashboard/StablesButton";
-import RecentSession from "~/components/dashboard/LatestSessions";
-import AddSessionButton from "~/components/dashboard/AddSessionButton";
+import { useUser } from '@clerk/clerk-react';
+import * as React from 'react';
+import { api } from '~/utils/api';
+import { useRouter } from 'next/router';
+import { SignedIn } from '@clerk/nextjs';
+import Loading from '~/components/Loading';
+import type { UserInfo } from '@prisma/client';
+import FriendsButton from '~/components/dashboard/FriendsButton';
+import SessionsThisMonth from '~/components/dashboard/SessionsThisMonth';
+import TotalAllFloats from '~/components/dashboard/TotalAllFloats';
+import StableButton from '~/components/dashboard/StablesButton';
+import RecentSession from '~/components/dashboard/LatestSessions';
+import AddSessionButton from '~/components/dashboard/AddSessionButton';
 
 export default function Home() {
   const user = useUser().user;
   const { data, isLoading, isError } = api.users.getCurrentUserInfo.useQuery();
   const router = useRouter();
   if (!user) return null;
-  if (isError) void router.push("/settings");
+  if (isError) void router.push('/settings');
   if (isLoading) return <Loading />;
   if (!data) return <p>missing data</p>;
   return (

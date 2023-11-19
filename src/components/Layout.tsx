@@ -1,7 +1,7 @@
-import React, { type PropsWithChildren } from "react";
-import Header from "./Header";
-import { Toaster } from "sonner";
-import Head from "next/head";
+import React, { type PropsWithChildren } from 'react';
+import Header from './Header';
+import { Toaster } from 'sonner';
+import Head from 'next/head';
 const Layout = ({ children }: PropsWithChildren) => {
   return (
     <>

@@ -1,10 +1,10 @@
-import { useRouter } from "next/router";
-import { useState } from "react";
-import Loading from "~/components/Loading";
-import { api } from "~/utils/api";
-import { FiArrowLeft, FiSend } from "react-icons/fi";
-import placeHolderImage from "../../../../public/defaultUser.jpg";
-import Image from "next/image";
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import Loading from '~/components/Loading';
+import { api } from '~/utils/api';
+import { FiArrowLeft, FiSend } from 'react-icons/fi';
+import placeHolderImage from '../../../../public/defaultUser.jpg';
+import Image from 'next/image';
 
 export default function Session() {
   const router = useRouter();
@@ -17,7 +17,7 @@ export default function Session() {
   if (isError) return <div>Error refresh page or contact admin</div>;
   if (!data) return <div>No comments</div>;
 
-  const imageStyle = { borderRadius: "50%" };
+  const imageStyle = { borderRadius: '50%' };
 
   return (
     <div className="h-[calc(100vh-4rem)] bg-theme-black text-white">
@@ -29,7 +29,7 @@ export default function Session() {
       </button>
       <div className="flex flex-col">
         <h2 className="flex justify-center text-2xl">Comments</h2>
-        {data.comments.map((comment) => {
+        {data.comments.map(comment => {
           return (
             <div
               className="m-2 grid grid-cols-10 rounded-lg bg-theme-grey p-2"
@@ -71,13 +71,13 @@ export function AddComment({ session_id }: { session_id: string }) {
       void ctx.sessions.invalidate();
     },
   });
-  const [body, setBody] = useState("");
+  const [body, setBody] = useState('');
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBody(e.target.value);
   };
   const handleOnClick = () => {
     mutate({ session_id: +session_id, comment: body });
-    setBody("");
+    setBody('');
   };
   return (
     <div className="m-2 flex justify-center rounded-lg bg-theme-grey p-2 text-theme-black">

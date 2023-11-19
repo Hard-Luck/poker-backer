@@ -1,10 +1,10 @@
-import { useState } from "react";
-import ReactModal from "react-modal";
-import SettingsModal from "./SettingsModal";
-import AddPlayerToPot from "./AddPlayerToPot";
-import { TopUpWizard } from "./TopUpWizard";
-import ChopButton from "./ChopButton";
-import { FiSettings, FiUserPlus, FiDollarSign } from "react-icons/fi";
+import { useState } from 'react';
+import ReactModal from 'react-modal';
+import SettingsModal from './SettingsModal';
+import AddPlayerToPot from './AddPlayerToPot';
+import { TopUpWizard } from './TopUpWizard';
+import ChopButton from './ChopButton';
+import { FiSettings, FiUserPlus, FiDollarSign } from 'react-icons/fi';
 
 export function Modals({ pot_id }: { pot_id: number }) {
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
@@ -12,7 +12,7 @@ export function Modals({ pot_id }: { pot_id: number }) {
   const [isTopUpModalOpen, setIsTopUpModalOpen] = useState(false);
 
   return (
-    <div className="mt-2 h-9 text-lg flex items-center">
+    <div className="mt-2 flex h-9 items-center text-lg">
       <button
         className=" mr-2 rounded-lg bg-theme-header p-2"
         onClick={() => setIsSettingsModalOpen(true)}

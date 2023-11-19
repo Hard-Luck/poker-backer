@@ -1,27 +1,27 @@
-import type { FriendRequest } from "types/api";
-import { api } from "~/utils/api";
-import { formatShortDate } from "~/utils/timestamp";
-import Loading from "../Loading";
-import { BsCheck } from "react-icons/bs";
-import { RiPassPendingFill } from "react-icons/ri";
-import placeHolderImage from "../../../public/defaultUser.jpg";
-import Image from "next/image";
-import { toastDefaultError } from "../utils/default-toasts";
+import type { FriendRequest } from 'types/api';
+import { api } from '~/utils/api';
+import { formatShortDate } from '~/utils/timestamp';
+import Loading from '../Loading';
+import { BsCheck } from 'react-icons/bs';
+import { RiPassPendingFill } from 'react-icons/ri';
+import placeHolderImage from '../../../public/defaultUser.jpg';
+import Image from 'next/image';
+import { toastDefaultError } from '../utils/default-toasts';
 
 export default function FriendsList({ username }: { username: string }) {
   const { data, isLoading } = api.friends.getUserFriendsWithStatus.useQuery();
   if (isLoading) return <Loading />;
   if (!data) return <div>No friends yet</div>;
-  const pendingRequests = data.filter((request) => {
+  const pendingRequests = data.filter(request => {
     return !request.status;
   });
-  const friends = data.filter((request) => !!request.status);
+  const friends = data.filter(request => !!request.status);
 
   return (
     <>
       <div>
         <ul>
-          {friends.map((friendInfo) => {
+          {friends.map(friendInfo => {
             return (
               <FriendCard
                 username={username}
@@ -35,7 +35,7 @@ export default function FriendsList({ username }: { username: string }) {
 
       <h3 className="text-l p-2 pl-4 font-semibold">Pending Requests</h3>
       <ul>
-        {pendingRequests.map((friendInfo) => {
+        {pendingRequests.map(friendInfo => {
           return (
             <FriendCard
               username={username}
@@ -56,7 +56,7 @@ function FriendCard({
   friendRequest: FriendRequest;
   username: string;
 }) {
-  const imageStyle = { borderRadius: "50%" };
+  const imageStyle = { borderRadius: '50%' };
   const { user_id, status, created_at, friend, user } = friendRequest;
   if (user.username === username) {
     return (
@@ -107,7 +107,7 @@ function FriendRequestButton({ user_id }: { user_id: string }) {
       void ctx.friends.invalidate();
     },
     onError: () => {
-      toastDefaultError("Error accepting friend request");
+      toastDefaultError('Error accepting friend request');
     },
   });
 

@@ -1,4 +1,4 @@
-import { api } from "~/utils/api";
+import { api } from '~/utils/api';
 
 export default function SessionCount({ pot_id }: { pot_id: number }) {
   const { data, isLoading } = api.sessions.sessionsSinceLastChop.useQuery({

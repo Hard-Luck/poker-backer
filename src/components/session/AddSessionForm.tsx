@@ -1,31 +1,32 @@
-import { useRouter } from "next/router";
-import { type ChangeEvent, type FormEvent, useState } from "react";
-import { api } from "~/utils/api";
-import { toastDefaultError } from "../utils/default-toasts";
+import { useRouter } from 'next/router';
+import { type ChangeEvent, type FormEvent, useState } from 'react';
+import { api } from '~/utils/api';
+import { toastDefaultError } from '../utils/default-toasts';
 export interface PotNameWithID {
   name: string;
   id: number;
 }
 export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
   const [pot, setPot] = useState(pots[0]);
-  const [amount, setAmount] = useState("");
-  const [sessionLength, setSessionLength] = useState("");
+  const [amount, setAmount] = useState('');
+  const [sessionLength, setSessionLength] = useState('');
   const [created_at, setCreated_at] = useState(new Date());
   const [amountError, setAmountError] = useState(false);
   const [sessionLengthError, setSessionLengthError] = useState(false);
+  const [location, setLocation] = useState('');
   const { mutate: postSession, data } = api.sessions.create.useMutation({
     onSuccess: () => {
       pot?.id && void router.push(`/stable/${pot.id}`);
     },
     onError: () => {
-      toastDefaultError("Error: are all inputs correct?");
+      toastDefaultError('Error: are all inputs correct?');
     },
   });
   const router = useRouter();
   const handleChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = event.target.value;
 
-    const filteredPot = pots.find((pot) => pot.name === selectedValue);
+    const filteredPot = pots.find(pot => pot.name === selectedValue);
     if (filteredPot) {
       setPot(filteredPot);
     }
@@ -33,13 +34,13 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
 
   function handleAmountChange(event: ChangeEvent<HTMLInputElement>) {
     setAmount(event.target.value);
-    setAmountError(event.target.value === "");
+    setAmountError(event.target.value === '');
   }
 
   function handleSessionLengthChange(event: ChangeEvent<HTMLInputElement>) {
     setSessionLength(event.target.value);
     setSessionLengthError(
-      event.target.value === "" || +event.target.value <= 0
+      event.target.value === '' || +event.target.value <= 0
     );
   }
 
@@ -54,16 +55,20 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setAmountError(amount === "" || +amount < 0);
-    setSessionLengthError(sessionLength === "" || +sessionLength <= 0);
+    setAmountError(amount === '' || +amount < 0);
+    setSessionLengthError(sessionLength === '' || +sessionLength <= 0);
     if (!amountError && !sessionLengthError) {
       postSession({
         pot_id: pot?.id as number,
         amount: +amount,
         session_length: +sessionLength,
         created_at,
+        location, // Include the location in the form data
       });
     }
+  }
+  function handleLocationChange(event: ChangeEvent<HTMLInputElement>) {
+    setLocation(event.target.value);
   }
 
   return (
@@ -96,7 +101,7 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
           Amount:
           <input
             type="number"
-            value={amount === "" ? "" : +amount}
+            value={amount === '' ? '' : +amount}
             onChange={handleAmountChange}
             className="mt-2 w-full rounded-lg border border-gray-300 p-2 text-theme-black"
           />
@@ -116,6 +121,15 @@ export default function AddSessionForm({ pots }: { pots: PotNameWithID[] }) {
             type="datetime-local"
             value={created_at.toISOString().slice(0, -8)}
             onChange={handleCreated_atChange}
+            className="mt-2 w-full rounded-lg border border-gray-300 p-2 text-theme-black"
+          />
+        </label>
+        <label className="mb-4 w-full">
+          Location (optional):
+          <input
+            type="text"
+            value={location}
+            onChange={handleLocationChange}
             className="mt-2 w-full rounded-lg border border-gray-300 p-2 text-theme-black"
           />
         </label>
