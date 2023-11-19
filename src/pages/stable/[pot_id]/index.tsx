@@ -22,12 +22,12 @@ export default function Pot() {
   if (isLoading) return <Loading />;
   const topUps = data?.sessions[0]?.top_ups_total ?? 0;
   const float = data?.float ?? 0;
-  console.log(data?.sessions);
+
   return (
     <HasAccess pot_id={pot_id}>
-      <div className="h-[calc(100vh-4rem)] bg-theme-black p-4 ">
+      <div className=" h-[calc(100vh-4rem)]  bg-theme-black p-4">
         <div className=" mb-2 grid grid-cols-7 rounded-lg bg-theme-grey p-4 text-white">
-          <div className="col-span-4 flex flex-col justify-between ">
+          <div className="col-span-4  flex flex-col justify-between ">
             <div>
               <div className=" text-xs">Pot Name</div>
               <div className="text-xl font-bold">{data?.name}</div>

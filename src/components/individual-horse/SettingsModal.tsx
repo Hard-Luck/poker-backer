@@ -112,8 +112,15 @@ export function PercentageWithSliders({
   return (
     <div className="flex flex-col items-center justify-center gap-2 text-center ">
       {access.map((player: Access) => (
-        <div key={player.user_id}>
+        <div className="flex flex-col gap-1" key={player.user_id}>
           <p>{player.username}</p>
+          <input
+            className="rounded-lg p-2 text-theme-black"
+            type="number"
+            min={0}
+            value={percentages[player.user_id]}
+            onChange={e => handleInputChange(player.user_id, e.target.value)}
+          />
           <InputSlider
             axis="x"
             xstep={10}
@@ -123,13 +130,7 @@ export function PercentageWithSliders({
               handleSliderChange(player.user_id, x)
             }
           />
-          <input
-            className="rounded-lg p-2 text-theme-black"
-            type="number"
-            min={0}
-            value={percentages[player.user_id]}
-            onChange={e => handleInputChange(player.user_id, e.target.value)}
-          />
+
           <DeleteAccessButton user_id={player.user_id} pot_id={pot_id} />
         </div>
       ))}
