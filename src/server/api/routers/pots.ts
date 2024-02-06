@@ -9,6 +9,7 @@ import {
   getPotById,
   isPotOwner,
   topUpPot,
+  updatePotFloat,
 } from '~/models/pots';
 import { z } from 'zod';
 import { createTRPCRouter, privateProcedure } from '~/server/api/trpc';
@@ -100,5 +101,11 @@ export const potsRouter = createTRPCRouter({
         (latestSession?.top_ups_total || 0) -
         (pot?.float || 0)
       );
+    }),
+  patchFloat: privateProcedure
+    .input(z.object({ pot_id: z.number(), float: z.number() }))
+    .mutation(async ({ input }) => {
+      const { pot_id, float } = input;
+      return updatePotFloat(pot_id, float);
     }),
 });

@@ -147,3 +147,27 @@ export async function isPotOwner(pot_id: number, user_id: string) {
 export async function deletePot(pot_id: number) {
   return prisma.pots.delete({ where: { id: pot_id } });
 }
+
+export async function updatePotFloat(pot_id: number, newFloatValue: number) {
+  const lastSession = await getLastSession(pot_id);
+  if (!lastSession) throw new Error('No last session');
+  if (lastSession.transaction_type !== 'chop') {
+    throw new Error('Last Session must be chop');
+  }
+  return prisma.$transaction([
+    prisma.pots.update({
+      where: { id: pot_id },
+      data: { float: newFloatValue },
+    }),
+    prisma.sessions.create({
+      data: {
+        pot_id,
+        transaction_type: 'chop',
+        amount: newFloatValue,
+        user_id: lastSession.user_id,
+        top_ups_total: 0,
+        total: newFloatValue,
+      },
+    }),
+  ]);
+}

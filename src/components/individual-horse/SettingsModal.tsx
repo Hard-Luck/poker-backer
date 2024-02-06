@@ -141,6 +141,7 @@ export function PercentageWithSliders({
         Update
       </button>
       {!!sliderError && <p>{sliderError}</p>}
+      <UpdateFloat pot_id={pot_id} />
       <DeletePotButton pot_id={pot_id} />
     </div>
   );
@@ -180,5 +181,45 @@ export function DeletePotButton({ pot_id }: { pot_id: number }) {
       )}
       {confirmMessage && <p>This cannot be undone, click below to delete</p>}
     </div>
+  );
+}
+function UpdateFloat({ pot_id }: { pot_id: number }) {
+  const [floatValue, setFloatValue] = useState('');
+  const ctx = api.useContext();
+  const router = useRouter();
+  const { mutate: update_float, isError } = api.pots.patchFloat.useMutation({
+    onSuccess: () => {
+      void ctx.invalidate();
+      setFloatValue('');
+      toastDefaultSuccess('Float updated');
+    },
+    onError: error => {
+      toastDefaultError(error.message);
+    },
+  });
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!isNaN(Number(e.target.value))) setFloatValue(e.target.value);
+  }
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    console.log(floatValue);
+
+    e.preventDefault();
+    update_float({ pot_id, float: +floatValue });
+  }
+  return (
+    <form onSubmit={handleSubmit}>
+      <p className="text-red-400">This is an experimenatal feature</p>
+      <input
+        type="text"
+        value={floatValue}
+        onChange={handleChange}
+        className="text-right text-black"
+        placeholder="0"
+      />
+      <button type="submit" className="m-2 rounded-lg bg-blue-400 p-2">
+        Update Float
+      </button>
+      {isError && <p>Error: can only change float after a chop</p>}
+    </form>
   );
 }
