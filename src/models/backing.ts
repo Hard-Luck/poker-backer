@@ -1,19 +1,9 @@
-import { db } from "@/lib/db";
+import { db } from '@/lib/db';
 
 export async function getPotBasicInfo(backing_id: number) {
   return db.backing.findUnique({ where: { id: backing_id } });
 }
-export async function getPotById(backing_id: number) {
-  return db.backing.findUnique({
-    where: { id: backing_id },
-    include: {
-      session: {
-        orderBy: { created_at: "desc" },
-        include: { _count: { select: { comments: true } } },
-      },
-    },
-  });
-}
+
 export async function createBacking({
   name,
   float,
@@ -28,7 +18,7 @@ export async function createBacking({
       name,
       float,
       owner,
-      access: { create: { type: "BACKER", user_id: owner, percent: 100 } },
+      access: { create: { type: 'BACKER', user_id: owner, percent: 100 } },
     },
   });
 
