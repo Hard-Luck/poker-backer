@@ -3,7 +3,7 @@ import type { Pots, Sessions } from '@prisma/client';
 export function createMockSession(options: Partial<Sessions> = {}): Sessions {
   return {
     id: 1,
-    pot_id: 1,
+    backing_id: 1,
     user_id: '1',
     amount: 100,
     total: 1100,

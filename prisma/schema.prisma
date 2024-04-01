@@ -1,27 +1,26 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-datasource db {
-  provider     = "mysql"
-  url          = env("DATABASE_URL")
-  relationMode = "prisma"
-}
-
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
-model UserInfo {
-  id                  String            @id @default(cuid())
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id                  String           @id @default(cuid())
   username            String
-  is_backer           Boolean           @default(false)
-  admin               Boolean           @default(false)
   img_url             String?
-  potAccess           PotAccess[]
-  Sessions            Sessions[]
-  sentFriendships     Friendship[]      @relation(name: "sent")
-  receivedFriendships Friendship[]      @relation(name: "received")
-  SessionComments     SessionComments[]
+  userBacking         UserBacking[]
+  session             Session[]
+  sentFriendships     Friendship[]     @relation(name: "sent")
+  receivedFriendships Friendship[]     @relation(name: "received")
+  sessionComments     SessionComment[]
 
   @@unique([username])
   @@index([username])
@@ -30,9 +29,9 @@ model UserInfo {
 model Friendship {
   id         Int      @id @default(autoincrement())
   user_id    String
-  user       UserInfo @relation(name: "sent", fields: [user_id], references: [id], onDelete: Cascade)
+  user       User     @relation(name: "sent", fields: [user_id], references: [id], onDelete: Cascade)
   friend_id  String
-  friend     UserInfo @relation(name: "received", fields: [friend_id], references: [id], onDelete: Cascade)
+  friend     User     @relation(name: "received", fields: [friend_id], references: [id], onDelete: Cascade)
   status     Boolean  @default(false)
   created_at DateTime @default(now())
 
@@ -41,71 +40,83 @@ model Friendship {
   @@index([friend_id])
 }
 
-model Pots {
-  id         Int         @id @default(autoincrement())
+model Backing {
+  id         Int           @id @default(autoincrement())
   name       String
   owner      String
   float      Int
-  created_at DateTime    @default(now())
-  sessions   Sessions[]
-  access     PotAccess[] @relation("PotAccess")
+  created_at DateTime      @default(now())
+  session    Session[]
+  chops      Chop[]
+  topUps     TopUp[]
+  access     UserBacking[] 
 
   @@unique([name, owner])
   @@index([owner])
 }
 
-model PotAccess {
-  id      Int      @id @default(autoincrement())
-  user_id String
-  pot_id  Int
-  type    Int
-  percent Float    @default(0)
-  user    UserInfo @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  pot     Pots     @relation("PotAccess", fields: [pot_id], references: [id], onDelete: Cascade)
+model UserBacking {
+  id         Int     @id @default(autoincrement())
+  user_id    String
+  backing_id Int
+  type       String
+  percent    Float   @default(0)
+  user       User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  backing    Backing @relation(fields: [backing_id], references: [id], onDelete: Cascade)
 
-  @@unique([user_id, pot_id])
-  @@index([pot_id])
+  @@unique([user_id, backing_id])
+  @@index([backing_id])
   @@index([user_id])
 }
 
-model Sessions {
-  id               Int               @id @default(autoincrement())
-  user_id          String            @default("N/A")
-  user             UserInfo          @relation(fields: [user_id], references: [id], onDelete: Cascade)
-  pot              Pots              @relation(fields: [pot_id], references: [id], onDelete: Cascade)
-  pot_id           Int
-  amount           Int
-  total            Int
-  top_ups_total    Int               @default(0)
-  created_at       DateTime          @default(now())
-  session_length   Int?
-  chop_split       Json?
-  transaction_type transactionType   @default(cash_game)
-  likes            Int               @default(0)
-  location         String?
-  comments         SessionComments[]
+model Session {
+  id         Int              @id @default(autoincrement())
+  user_id    String           @default("N/A")
+  user       User             @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  backing_id Int
+  backing        Backing          @relation(fields: [backing_id], references: [id], onDelete: Cascade)
+  amount     Int
+  created_at DateTime         @default(now())
+  length     Int?
+  game_type  String           @default("cash_game")
+  location   String?
+  comments   SessionComment[]
 
-  @@index([pot_id])
+  @@index([backing_id])
   @@index([user_id])
 }
 
-model SessionComments {
+model Chop {
+  id         String   @id @default(cuid())
+  user_id    String
+  backing_id Int
+  amount     Int
+  created_at DateTime @default(now())
+  chop_split String
+  note       String?
+  Backing    Backing? @relation(fields: [backing_id], references: [id])
+}
+
+model TopUp {
+  id         String   @id @default(cuid())
+  user_id    String
+  backing_id Int
+  amount     Int
+  created_at DateTime @default(now())
+  note       String?
+  Backing    Backing? @relation(fields: [backing_id], references: [id])
+}
+
+model SessionComment {
   id         Int      @id @default(autoincrement())
   user_id    String
-  user       UserInfo @relation(fields: [user_id], references: [id])
+  user       User     @relation(fields: [user_id], references: [id])
   session_id Int
-  session    Sessions @relation(fields: [session_id], references: [id])
+  session    Session  @relation(fields: [session_id], references: [id])
   body       String
   likes      Int      @default(0)
   created_at DateTime @default(now())
 
   @@index([user_id])
   @@index([session_id])
-}
-
-enum transactionType {
-  top_up
-  chop
-  cash_game
-  tournament
 }

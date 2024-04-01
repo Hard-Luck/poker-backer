@@ -1,30 +1,56 @@
-import { type Config } from 'tailwindcss';
+import type { Config } from "tailwindcss";
 
-export default {
-  content: ['./src/**/*.{js,ts,jsx,tsx}'],
+const config: Config = {
+  content: [
+    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "@/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
   theme: {
     extend: {
       colors: {
-        'theme-black': '#232931',
-        'theme-grey': '#393E46',
-        'theme-green': '#4ECCA3',
-        'theme-white': '#EEEEEE',
-        'theme-red': '#A34E4E',
-        'theme-header': '#3F88C5',
-        'theme-accent-silver': '#C1BDB3',
-        'theme-red2': '#E94F37',
-        'theme-gold': '#FFD700',
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
       },
-      margin: {
-        '0': '0',
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic":
+          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
-      zIndex: {
-        '0': '0',
-        '10': '10',
-        '20': '20',
-      },
-      boxSizing: ['responsive', 'border-box'],
     },
   },
   plugins: [],
-} satisfies Config;
+};
+export default config;
