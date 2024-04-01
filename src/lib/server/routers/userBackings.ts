@@ -1,5 +1,5 @@
-import { protectedProcedure, router } from "@/lib/server/trpc";
-import { sendFriendRequest } from "@/models/friends";
+import { protectedProcedure, router } from '@/lib/server/trpc';
+import { sendFriendRequest } from '@/models/friends';
 import {
   createUserBacking,
   deleteUserBacking,
@@ -7,10 +7,10 @@ import {
   hasAccessToBacking,
   isBackerForBacking,
   patchPercentages,
-} from "@/models/userBacking";
-import { TRPCClientError } from "@trpc/client";
-import { TRPCError } from "@trpc/server";
-import { z } from "zod";
+} from '@/models/userBacking';
+import { TRPCClientError } from '@trpc/client';
+import { TRPCError } from '@trpc/server';
+import { z } from 'zod';
 
 export const userBackingsRouter = router({
   listIndividual: protectedProcedure
@@ -23,12 +23,12 @@ export const userBackingsRouter = router({
       const { backingId } = input;
       const { session } = ctx;
       if (!session) {
-        throw new Error("Not authenticated");
+        throw new TRPCError({ code: 'UNAUTHORIZED' });
       }
       const userId = session.user.id;
       const hasAccess = await hasAccessToBacking({ backingId, userId });
       if (!hasAccess) {
-        throw new TRPCError({ code: "FORBIDDEN" });
+        throw new TRPCError({ code: 'FORBIDDEN' });
       }
       return findAllUserBackings({ backingId });
     }),
@@ -47,6 +47,11 @@ export const userBackingsRouter = router({
     .mutation(async ({ ctx, input }) => {
       const { backingId, percentages } = input;
       const { session } = ctx;
+      if (!session) {
+        console.log('no session');
+
+        throw new TRPCError({ code: 'UNAUTHORIZED' });
+      }
       console.log({ backingId, percentages, session });
 
       const userId = session.user.id;
@@ -54,14 +59,14 @@ export const userBackingsRouter = router({
       console.log(hasAccess);
 
       if (!hasAccess) {
-        throw new TRPCError({ code: "FORBIDDEN" });
+        throw new TRPCError({ code: 'FORBIDDEN' });
       }
       const percentageCheck = percentages.reduce(
         (acc, { percent }) => acc + percent,
         0
       );
       if (percentageCheck !== 100) {
-        throw new TRPCError({ code: "BAD_REQUEST" });
+        throw new TRPCError({ code: 'BAD_REQUEST' });
       }
       return patchPercentages({ backingId, percentages });
     }),
@@ -78,7 +83,7 @@ export const userBackingsRouter = router({
       try {
         return deleteUserBacking({ userId, backerId, backingId });
       } catch {
-        throw new TRPCError({ code: "NOT_FOUND" });
+        throw new TRPCError({ code: 'NOT_FOUND' });
       }
     }),
   create: protectedProcedure
@@ -90,7 +95,7 @@ export const userBackingsRouter = router({
         userBacking: {
           backing_id: backingId,
           user_id: friendId,
-          type: "PLAYER",
+          type: 'PLAYER',
         },
         backerId,
       });

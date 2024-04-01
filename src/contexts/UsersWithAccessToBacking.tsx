@@ -1,8 +1,8 @@
-"use client";
-import { trpc } from "@/lib/trpc/client";
-import { PlayerOrBacker } from "@/models/types";
-import { useParams } from "next/navigation";
-import { FC, PropsWithChildren, createContext } from "react";
+'use client';
+import { trpc } from '@/lib/trpc/client';
+import { PlayerOrBacker } from '@/models/types';
+import { useParams } from 'next/navigation';
+import { FC, PropsWithChildren, createContext } from 'react';
 
 type UsersWithAccessToBacking = Record<
   string,
@@ -44,9 +44,11 @@ const UsersWithAccessToBackingProvider: FC<PropsWithChildren> = ({
         },
       };
     }, {}) || {};
+  if (isLoading) return null;
   return (
     <UsersWithAccessToBackingContext.Provider
-      value={{ userDetails: playersWithUserBackingsForPot, isLoading }}>
+      value={{ userDetails: playersWithUserBackingsForPot, isLoading }}
+    >
       {children}
     </UsersWithAccessToBackingContext.Provider>
   );
