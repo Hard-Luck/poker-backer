@@ -8,13 +8,13 @@ import {
 } from "@/components/ui/select";
 
 import { FC, useState } from "react";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import DatePicker from "../DataPicker";
 import { trpc } from "@/lib/trpc/client";
 import { toast } from "sonner";
-import { Button, buttonVariants } from "../ui/button";
 import Link from "next/link";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button, buttonVariants } from "@/components/ui/button";
+import DatePicker from "@/components/DataPicker";
 
 type AddSessionFormProps = {
   backings: {

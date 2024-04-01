@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { SessionOverview } from "@/models/prismaTypes";
+import { type SessionOverview } from "@/models/prismaTypes";
 import { formatLongDate } from "@/models/utils/timestamp";
 import { minutesToHours } from "date-fns";
 import Link from "next/link";
