@@ -1,5 +1,5 @@
-"use client";
-import { ScrollArea } from "@/components/ui/scroll-area";
+'use client';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   Table,
   TableBody,
@@ -7,19 +7,24 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import useUsersWithAccessToBackingContext from "@/contexts/UsersWithAccessToBacking/useUsersWithAccessToBackingContext";
+} from '@/components/ui/table';
+import useUsersWithAccessToBackingContext from '@/contexts/UsersWithAccessToBacking/useUsersWithAccessToBackingContext';
 import {
   ChopsForHistoryList,
   SessionsForHistoryList,
   TopUpsForHistoryList,
-} from "@/models/prismaTypes";
-import { formatCurrency } from "@/models/utils/currency";
-import { parseAndValidateChopSplit } from "@/models/utils/parse";
-import { formatShortDate } from "@/models/utils/timestamp";
-import { ScrollAreaViewport } from "@radix-ui/react-scroll-area";
-import { useRouter } from "next/navigation";
-import { FC, useState } from "react";
+} from '@/models/prismaTypes';
+import { formatCurrency } from '@/models/utils/currency';
+import { parseAndValidateChopSplit } from '@/models/utils/parse';
+import {
+  formatLongDateWithformatLongDateWithTime,
+  TimeformatLongDateWithTime,
+  formatShortDate,
+  formatLongDateWithTime,
+} from '@/models/utils/timestamp';
+import { ScrollAreaViewport } from '@radix-ui/react-scroll-area';
+import { useRouter } from 'next/navigation';
+import { FC, useState } from 'react';
 
 type HistoryListProps = {
   sessions: SessionsForHistoryList;
@@ -29,9 +34,9 @@ type HistoryListProps = {
 
 const HistoryList: FC<HistoryListProps> = ({ chops, sessions, topUps }) => {
   const list = [
-    ...chops.map((c) => ({ ...c, type: "chop" })),
-    ...sessions.map((s) => ({ ...s, type: "session" })),
-    ...topUps.map((t) => ({ ...t, type: "top_up" })),
+    ...chops.map(c => ({ ...c, type: 'chop' })),
+    ...sessions.map(s => ({ ...s, type: 'session' })),
+    ...topUps.map(t => ({ ...t, type: 'top_up' })),
   ].sort((a, b) => {
     return a.created_at > b.created_at ? -1 : 1;
   });
@@ -50,18 +55,18 @@ const HistoryList: FC<HistoryListProps> = ({ chops, sessions, topUps }) => {
           <TableBody>
             {list.map(({ type, ...item }, i) => {
               switch (type) {
-                case "chop":
+                case 'chop':
                   return (
                     <ChopCard key={i} chop={item as ChopsForHistoryList[0]} />
                   );
-                case "session":
+                case 'session':
                   return (
                     <SessionCard
                       key={i}
                       session={item as SessionsForHistoryList[0]}
                     />
                   );
-                case "top_up":
+                case 'top_up':
                   return <TopUpCard key={i} topUp={item} />;
               }
             })}
@@ -81,10 +86,11 @@ const ChopCard = ({ chop }: { chop: ChopsForHistoryList[0] }) => {
     <>
       <TableRow
         onClick={() => setModalOpen(!modalOpen)}
-        className="text-purple-700">
-        <TableCell>{formatShortDate(chop.created_at)}</TableCell>
+        className="text-purple-700"
+      >
+        <TableCell>{formatLongDateWithTime(chop.created_at)}</TableCell>
         <TableCell>
-          {userDetails[chop.user_id]?.username || "No longer here"}
+          {userDetails[chop.user_id]?.username || 'No longer here'}
         </TableCell>
         <TableCell>Chop</TableCell>
         <TableCell>£{chop.amount}</TableCell>
@@ -103,26 +109,36 @@ const SessionCard = ({ session }: { session: SessionsForHistoryList[0] }) => {
       role="link"
       onClick={() => {
         router.push(`/session/${session.id}`);
-      }}>
-      <TableCell>{formatShortDate(session.created_at)}</TableCell>
+      }}
+    >
+      <TableCell>{formatLongDateWithTime(session.created_at)}</TableCell>
       <TableCell>
-        {userDetails[session.user_id]?.username || "No longer here"}
+        {userDetails[session.user_id]?.username || 'No longer here'}
       </TableCell>
-      <TableCell className="flex flex-col">
-        <span>
-          {session.game_type === "tournament" ? "tournament" : "cash"}
-        </span>
-        {session.location && (
-          <span className="text-xs">{session.location}</span>
+      <TableCell className="">
+        {session.location ? (
+          <div className="flex flex-col">
+            <span>
+              {session.game_type === 'tournament' ? 'tournament' : 'cash'}
+            </span>
+            <span className="text-xs">{session.location}</span>
+          </div>
+        ) : (
+          <div className="h-full flex flex-col">
+            <span className="">
+              {session.game_type === 'tournament' ? 'tournament' : 'cash'}
+            </span>
+          </div>
         )}
       </TableCell>
       <TableCell>
-          <span
-            className={`${
-              session.amount < 0 ? "text-red-500" : "text-primary"
-            } text-lg`}>
-            {formatCurrency(session.amount)}
-          </span>
+        <span
+          className={`${
+            session.amount < 0 ? 'text-red-500' : 'text-primary'
+          } text-lg`}
+        >
+          {formatCurrency(session.amount)}
+        </span>
       </TableCell>
     </TableRow>
   );
@@ -133,9 +149,9 @@ const TopUpCard = ({ topUp }: { topUp: TopUpsForHistoryList[0] }) => {
   if (isLoading) return null;
   return (
     <TableRow>
-      <TableCell>{formatShortDate(topUp.created_at)}</TableCell>
+      <TableCell>{formatLongDateWithTime(topUp.created_at)}</TableCell>
       <TableCell>
-        {userDetails[topUp.user_id]?.username || "No longer here"}
+        {userDetails[topUp.user_id]?.username || 'No longer here'}
       </TableCell>
       <TableCell className="text-yellow-700">Top Up</TableCell>
       <TableCell className="text-yellow-700">
