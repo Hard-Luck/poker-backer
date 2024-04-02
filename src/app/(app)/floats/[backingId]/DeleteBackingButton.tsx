@@ -13,7 +13,7 @@ const DeleteBackingButton = () => {
   const { mutate: deleteBacking, isLoading } = trpc.backings.delete.useMutation(
     {
       onSuccess: () => {
-        router.push("/history");
+        router.push("/floats");
         router.refresh();
       },
       onError: () => {
