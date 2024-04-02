@@ -1,5 +1,5 @@
-import MiniCard from "@/components/ui/minicard";
-import { FC } from "react";
+import MiniCard from '@/components/ui/minicard';
+import { FC } from 'react';
 
 type BackingHeroProps = {
   totalSessions: number;
@@ -38,8 +38,8 @@ const BackingHero: FC<BackingHeroProps> = ({
         <h3 className="text-lg font-bold">Float</h3>
         <div className="3">£{float}</div>
       </MiniCard>
-      <MiniCard>
-        <h3 className="text-lg font-bold">Profit</h3>
+      <MiniCard alternateColor={profitOrLoss >= 0 ? 'blue' : 'red'}>
+        <h3 className="text-lg font-bold">Make up</h3>
         <div className="">£{profitOrLoss}</div>
       </MiniCard>
     </section>

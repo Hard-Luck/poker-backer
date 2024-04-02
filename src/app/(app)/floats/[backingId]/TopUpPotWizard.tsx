@@ -1,5 +1,5 @@
-"use client";
-import { Button } from "@/components/ui/button";
+'use client';
+import { Button } from '@/components/ui/button';
 import {
   Drawer,
   DrawerClose,
@@ -8,24 +8,24 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/drawer';
+import { Input } from '@/components/ui/input';
 import {
   toastDefaultError,
   toastDefaultSuccess,
-} from "@/components/utils/default-toasts";
-import { trpc } from "@/lib/trpc/client";
-import { TopUpsForHistoryList } from "@/models/prismaTypes";
-import { useParams } from "next/navigation";
-import { Dispatch, FC, useState } from "react";
-import { FaPlusMinus } from "react-icons/fa6";
+} from '@/components/utils/default-toasts';
+import { trpc } from '@/lib/trpc/client';
+import { TopUpsForHistoryList } from '@/models/prismaTypes';
+import { useParams } from 'next/navigation';
+import { Dispatch, FC, useState } from 'react';
+import { FaPlusMinus } from 'react-icons/fa6';
 type TopUpPotWizardProps = {
   profit: number;
 };
 const TopUpDrawerButton: FC<TopUpPotWizardProps> = ({ profit }) => {
-  const [amount, setAmount] = useState("");
-  const [note, setNote] = useState("");
-  const [plusOrMinus, setPlusOrMinus] = useState<"+" | "-">("+");
+  const [amount, setAmount] = useState('');
+  const [note, setNote] = useState('');
+  const [plusOrMinus, setPlusOrMinus] = useState<'+' | '-'>('+');
   const { mutate: topUpPot, isLoading } = trpc.topUps.create.useMutation({
     onSuccess: ({ amount }) => {
       toastDefaultSuccess(
@@ -35,17 +35,18 @@ const TopUpDrawerButton: FC<TopUpPotWizardProps> = ({ profit }) => {
       );
     },
     onError: () => {
-      toastDefaultError("Top up failed, please try again.");
+      toastDefaultError('Top up failed, please try again.');
     },
   });
   const { backingId } = useParams();
   return (
     <Drawer
       onOpenChange={() => {
-        setAmount("");
-        setNote("");
-        setPlusOrMinus("+");
-      }}>
+        setAmount('');
+        setNote('');
+        setPlusOrMinus('+');
+      }}
+    >
       <DrawerTrigger asChild>
         <Button variant="ghost" className="flex-1" aria-label="settings">
           Top Up
@@ -67,10 +68,10 @@ const TopUpDrawerButton: FC<TopUpPotWizardProps> = ({ profit }) => {
             <Button>
               <FaPlusMinus
                 onClick={() => {
-                  if (plusOrMinus === "+") {
-                    setPlusOrMinus("-");
+                  if (plusOrMinus === '+') {
+                    setPlusOrMinus('-');
                   } else {
-                    setPlusOrMinus("+");
+                    setPlusOrMinus('+');
                   }
                 }}
               />
@@ -79,9 +80,9 @@ const TopUpDrawerButton: FC<TopUpPotWizardProps> = ({ profit }) => {
             <Input
               id="amount"
               value={amount}
-              onChange={(e) => {
-                if (e.target.value === "") {
-                  setAmount("");
+              onChange={e => {
+                if (e.target.value === '') {
+                  setAmount('');
                   return;
                 }
                 if (isNaN(Number(e.target.value))) {
@@ -99,22 +100,23 @@ const TopUpDrawerButton: FC<TopUpPotWizardProps> = ({ profit }) => {
             id="note"
             placeholder="optional"
             value={note}
-            onChange={(e) => setNote(e.target.value)}
+            onChange={e => setNote(e.target.value)}
           />
           <Button
             className="mt-4 w-full"
             disabled={isLoading}
             onClick={() => {
-              if (Number(amount) + profit < 0) {
-                toastDefaultError("Cannot remove more than the profit.");
+              if (Number(amount) < 0 && Number(amount) + profit < 0) {
+                toastDefaultError('Cannot remove more than the profit.');
                 return;
               }
               topUpPot({
-                amount: Number(amount) * (plusOrMinus === "+" ? 1 : -1),
+                amount: Number(amount) * (plusOrMinus === '+' ? 1 : -1),
                 note,
                 backingId: Number(backingId),
               });
-            }}>
+            }}
+          >
             Top Up
           </Button>
         </div>

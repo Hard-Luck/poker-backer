@@ -1,11 +1,7 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["driverAdapters"]
 }
-
 
 datasource db {
   provider = "sqlite"
@@ -14,26 +10,25 @@ datasource db {
 
 model User {
   id                  String           @id @default(cuid())
-  username            String
+  username            String           @unique
   img_url             String?
-  userBacking         UserBacking[]
+  receivedFriendships Friendship[]     @relation("received")
+  sentFriendships     Friendship[]     @relation("sent")
   session             Session[]
-  sentFriendships     Friendship[]     @relation(name: "sent")
-  receivedFriendships Friendship[]     @relation(name: "received")
   sessionComments     SessionComment[]
+  userBacking         UserBacking[]
 
-  @@unique([username])
   @@index([username])
 }
 
 model Friendship {
   id         Int      @id @default(autoincrement())
   user_id    String
-  user       User     @relation(name: "sent", fields: [user_id], references: [id], onDelete: Cascade)
   friend_id  String
-  friend     User     @relation(name: "received", fields: [friend_id], references: [id], onDelete: Cascade)
   status     Boolean  @default(false)
   created_at DateTime @default(now())
+  friend     User     @relation("received", fields: [friend_id], references: [id], onDelete: Cascade)
+  user       User     @relation("sent", fields: [user_id], references: [id], onDelete: Cascade)
 
   @@unique([user_id, friend_id])
   @@index([user_id])
@@ -46,10 +41,10 @@ model Backing {
   owner      String
   float      Int
   created_at DateTime      @default(now())
-  session    Session[]
   chops      Chop[]
+  session    Session[]
   topUps     TopUp[]
-  access     UserBacking[] 
+  access     UserBacking[]
 
   @@unique([name, owner])
   @@index([owner])
@@ -61,8 +56,8 @@ model UserBacking {
   backing_id Int
   type       String
   percent    Float   @default(0)
-  user       User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
   backing    Backing @relation(fields: [backing_id], references: [id], onDelete: Cascade)
+  user       User    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@unique([user_id, backing_id])
   @@index([backing_id])
@@ -72,14 +67,14 @@ model UserBacking {
 model Session {
   id         Int              @id @default(autoincrement())
   user_id    String           @default("N/A")
-  user       User             @relation(fields: [user_id], references: [id], onDelete: Cascade)
   backing_id Int
-  backing        Backing          @relation(fields: [backing_id], references: [id], onDelete: Cascade)
   amount     Int
   created_at DateTime         @default(now())
   length     Int?
   game_type  String           @default("cash_game")
   location   String?
+  backing    Backing          @relation(fields: [backing_id], references: [id], onDelete: Cascade)
+  user       User             @relation(fields: [user_id], references: [id], onDelete: Cascade)
   comments   SessionComment[]
 
   @@index([backing_id])
@@ -94,7 +89,7 @@ model Chop {
   created_at DateTime @default(now())
   chop_split String
   note       String?
-  Backing    Backing? @relation(fields: [backing_id], references: [id])
+  Backing    Backing  @relation(fields: [backing_id], references: [id])
 }
 
 model TopUp {
@@ -104,18 +99,18 @@ model TopUp {
   amount     Int
   created_at DateTime @default(now())
   note       String?
-  Backing    Backing? @relation(fields: [backing_id], references: [id])
+  Backing    Backing  @relation(fields: [backing_id], references: [id])
 }
 
 model SessionComment {
   id         Int      @id @default(autoincrement())
   user_id    String
-  user       User     @relation(fields: [user_id], references: [id])
   session_id Int
-  session    Session  @relation(fields: [session_id], references: [id])
   body       String
   likes      Int      @default(0)
   created_at DateTime @default(now())
+  session    Session  @relation(fields: [session_id], references: [id])
+  user       User     @relation(fields: [user_id], references: [id])
 
   @@index([user_id])
   @@index([session_id])
