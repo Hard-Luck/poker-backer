@@ -36,7 +36,7 @@ const BackingsList: FC<BackingsListProps> = ({ backings, type }) => {
               className="cursor-pointer hover:bg-gray-100 hover:text-black"
               role="link"
               onClick={() => {
-                router.push(`/history/${backing.id}`);
+                router.push(`/floats/${backing.id}`);
               }}
               key={backing.id}>
               <TableCell>{backing.name}</TableCell>

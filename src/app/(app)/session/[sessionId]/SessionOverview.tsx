@@ -13,7 +13,7 @@ const SessionOverview: FC<SessionOverviewProps> = ({ session }) => {
   return (
     <div className="text-center">
       <Button asChild role="link" variant={"link"}>
-        <Link href={"/history/" + session.backing_id}>
+        <Link href={"/floats/" + session.backing_id}>
           <IoMdArrowRoundBack color="primary" />
           Back To Backing
         </Link>

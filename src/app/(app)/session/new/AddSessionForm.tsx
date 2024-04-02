@@ -101,7 +101,7 @@ const AddSessionForm: FC<AddSessionFormProps> = ({ backings }) => {
           </Select>
           {selectedBacking !== null && (
             <Link
-              href={`/history/${selectedBacking}`}
+              href={`/floats/${selectedBacking}`}
               className="text-primary ">
               Click here to go to backing
             </Link>

@@ -117,17 +117,12 @@ const SessionCard = ({ session }: { session: SessionsForHistoryList[0] }) => {
         )}
       </TableCell>
       <TableCell>
-        <div className="flex flex-col">
           <span
             className={`${
               session.amount < 0 ? "text-red-500" : "text-primary"
             } text-lg`}>
             {formatCurrency(session.amount)}
           </span>
-          <span className="text-xs text-text">
-            {session._count.comments} comments
-          </span>
-        </div>
       </TableCell>
     </TableRow>
   );

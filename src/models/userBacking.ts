@@ -156,9 +156,6 @@ export async function findBackingWithSessionsChopsAndTopUps({
               created_at: true,
               user_id: true,
               game_type: true,
-              _count: {
-                select: { comments: true },
-              },
               location: true,
             },
           },

@@ -17,7 +17,7 @@ export default async function Page() {
     return (
       <main>
         <h1 className="font-bold text-2xl">Histories</h1>
-        <p>No game histories found</p>
+        <p>No floatsfound</p>
       </main>
     );
   }
@@ -25,7 +25,7 @@ export default async function Page() {
     <main>
       <h1 className="font-bold text-2xl text-center">Backings</h1>
       {whereUserIsPlayer.length === 0 && whereUserIsBacker.length === 0 && (
-        <p>No game histories found</p>
+        <p>No floats found</p>
       )}
       {whereUserIsBacker.length > 0 && (
         <BackingsList type="BACKER" backings={whereUserIsBacker} />
