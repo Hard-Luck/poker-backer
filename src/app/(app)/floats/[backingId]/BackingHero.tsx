@@ -21,7 +21,7 @@ const BackingHero: FC<BackingHeroProps> = ({
   return (
     <section className="grid grid-cols-2 grid-rows-2 bg-secondary">
       <MiniCard>
-        <h3 className="text-lg font-bold">Current Float</h3>
+        <h3 className="text-lg font-bold">Balance</h3>
         <div className="flex flex-col">
           <span>£{currentFloat + currentTopUps}</span>
           {!!currentTopUps && (
