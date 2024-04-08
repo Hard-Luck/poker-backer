@@ -1,6 +1,6 @@
-import { protectedProcedure, publicProcedure, router } from "@/lib/server/trpc";
-import { addSession } from "@/models/sessions";
-import { z } from "zod";
+import { protectedProcedure, publicProcedure, router } from '@/lib/server/trpc';
+import { addSession, canDeleteSession, deleteSession } from '@/models/sessions';
+import { z } from 'zod';
 
 export const sessionsRouter = router({
   create: protectedProcedure
@@ -23,5 +23,15 @@ export const sessionsRouter = router({
         location,
         backing_id: parseInt(backingId),
       });
+    }),
+  delete: protectedProcedure
+    .input(z.object({ sessionId: z.number() }))
+    .mutation(async ({ input, ctx }) => {
+      const { sessionId } = input;
+      const userId = ctx.session.user.id;
+      if (!(await canDeleteSession(sessionId, userId))) {
+        throw new Error('Forbidden');
+      }
+      return deleteSession({ sessionId: sessionId });
     }),
 });

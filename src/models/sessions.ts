@@ -1,7 +1,7 @@
-import { TRPCError } from "@trpc/server";
-import { db } from "@/lib/db";
-import { hasAccessToBacking } from "./userBacking";
-import { getLastChop } from "./chops";
+import { TRPCError } from '@trpc/server';
+import { db } from '@/lib/db';
+import { hasAccessToBacking } from './userBacking';
+import { getLastChop } from './chops';
 
 interface AddSessionInput {
   backing_id: number;
@@ -30,7 +30,7 @@ export async function addSession(user_id: string, session: AddSessionInput) {
     userId: user_id,
     backingId: backing_id,
   });
-  if (!hasAccess) throw new TRPCError({ code: "FORBIDDEN" });
+  if (!hasAccess) throw new TRPCError({ code: 'FORBIDDEN' });
   return db.session.create({
     data: {
       user_id,
@@ -56,13 +56,22 @@ export async function getSessionSinceLastChop(backing_id: number) {
 export async function getLastSession(backing_id: number) {
   return db.session.findFirst({
     where: { backing_id },
-    orderBy: { created_at: "desc" },
+    orderBy: { created_at: 'desc' },
   });
 }
 
-export async function deleteSession({ session_id }: { session_id: number }) {}
+export async function deleteSession({ sessionId }: { sessionId: number }) {
+  return db.session.delete({ where: { id: sessionId } });
+}
 
-export async function canDeleteSession(session_id: number, user_id: string) {}
+export async function canDeleteSession(session_id: number, user_id: string) {
+  const session = await db.session.findFirst({
+    where: { id: session_id },
+  });
+  const backing = session?.backing_id;
+  if (!backing) throw new Error('NOT_FOUND');
+  return hasAccessToBacking({ userId: user_id, backingId: backing });
+}
 
 export async function getSessionWithComments({
   sessionId,

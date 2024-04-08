@@ -161,13 +161,21 @@ export async function findBackingWithSessionsChopsAndTopUps({
           },
           chops: {
             select: {
+              id: true,
               amount: true,
               created_at: true,
               user_id: true,
               chop_split: true,
             },
           },
-          topUps: { select: { amount: true, created_at: true, user_id: true } },
+          topUps: {
+            select: {
+              id: true,
+              amount: true,
+              created_at: true,
+              user_id: true,
+            },
+          },
           owner: true,
           float: true,
           name: true,

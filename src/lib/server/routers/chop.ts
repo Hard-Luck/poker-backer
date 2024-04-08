@@ -1,6 +1,6 @@
-import { protectedProcedure, router } from "@/lib/server/trpc";
-import { chop } from "@/models/chops";
-import { z } from "zod";
+import { protectedProcedure, router } from '@/lib/server/trpc';
+import { chop, deleteChop } from '@/models/chops';
+import { z } from 'zod';
 
 export const chopsRouter = router({
   create: protectedProcedure
@@ -13,5 +13,12 @@ export const chopsRouter = router({
       const { backingId } = input;
       const userId = ctx.session.user.id;
       return chop({ userId, backingId });
+    }),
+  delete: protectedProcedure
+    .input(z.object({ chopId: z.string() }))
+    .mutation(async ({ input, ctx }) => {
+      const { chopId } = input;
+      const userId = ctx.session.user.id;
+      return deleteChop({ chopId, userId });
     }),
 });

@@ -18,8 +18,11 @@ import { formatCurrency } from '@/models/utils/currency';
 import { parseAndValidateChopSplit } from '@/models/utils/parse';
 import { formatLongDateWithTime } from '@/models/utils/timestamp';
 import { ScrollAreaViewport } from '@radix-ui/react-scroll-area';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { FC, useState } from 'react';
+import DeleteChopButton from './DeleteChopButton';
+import DeleteSessionButton from './DeleteSessionButton';
+import DeleteTopUpButton from './DeleteTopUpButton';
 
 type HistoryListProps = {
   sessions: SessionsForHistoryList;
@@ -45,6 +48,7 @@ const HistoryList: FC<HistoryListProps> = ({ chops, sessions, topUps }) => {
               <TableHead className="text-center">Name</TableHead>
               <TableHead className="text-center">Type</TableHead>
               <TableHead className="text-center">Amount</TableHead>
+              <TableHead className="text-center">Delete</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -62,7 +66,12 @@ const HistoryList: FC<HistoryListProps> = ({ chops, sessions, topUps }) => {
                     />
                   );
                 case 'top_up':
-                  return <TopUpCard key={i} topUp={item} />;
+                  return (
+                    <TopUpCard
+                      key={i}
+                      topUp={item as TopUpsForHistoryList[0]}
+                    />
+                  );
               }
             })}
           </TableBody>
@@ -89,6 +98,13 @@ const ChopCard = ({ chop }: { chop: ChopsForHistoryList[0] }) => {
         </TableCell>
         <TableCell>Chop</TableCell>
         <TableCell>£{chop.amount}</TableCell>
+        <TableCell
+          onClick={e => {
+            e.stopPropagation();
+          }}
+        >
+          <DeleteChopButton chopId={chop.id} />
+        </TableCell>
       </TableRow>
       <ChopSplit chopSplit={chop.chop_split} open={modalOpen} />
     </>
@@ -135,12 +151,20 @@ const SessionCard = ({ session }: { session: SessionsForHistoryList[0] }) => {
           {formatCurrency(session.amount)}
         </span>
       </TableCell>
+      <TableCell
+        onClick={e => {
+          e.stopPropagation();
+        }}
+      >
+        <DeleteSessionButton sessionId={session.id}></DeleteSessionButton>
+      </TableCell>
     </TableRow>
   );
 };
 
 const TopUpCard = ({ topUp }: { topUp: TopUpsForHistoryList[0] }) => {
   const { userDetails, isLoading } = useUsersWithAccessToBackingContext();
+  const { backingId } = useParams() as { backingId: string };
   if (isLoading) return null;
   return (
     <TableRow>
@@ -151,6 +175,13 @@ const TopUpCard = ({ topUp }: { topUp: TopUpsForHistoryList[0] }) => {
       <TableCell className="text-yellow-700">Top Up</TableCell>
       <TableCell className="text-yellow-700">
         {formatCurrency(topUp.amount)}
+      </TableCell>
+      <TableCell
+        onClick={e => {
+          e.stopPropagation();
+        }}
+      >
+        <DeleteTopUpButton topupId={topUp.id} backingId={backingId} />
       </TableCell>
     </TableRow>
   );
