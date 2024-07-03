@@ -1,8 +1,6 @@
 import { db } from '@/lib/db';
 
-export async function createNewuser(id: string, username: string) {
-  const user = { username, id: id };
-}
+
 export async function getUserById(id: string) {
   return db.user.findFirst({
     where: { id },

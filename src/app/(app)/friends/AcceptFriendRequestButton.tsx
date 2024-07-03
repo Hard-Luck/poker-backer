@@ -12,7 +12,7 @@ export default function AcceptFriendRequestButton({
 }) {
   const [visible, setVisible] = useState(true);
   const { mutate } = trpc.friendships.acceptFriendRequest.useMutation({
-    onError: error => {
+    onError: () => {
       toast.error('Failed to accept friend request', {
         duration: 3000,
         position: 'top-center',

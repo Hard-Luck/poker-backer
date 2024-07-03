@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from '../../../components/ui/table';
-import { FriendforFriendListWithImgUrl } from '@/models/friends';
+import type { FriendforFriendListWithImgUrl } from '@/models/friends';
 
 type FriendsListProps = {
   friends: FriendforFriendListWithImgUrl[];
@@ -42,7 +42,9 @@ export default function FriendsList({ friends }: FriendsListProps) {
                   </div>
                 </TableCell>
                 <TableCell>{friend.friend.username}</TableCell>
-                <TableCell>{formatDateStringToDDMM(friend.created_at)}</TableCell>
+                <TableCell>
+                  {formatDateStringToDDMM(friend.created_at)}
+                </TableCell>
               </TableRow>
             );
           })}

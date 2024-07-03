@@ -8,7 +8,7 @@ import HistoryLink from './HistoryLink';
 import FriendsLink from './FriendsLink';
 
 export default async function Page() {
-  const { session } = await getUserAuth();
+  const { session } = getUserAuth();
   if (!session) throw new Error('No session found');
   const user = await getDashboard(session.user.id);
   return (

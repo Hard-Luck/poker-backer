@@ -1,6 +1,6 @@
 import { db } from '@/lib/db';
-import { UserBacking } from '@prisma/client';
-import { PlayerOrBacker } from './types';
+import { type UserBacking } from '@prisma/client';
+import { type PlayerOrBacker } from './types';
 
 export async function hasAccessToBacking({
   userId,

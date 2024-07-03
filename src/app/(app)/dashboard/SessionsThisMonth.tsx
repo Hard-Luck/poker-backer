@@ -2,7 +2,7 @@ import { getUserAuth } from '@/lib/auth/utils';
 import { getSessionsPlayedThisMonth } from '@/models/sessions';
 
 export default async function SessionsThisMonth() {
-  const { session } = await getUserAuth();
+  const { session } = getUserAuth();
   if (!session) throw new Error('No session found');
   const sessionsPlayedThisMonth = await getSessionsPlayedThisMonth(
     session.user.id

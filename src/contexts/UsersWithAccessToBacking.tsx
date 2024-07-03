@@ -1,8 +1,8 @@
 'use client';
 import { trpc } from '@/lib/trpc/client';
-import { PlayerOrBacker } from '@/models/types';
+import { type PlayerOrBacker } from '@/models/types';
 import { useParams } from 'next/navigation';
-import { FC, PropsWithChildren, createContext } from 'react';
+import { type FC, type PropsWithChildren, createContext } from 'react';
 
 type UsersWithAccessToBacking = Record<
   string,
@@ -33,7 +33,7 @@ const UsersWithAccessToBackingProvider: FC<PropsWithChildren> = ({
       refetchOnWindowFocus: false,
     }
   );
-  let playersWithUserBackingsForPot: UsersWithAccessToBacking | {} =
+  const playersWithUserBackingsForPot: UsersWithAccessToBacking =
     data?.reduce((acc, { user, percent, type, user_id }) => {
       return {
         ...acc,

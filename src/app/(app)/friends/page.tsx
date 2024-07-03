@@ -1,12 +1,12 @@
 import { getUserAuth } from '@/lib/auth/utils';
-import { getAllFriends, getFriendRequests } from '@/models/friends';
+import { getAllFriends } from '@/models/friends';
 import { redirect } from 'next/navigation';
 import FriendRequestWizard from './FriendRequestWizard';
 import FriendsList from './FriendsList';
 import FriendRequestList from './FriendRequestLists';
 
 export default async function FriendsPage() {
-  const { session } = await getUserAuth();
+  const { session } = getUserAuth();
   if (!session) redirect('/sign-in');
   const friends = await getAllFriends(session.user.id);
 

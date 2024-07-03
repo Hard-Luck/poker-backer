@@ -3,7 +3,7 @@ import { type SessionOverview } from '@/models/prismaTypes';
 import { formatDateStringToLongDate } from '@/models/utils/timestamp';
 import { minutesToHours } from 'date-fns';
 import Link from 'next/link';
-import { FC } from 'react';
+import { type FC } from 'react';
 import { IoMdArrowRoundBack } from 'react-icons/io';
 
 type SessionOverviewProps = { session: SessionOverview };

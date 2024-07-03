@@ -9,10 +9,8 @@ import { FaRegSquarePlus, FaRegSquareMinus } from 'react-icons/fa6';
 import * as React from 'react';
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
@@ -123,17 +121,18 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
   const { mutate, isLoading } = trpc.userBackings.update.useMutation({
     onSuccess: () => {
       toastDefaultSuccess('Percentages updated');
-      utils.userBackings.listIndividual.invalidate();
+      void utils.userBackings.listIndividual.invalidate();
     },
-    onError: error => {
+    onError: () => {
       toastDefaultError(
         'Failed to update percentages, please try again later.'
       );
     },
   });
   const params = useParams();
-  const backingId = params.backingId;
+  const backingId = params?.backingId;
   function handleClick() {
+    if (!backingId) return; // TEMP FIX
     let total = 0;
     const percentages = [];
     for (const userId in newPercentages) {
@@ -310,10 +309,10 @@ const UserWithAccessCardWithRemoveButton = ({
   const utils = trpc.useUtils();
   const [confirmNotice, setConfirmNotice] = React.useState(false);
   const { backingId } = useParams() as { backingId: string };
-  const { mutate, isLoading } = trpc.userBackings.delete.useMutation({
+  const { mutate } = trpc.userBackings.delete.useMutation({
     onSuccess: () => {
       toastDefaultSuccess('User removed');
-      utils.userBackings.listIndividual.invalidate();
+      void utils.userBackings.listIndividual.invalidate();
     },
     onError: () => {
       toastDefaultError('Failed to remove user, please try again later.');

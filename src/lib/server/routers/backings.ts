@@ -1,4 +1,4 @@
-import { protectedProcedure, publicProcedure, router } from '@/lib/server/trpc';
+import { protectedProcedure, router } from '@/lib/server/trpc';
 import {
   createBacking,
   deleteBackingAsOwner,

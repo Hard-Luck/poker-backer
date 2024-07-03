@@ -14,7 +14,7 @@ type BackingPageProps = {
 
 export default async function page({ params }: BackingPageProps) {
   const { backingId } = params;
-  const { session } = await getUserAuth();
+  const { session } = getUserAuth();
   if (!session) {
     redirect('/sign-in');
   }

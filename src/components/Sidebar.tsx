@@ -3,10 +3,10 @@ import Link from 'next/link';
 import SidebarItems from './SidebarItems';
 import { UserButton } from '@clerk/nextjs';
 
-import { AuthSession, getUserAuth } from '@/lib/auth/utils';
+import { type AuthSession, getUserAuth } from '@/lib/auth/utils';
 
-const Sidebar = async () => {
-  const session = await getUserAuth();
+const Sidebar =  () => {
+  const session = getUserAuth();
   if (session.session === null) return null;
 
   return (

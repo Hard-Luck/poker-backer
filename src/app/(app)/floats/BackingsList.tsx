@@ -1,8 +1,8 @@
 'use client';
-import { PlayerOrBacker } from '@/models/types';
-import { BackingsForUserList } from '@/models/userBacking';
+import { type PlayerOrBacker } from '@/models/types';
+import { type BackingsForUserList } from '@/models/userBacking';
 import { formatDateStringToDDMM } from '@/models/utils/timestamp';
-import { FC } from 'react';
+import { type FC } from 'react';
 import {
   Table,
   TableBody,

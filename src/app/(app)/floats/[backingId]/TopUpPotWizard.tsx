@@ -15,9 +15,8 @@ import {
   toastDefaultSuccess,
 } from '@/components/utils/default-toasts';
 import { trpc } from '@/lib/trpc/client';
-import { TopUpsForHistoryList } from '@/models/prismaTypes';
 import { useParams } from 'next/navigation';
-import { Dispatch, FC, useState } from 'react';
+import { type FC, useState } from 'react';
 import { FaPlusMinus } from 'react-icons/fa6';
 type TopUpPotWizardProps = {
   profit: number;
@@ -38,7 +37,7 @@ const TopUpDrawerButton: FC<TopUpPotWizardProps> = ({ profit }) => {
       toastDefaultError('Top up failed, please try again.');
     },
   });
-  const { backingId } = useParams();
+  const { backingId } = useParams() as { backingId: string };
   return (
     <Drawer
       onOpenChange={() => {

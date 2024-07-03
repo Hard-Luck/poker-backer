@@ -1,5 +1,4 @@
 import { protectedProcedure, router } from '@/lib/server/trpc';
-import { sendFriendRequest } from '@/models/friends';
 import {
   createUserBacking,
   deleteUserBacking,
@@ -8,7 +7,6 @@ import {
   isBackerForBacking,
   patchPercentages,
 } from '@/models/userBacking';
-import { TRPCClientError } from '@trpc/client';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 

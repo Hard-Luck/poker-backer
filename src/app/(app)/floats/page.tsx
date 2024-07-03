@@ -4,7 +4,7 @@ import { getBackingsForUser } from '@/models/userBacking';
 import BackingsList from './BackingsList';
 
 export default async function Page() {
-  const { session } = await getUserAuth();
+  const { session } = getUserAuth();
   if (!session) return null;
   const backings = await getBackingsForUser(session.user.id);
   const whereUserIsPlayer = backings.filter(

@@ -7,7 +7,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-import { FC, useState } from 'react';
+import { type FC, useState } from 'react';
 import { trpc } from '@/lib/trpc/client';
 import { toast } from 'sonner';
 import Link from 'next/link';

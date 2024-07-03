@@ -13,7 +13,7 @@ export const friendshipsRouter = router({
         friendshipId: z.number(),
       })
     )
-    .mutation(async ({ input, ctx }) => {
+    .mutation(async ({ input }) => {
       const { friendshipId } = input;
       return acceptFriendRequest({ friendshipId });
     }),

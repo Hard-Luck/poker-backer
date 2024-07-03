@@ -1,5 +1,5 @@
-import { FriendforFriendListWithImgUrl } from '@/models/friends';
-import { FC } from 'react';
+import { type FriendforFriendListWithImgUrl } from '@/models/friends';
+import { type FC } from 'react';
 import {
   Table,
   TableBody,

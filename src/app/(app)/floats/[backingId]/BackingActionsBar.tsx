@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import UsersWithAccessToBackingProvider from '@/contexts/UsersWithAccessToBacking';
-import { FC } from 'react';
+import { type FC } from 'react';
 import BackingSettings from './BackingSettings';
 import { trpc } from '@/lib/trpc/client';
 import { useParams, useRouter } from 'next/navigation';
@@ -21,11 +21,12 @@ type BackingActionsBarProps = {
 
 const BackingActionsBar: FC<BackingActionsBarProps> = ({ profitOrLoss }) => {
   const { user } = useUser();
+  const router = useRouter();
+  const { backingId } = useParams() as { backingId: string };
+  const usersWithAccessToBacking = useUsersWithAccessToBackingContext();
   if (!user) return null;
   const userId = user.id;
-  const usersWithAccessToBacking = useUsersWithAccessToBackingContext();
   const backingType = usersWithAccessToBacking.userDetails[userId]?.type;
-  const router = useRouter();
   if (backingType !== 'BACKER') return null;
 
   const { mutate: chopPot, isLoading } = trpc.chops.create.useMutation({
@@ -37,7 +38,6 @@ const BackingActionsBar: FC<BackingActionsBarProps> = ({ profitOrLoss }) => {
       toastDefaultError('Chop failed, please try again.');
     },
   });
-  const { backingId } = useParams();
   function handleClick() {
     chopPot({ backingId: Number(backingId) });
     router.refresh();

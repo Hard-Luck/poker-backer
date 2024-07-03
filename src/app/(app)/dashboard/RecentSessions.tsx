@@ -15,7 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from '../../../components/ui/table';
-import { useTheme } from 'next-themes';
 import { ScrollArea } from '../../../components/ui/scroll-area';
 import { ScrollAreaViewport } from '@radix-ui/react-scroll-area';
 interface UsernameAndId {
@@ -28,7 +27,6 @@ export default function RecentSession({
 }: {
   sessions: Array<Session & UsernameAndId>;
 }) {
-  const { theme } = useTheme();
   return (
     <section className={`text-secondary-foreground `}>
       <h2 className={`text-center text-2xl  `}>Recent Sessions</h2>
@@ -61,7 +59,9 @@ export default function RecentSession({
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-col text-center">
-                        <span>{formatDateStringToDDMM(session.created_at)}</span>
+                        <span>
+                          {formatDateStringToDDMM(session.created_at)}
+                        </span>
                         <span className="text-xs">{session.location}</span>
                       </div>
                     </TableCell>

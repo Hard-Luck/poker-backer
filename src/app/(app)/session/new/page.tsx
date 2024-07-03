@@ -3,7 +3,7 @@ import { getBackingsForUser } from '@/models/userBacking';
 import AddSessionForm from './AddSessionForm';
 
 export default async function Page() {
-  const { session } = await getUserAuth();
+  const { session } = getUserAuth();
   if (!session) throw new Error('No session found');
 
   const backingsUserCanAddTo = await getBackingsForUser(session.user.id);

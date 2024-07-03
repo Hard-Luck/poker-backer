@@ -9,7 +9,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import useUsersWithAccessToBackingContext from '@/contexts/UsersWithAccessToBacking/useUsersWithAccessToBackingContext';
-import {
+import type {
   ChopsForHistoryList,
   SessionsForHistoryList,
   TopUpsForHistoryList,
@@ -19,7 +19,7 @@ import { parseAndValidateChopSplit } from '@/models/utils/parse';
 import { formatDateStringToDDMMYY } from '@/models/utils/timestamp';
 import { ScrollAreaViewport } from '@radix-ui/react-scroll-area';
 import { useParams, useRouter } from 'next/navigation';
-import { FC, useState } from 'react';
+import { type FC, useState } from 'react';
 import DeleteChopButton from './DeleteChopButton';
 import DeleteSessionButton from './DeleteSessionButton';
 import DeleteTopUpButton from './DeleteTopUpButton';

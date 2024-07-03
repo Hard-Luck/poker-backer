@@ -1,11 +1,10 @@
 import { getUserAuth } from '@/lib/auth/utils';
 import Link from 'next/link';
 import Navbar from './Navbar';
-import { FC, PropsWithChildren } from 'react';
+import type { FC, PropsWithChildren } from 'react';
 
-const Header: FC<PropsWithChildren> = async ({ children }) => {
-  const { session } = await getUserAuth();
-  console.log('here');
+const Header: FC<PropsWithChildren> =  () => {
+  const { session } =  getUserAuth();
 
   return (
     <header className="px-4 w-full">

@@ -32,7 +32,7 @@ export async function deleteBackingAsOwner({
   backingId: number;
   userId: string;
 }) {
-  const backing = await db.backing.delete({
+  return db.backing.delete({
     where: {
       id: backingId,
       owner: userId,

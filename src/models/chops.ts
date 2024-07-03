@@ -1,10 +1,9 @@
 import { db } from '../lib/db';
 import { getSessionAmounts } from './sessions';
 import { getTopUpAmounts } from './topups';
-import { ChopSplitRecord } from './types';
+import { type ChopSplitRecord } from './types';
 import {
   findAllUserBackings,
-  hasAccessToBacking,
   isBackerForBacking,
 } from './userBacking';
 

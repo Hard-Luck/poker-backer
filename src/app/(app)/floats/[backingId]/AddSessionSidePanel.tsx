@@ -13,7 +13,7 @@ import {
 import { trpc } from '@/lib/trpc/client';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { FC, useState } from 'react';
+import { type FC, useState } from 'react';
 import { IoMdAdd } from 'react-icons/io';
 import { toast } from 'sonner';
 

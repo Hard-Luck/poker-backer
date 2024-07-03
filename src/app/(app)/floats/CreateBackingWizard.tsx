@@ -1,5 +1,5 @@
 'use client';
-import { FC, useState } from 'react';
+import { type FC, useState } from 'react';
 import { trpc } from '@/lib/trpc/client';
 import Modal from 'react-modal';
 import { BsXCircleFill } from 'react-icons/bs';
@@ -9,8 +9,7 @@ import {
 } from '../../../components/utils/default-toasts';
 import { Button } from '../../../components/ui/button';
 import { useRouter } from 'next/navigation';
-type CreateBackingWizardProps = {};
-const CreateBackingWizard: FC<CreateBackingWizardProps> = ({}: {}) => {
+const CreateBackingWizard: FC = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [newPot, setNewPot] = useState({ name: '', float: 0 });
   const router = useRouter();

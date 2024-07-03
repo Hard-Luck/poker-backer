@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
 
-export default async function LandingPage() {
+export default function LandingPage() {
   redirect('/dashboard');
 }

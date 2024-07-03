@@ -1,7 +1,7 @@
-import { Prisma } from '@prisma/client';
-import { findBackingWithSessionsChopsAndTopUps } from './userBacking';
-import { getFriendsNotInBacking } from './friends';
-import { getSessionWithComments } from './sessions';
+import {type  Prisma } from '@prisma/client';
+import {type  findBackingWithSessionsChopsAndTopUps } from './userBacking';
+import {type  getFriendsNotInBacking } from './friends';
+import {type  getSessionWithComments } from './sessions';
 
 export type CompleteUserBackingWithChopsTopUpsSessions = NonNullable<
   Prisma.PromiseReturnType<typeof findBackingWithSessionsChopsAndTopUps>

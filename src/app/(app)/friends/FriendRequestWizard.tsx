@@ -1,6 +1,6 @@
 'use client';
 import { trpc } from '@/lib/trpc/client';
-import { FC, useEffect, useState } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import { Input } from '../../../components/ui/input';
 import { Button } from '../../../components/ui/button';
 import placeHolderImage from '../../../../public/defaultUser.jpg';
