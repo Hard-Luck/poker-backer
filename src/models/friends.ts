@@ -1,4 +1,4 @@
-import { db } from "@/lib/db";
+import { db } from '@/lib/db';
 export type FriendforFriendListWithImgUrl = {
   id: number;
   friend_id: string;
@@ -96,7 +96,7 @@ export async function sendFriendRequest({
   friend_id: string;
 }) {
   if (await friendRequestExists(user_id, friend_id))
-    throw new Error("Request already sent");
+    throw new Error('Request already sent');
   return db.friendship.create({ data: { user_id, friend_id } });
 }
 
@@ -179,6 +179,6 @@ export async function getFriendsNotInBacking({
       },
     },
   });
-  if (!friends) throw new Error("User not found");
+  if (!friends) throw new Error('User not found');
   return friends;
 }

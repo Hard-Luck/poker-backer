@@ -1,4 +1,4 @@
-import { db } from "@/lib/db";
+import { db } from '@/lib/db';
 
 export default async function getDashboard(id: string) {
   const sessions = await getRecentSessions(id);
@@ -16,7 +16,7 @@ export async function getRecentSessions(user_id: string) {
       backing: {
         include: {
           session: {
-            orderBy: { created_at: "desc" },
+            orderBy: { created_at: 'desc' },
             take: 3,
             include: { user: true },
           },
@@ -25,7 +25,7 @@ export async function getRecentSessions(user_id: string) {
     },
   });
   return sessions
-    .map((backing) => backing.backing.session)
+    .map(backing => backing.backing.session)
     .flat()
     .sort((a, b) => b.created_at.getTime() - a.created_at.getTime());
 }

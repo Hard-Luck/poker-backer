@@ -1,10 +1,10 @@
-import { protectedProcedure, router } from "@/lib/server/trpc";
+import { protectedProcedure, router } from '@/lib/server/trpc';
 import {
   acceptFriendRequest,
   getFriendsNotInBacking,
   sendFriendRequest,
-} from "@/models/friends";
-import { z } from "zod";
+} from '@/models/friends';
+import { z } from 'zod';
 
 export const friendshipsRouter = router({
   acceptFriendRequest: protectedProcedure

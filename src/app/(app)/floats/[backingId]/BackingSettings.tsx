@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import useUsersWithAccessToBackingContext from "@/contexts/UsersWithAccessToBacking/useUsersWithAccessToBackingContext";
-import { useUser } from "@clerk/nextjs";
-import { CiSettings } from "react-icons/ci";
-import { FaRegSquarePlus, FaRegSquareMinus } from "react-icons/fa6";
+import { Button } from '@/components/ui/button';
+import useUsersWithAccessToBackingContext from '@/contexts/UsersWithAccessToBacking/useUsersWithAccessToBackingContext';
+import { useUser } from '@clerk/nextjs';
+import { CiSettings } from 'react-icons/ci';
+import { FaRegSquarePlus, FaRegSquareMinus } from 'react-icons/fa6';
 
-import * as React from "react";
+import * as React from 'react';
 import {
   Drawer,
   DrawerClose,
@@ -16,39 +16,40 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
-import { Slider } from "@/components/ui/slider";
-import { trpc } from "@/lib/trpc/client";
+} from '@/components/ui/drawer';
+import { Slider } from '@/components/ui/slider';
+import { trpc } from '@/lib/trpc/client';
 import {
   toastDefaultError,
   toastDefaultSuccess,
-} from "@/components/utils/default-toasts";
-import { useParams, useRouter } from "next/navigation";
-import { Switch } from "@/components/ui/switch";
-import { Delete } from "lucide-react";
-import DeleteBackingButton from "./DeleteBackingButton";
-import { Input } from "@/components/ui/input";
-import AddToBackingWizardButton from "./AddToBackingWizard";
+} from '@/components/utils/default-toasts';
+import { useParams, useRouter } from 'next/navigation';
+import { Switch } from '@/components/ui/switch';
+import { Delete } from 'lucide-react';
+import DeleteBackingButton from './DeleteBackingButton';
+import { Input } from '@/components/ui/input';
+import AddToBackingWizardButton from './AddToBackingWizard';
 
 const BackingSettings = () => {
   const usersWithAccessToBacking = useUsersWithAccessToBackingContext();
-  const [settingsTab, setSettingsTab] = React.useState<"DEFAULT" | "DANGEROUS">(
-    "DEFAULT"
+  const [settingsTab, setSettingsTab] = React.useState<'DEFAULT' | 'DANGEROUS'>(
+    'DEFAULT'
   );
 
   const { user } = useUser();
   if (!user) return null;
   const userId = user.id;
   const backingType = usersWithAccessToBacking.userDetails[userId]?.type;
-  if (backingType !== "BACKER") return null;
+  if (backingType !== 'BACKER') return null;
   return (
     <Drawer
       onClose={() => {
-        setSettingsTab("DEFAULT");
-      }}>
+        setSettingsTab('DEFAULT');
+      }}
+    >
       <DrawerTrigger asChild>
         <Button variant="ghost" className="flex-1" aria-label="settings">
-          <CiSettings size={"md"} />
+          <CiSettings size={'md'} />
         </Button>
       </DrawerTrigger>
       <DrawerContent>
@@ -57,21 +58,22 @@ const BackingSettings = () => {
             <DrawerTitle className="text-center">Settings</DrawerTitle>
             <div className="flex flex-col justify-self-center justify-center items-center">
               <Switch
-                checked={settingsTab === "DANGEROUS"}
-                onChange={(checked) =>
-                  setSettingsTab(checked ? "DANGEROUS" : "DEFAULT")
+                checked={settingsTab === 'DANGEROUS'}
+                onChange={checked =>
+                  setSettingsTab(checked ? 'DANGEROUS' : 'DEFAULT')
                 }
                 onClick={() => {
-                  setSettingsTab((value) =>
-                    value === "DANGEROUS" ? "DEFAULT" : "DANGEROUS"
+                  setSettingsTab(value =>
+                    value === 'DANGEROUS' ? 'DEFAULT' : 'DANGEROUS'
                   );
-                }}>
+                }}
+              >
                 Dangerous
               </Switch>
               <span className="text-xs">Dangerous Settings</span>
             </div>
           </DrawerHeader>
-          {settingsTab === "DEFAULT" ? (
+          {settingsTab === 'DEFAULT' ? (
             <div>
               <div className="p-4">
                 <DrawerDescription className="text-center">
@@ -120,12 +122,12 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
   const utils = trpc.useUtils();
   const { mutate, isLoading } = trpc.userBackings.update.useMutation({
     onSuccess: () => {
-      toastDefaultSuccess("Percentages updated");
+      toastDefaultSuccess('Percentages updated');
       utils.userBackings.listIndividual.invalidate();
     },
-    onError: (error) => {
+    onError: error => {
       toastDefaultError(
-        "Failed to update percentages, please try again later."
+        'Failed to update percentages, please try again later.'
       );
     },
   });
@@ -142,7 +144,7 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
       total += newPercentages[userId].percent;
     }
     if (total !== 100) {
-      toastDefaultError("Percentages must add up to 100");
+      toastDefaultError('Percentages must add up to 100');
       return;
     }
     mutate({
@@ -161,7 +163,7 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
               <Button
                 className="aspect-square flex-1 p-0 m-0 h-6"
                 onClick={() => {
-                  setNewPercentages((prev) => {
+                  setNewPercentages(prev => {
                     return {
                       ...prev,
                       [userId]: {
@@ -170,7 +172,8 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
                       },
                     };
                   });
-                }}>
+                }}
+              >
                 <FaRegSquareMinus />
               </Button>
               <Slider
@@ -179,7 +182,7 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
                 max={100}
                 step={0.5}
                 onValueChange={([value]) => {
-                  setNewPercentages((prev) => {
+                  setNewPercentages(prev => {
                     return {
                       ...prev,
                       [userId]: { ...prev[userId], percent: value },
@@ -190,7 +193,7 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
               <Button
                 className="aspect-square flex-1 p-0 m-0 h-6"
                 onClick={() => {
-                  setNewPercentages((prev) => {
+                  setNewPercentages(prev => {
                     return {
                       ...prev,
                       [userId]: {
@@ -199,7 +202,8 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
                       },
                     };
                   });
-                }}>
+                }}
+              >
                 <FaRegSquarePlus />
               </Button>
               <input
@@ -207,9 +211,9 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
                 min={0}
                 className="w-1/6 text-center"
                 value={newPercentages[userId].percent}
-                onChange={(e) => {
+                onChange={e => {
                   const value = Math.min(100, +e.target.value);
-                  setNewPercentages((prev) => {
+                  setNewPercentages(prev => {
                     return {
                       ...prev,
                       [userId]: { ...prev[userId], percent: value || 0 },
@@ -226,7 +230,8 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
         disabled={isLoading}
         variant="default"
         className="w-full"
-        onClick={handleClick}>
+        onClick={handleClick}
+      >
         Set percentages
       </Button>
     </div>
@@ -237,14 +242,14 @@ const ChangeFloat: React.FC = () => {
   const router = useRouter();
   const { mutate, isLoading } = trpc.backings.update.useMutation({
     onSuccess: () => {
-      toastDefaultSuccess("Float updated");
+      toastDefaultSuccess('Float updated');
       router.refresh();
     },
     onError: () => {
-      toastDefaultError("Failed to update float, please try again later.");
+      toastDefaultError('Failed to update float, please try again later.');
     },
   });
-  const [amount, setAmount] = React.useState("");
+  const [amount, setAmount] = React.useState('');
   const { backingId } = useParams();
   return (
     <div className="p-4 gap-2 flex flex-col">
@@ -253,8 +258,8 @@ const ChangeFloat: React.FC = () => {
       </DrawerDescription>
       <Input
         value={amount}
-        onChange={(e) => {
-          if (e.target.value === "" || !isNaN(+e.target.value)) {
+        onChange={e => {
+          if (e.target.value === '' || !isNaN(+e.target.value)) {
             setAmount(e.target.value);
           }
         }}
@@ -265,7 +270,8 @@ const ChangeFloat: React.FC = () => {
           onClick={() => {
             mutate({ backingId: +backingId, float: +amount });
           }}
-          disabled={isLoading}>
+          disabled={isLoading}
+        >
           Change Float
         </Button>
       </div>
@@ -306,11 +312,11 @@ const UserWithAccessCardWithRemoveButton = ({
   const { backingId } = useParams() as { backingId: string };
   const { mutate, isLoading } = trpc.userBackings.delete.useMutation({
     onSuccess: () => {
-      toastDefaultSuccess("User removed");
+      toastDefaultSuccess('User removed');
       utils.userBackings.listIndividual.invalidate();
     },
     onError: () => {
-      toastDefaultError("Failed to remove user, please try again later.");
+      toastDefaultError('Failed to remove user, please try again later.');
     },
   });
   return (
@@ -326,7 +332,8 @@ const UserWithAccessCardWithRemoveButton = ({
           }}
           variant="destructive"
           className="aspect-square w-[75px] p-0 m-0"
-          aria-label="delete user from backing">
+          aria-label="delete user from backing"
+        >
           Remove
         </Button>
       ) : (
@@ -334,7 +341,8 @@ const UserWithAccessCardWithRemoveButton = ({
           variant="default"
           onClick={() => setConfirmNotice(true)}
           className="aspect-square w-[75px] p-0 m-0"
-          aria-label="delete user from backing">
+          aria-label="delete user from backing"
+        >
           <Delete />
         </Button>
       )}

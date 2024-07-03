@@ -1,4 +1,4 @@
-import UsersWithAccessToBackingProvider from "@/contexts/UsersWithAccessToBacking";
+import UsersWithAccessToBackingProvider from '@/contexts/UsersWithAccessToBacking';
 
 export default function BackingLayout({
   children,

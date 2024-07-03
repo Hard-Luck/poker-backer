@@ -1,6 +1,6 @@
-import { FaUserFriends } from "react-icons/fa";
-import DashboardIcon from "./DashboardIcon";
-import Link from "next/link";
+import { FaUserFriends } from 'react-icons/fa';
+import DashboardIcon from './DashboardIcon';
+import Link from 'next/link';
 
 const FriendsLink = () => {
   return (

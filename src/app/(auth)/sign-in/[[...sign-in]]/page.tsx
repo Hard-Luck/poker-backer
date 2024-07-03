@@ -1,5 +1,5 @@
-import { SignIn } from "@clerk/nextjs";
-import Image from "next/image";
+import { SignIn } from '@clerk/nextjs';
+import Image from 'next/image';
 
 export default function Page() {
   return (
@@ -12,7 +12,7 @@ export default function Page() {
         className="rounded-3xl"
         priority
       />
-      <SignIn redirectUrl={"/dashboard"} />
+      <SignIn redirectUrl={'/dashboard'} />
     </main>
   );
 }

@@ -1,15 +1,15 @@
-import * as React from "react";
-import { getUserAuth } from "@/lib/auth/utils";
-import getDashboard from "@/models/dashboard";
-import SessionsThisMonth from "./SessionsThisMonth";
-import AddSessionButton from "./AddSessionButton";
-import RecentSession from "./RecentSessions";
-import HistoryLink from "./HistoryLink";
-import FriendsLink from "./FriendsLink";
+import * as React from 'react';
+import { getUserAuth } from '@/lib/auth/utils';
+import getDashboard from '@/models/dashboard';
+import SessionsThisMonth from './SessionsThisMonth';
+import AddSessionButton from './AddSessionButton';
+import RecentSession from './RecentSessions';
+import HistoryLink from './HistoryLink';
+import FriendsLink from './FriendsLink';
 
 export default async function Page() {
   const { session } = await getUserAuth();
-  if (!session) throw new Error("No session found");
+  if (!session) throw new Error('No session found');
   const user = await getDashboard(session.user.id);
   return (
     <main className="flex flex-col text-primary-foreground">

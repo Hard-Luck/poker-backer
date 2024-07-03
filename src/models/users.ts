@@ -1,4 +1,4 @@
-import { db } from "@/lib/db";
+import { db } from '@/lib/db';
 
 export async function createNewuser(id: string, username: string) {
   const user = { username, id: id };
@@ -31,7 +31,7 @@ export async function getUsernameById(id: string) {
     where: { id: id },
     select: { username: true },
   });
-  if (!user) throw new Error("User not found");
+  if (!user) throw new Error('User not found');
   const { username } = user;
   return username;
 }
@@ -44,7 +44,7 @@ export async function changeUsername(id: string, newUsername: string) {
 
 export async function changeImgUrl(url: string, user_id: string) {
   if (!url.match(/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}/))
-    throw new Error("Invalid URL");
+    throw new Error('Invalid URL');
   return db.user.update({
     where: { id: user_id },
     data: { img_url: url },

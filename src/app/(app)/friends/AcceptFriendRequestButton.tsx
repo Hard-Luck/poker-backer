@@ -1,9 +1,9 @@
-"use client";
-import { trpc } from "@/lib/trpc/client";
-import { useState } from "react";
-import { toast } from "sonner";
-import { Button } from "../../../components/ui/button";
-import { FaUserFriends } from "react-icons/fa";
+'use client';
+import { trpc } from '@/lib/trpc/client';
+import { useState } from 'react';
+import { toast } from 'sonner';
+import { Button } from '../../../components/ui/button';
+import { FaUserFriends } from 'react-icons/fa';
 
 export default function AcceptFriendRequestButton({
   friendshipId,
@@ -12,16 +12,16 @@ export default function AcceptFriendRequestButton({
 }) {
   const [visible, setVisible] = useState(true);
   const { mutate } = trpc.friendships.acceptFriendRequest.useMutation({
-    onError: (error) => {
-      toast.error("Failed to accept friend request", {
+    onError: error => {
+      toast.error('Failed to accept friend request', {
         duration: 3000,
-        position: "top-center",
+        position: 'top-center',
       });
     },
     onSuccess: () => {
-      toast.success("Friend request accepted", {
+      toast.success('Friend request accepted', {
         duration: 3000,
-        position: "top-center",
+        position: 'top-center',
       });
       setVisible(false);
     },
@@ -31,7 +31,8 @@ export default function AcceptFriendRequestButton({
     <Button
       onClick={() => {
         mutate({ friendshipId });
-      }}>
+      }}
+    >
       <FaUserFriends />
       Accept
     </Button>

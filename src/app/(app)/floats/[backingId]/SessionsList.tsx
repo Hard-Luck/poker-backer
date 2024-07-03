@@ -16,7 +16,7 @@ import {
 } from '@/models/prismaTypes';
 import { formatCurrency } from '@/models/utils/currency';
 import { parseAndValidateChopSplit } from '@/models/utils/parse';
-import { formatLongDateWithTime } from '@/models/utils/timestamp';
+import { formatDateStringToDDMMYY } from '@/models/utils/timestamp';
 import { ScrollAreaViewport } from '@radix-ui/react-scroll-area';
 import { useParams, useRouter } from 'next/navigation';
 import { FC, useState } from 'react';
@@ -92,7 +92,7 @@ const ChopCard = ({ chop }: { chop: ChopsForHistoryList[0] }) => {
         onClick={() => setModalOpen(!modalOpen)}
         className="text-purple-700"
       >
-        <TableCell>{formatLongDateWithTime(chop.created_at)}</TableCell>
+        <TableCell>{formatDateStringToDDMMYY(chop.created_at)}</TableCell>
         <TableCell>
           {userDetails[chop.user_id]?.username || 'No longer here'}
         </TableCell>
@@ -122,7 +122,7 @@ const SessionCard = ({ session }: { session: SessionsForHistoryList[0] }) => {
         router.push(`/session/${session.id}`);
       }}
     >
-      <TableCell>{formatLongDateWithTime(session.created_at)}</TableCell>
+      <TableCell>{formatDateStringToDDMMYY(session.created_at)}</TableCell>
       <TableCell>
         {userDetails[session.user_id]?.username || 'No longer here'}
       </TableCell>
@@ -168,7 +168,7 @@ const TopUpCard = ({ topUp }: { topUp: TopUpsForHistoryList[0] }) => {
   if (isLoading) return null;
   return (
     <TableRow>
-      <TableCell>{formatLongDateWithTime(topUp.created_at)}</TableCell>
+      <TableCell>{formatDateStringToDDMMYY(topUp.created_at)}</TableCell>
       <TableCell>
         {userDetails[topUp.user_id]?.username || 'No longer here'}
       </TableCell>

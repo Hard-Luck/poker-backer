@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import type { Session } from "@prisma/client";
-import { ImArrowUp, ImArrowDown } from "react-icons/im";
-import React from "react";
+import type { Session } from '@prisma/client';
+import { ImArrowUp, ImArrowDown } from 'react-icons/im';
+import React from 'react';
 import {
   convertMinsToHrsMins,
-  formatShortDate,
-} from "@/models/utils/timestamp";
+  formatDateStringToDDMM,
+} from '@/models/utils/timestamp';
 import {
   Table,
   TableBody,
@@ -14,10 +14,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../../../components/ui/table";
-import { useTheme } from "next-themes";
-import { ScrollArea } from "../../../components/ui/scroll-area";
-import { ScrollAreaViewport } from "@radix-ui/react-scroll-area";
+} from '../../../components/ui/table';
+import { useTheme } from 'next-themes';
+import { ScrollArea } from '../../../components/ui/scroll-area';
+import { ScrollAreaViewport } from '@radix-ui/react-scroll-area';
 interface UsernameAndId {
   user: {
     username: string;
@@ -44,9 +44,9 @@ export default function RecentSession({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {sessions.map((session) => {
+              {sessions.map(session => {
                 const winnerOrLoser =
-                  session.amount < 0 ? "text-red-700" : "text-lime-600";
+                  session.amount < 0 ? 'text-red-700' : 'text-lime-600';
 
                 return (
                   <TableRow key={session.id}>
@@ -61,7 +61,7 @@ export default function RecentSession({
                     </TableCell>
                     <TableCell>
                       <div className="flex flex-col text-center">
-                        <span>{formatShortDate(session.created_at)}</span>
+                        <span>{formatDateStringToDDMM(session.created_at)}</span>
                         <span className="text-xs">{session.location}</span>
                       </div>
                     </TableCell>

@@ -1,9 +1,9 @@
-import "@/app/globals.css";
-import Header from "@/components/Header";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import TrpcProvider from "@/lib/trpc/Provider";
-import { ClerkProvider } from "@clerk/nextjs";
-import { Toaster } from "sonner";
+import '@/app/globals.css';
+import Header from '@/components/Header';
+import { ThemeProvider } from '@/components/ThemeProvider';
+import TrpcProvider from '@/lib/trpc/Provider';
+import { ClerkProvider } from '@clerk/nextjs';
+import { Toaster } from 'sonner';
 
 export default function RootLayout({
   children,
@@ -23,7 +23,8 @@ export default function RootLayout({
               attribute="class"
               defaultTheme="system"
               enableSystem
-              disableTransitionOnChange>
+              disableTransitionOnChange
+            >
               <Header />
               {children}
             </ThemeProvider>

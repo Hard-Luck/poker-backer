@@ -1,14 +1,14 @@
-"use client";
-import { Button } from "@/components/ui/button";
+'use client';
+import { Button } from '@/components/ui/button';
 import {
   toastDefaultError,
   toastDefaultSuccess,
-} from "@/components/utils/default-toasts";
-import { trpc } from "@/lib/trpc/client";
-import { revalidatePath } from "next/cache";
-import { useParams, usePathname, useRouter } from "next/navigation";
-import { Dispatch, FC, SetStateAction, useState } from "react";
-import { IoMdPersonAdd } from "react-icons/io";
+} from '@/components/utils/default-toasts';
+import { trpc } from '@/lib/trpc/client';
+import { revalidatePath } from 'next/cache';
+import { useParams, usePathname, useRouter } from 'next/navigation';
+import { Dispatch, FC, SetStateAction, useState } from 'react';
+import { IoMdPersonAdd } from 'react-icons/io';
 type AddToBackingWizardProps = {
   setOpen: Dispatch<SetStateAction<boolean>>;
 };
@@ -22,11 +22,11 @@ const AddToBackingWizard: FC<AddToBackingWizardProps> = ({ setOpen }) => {
   if (isLoading) return null;
   if (!friends) return null;
   const formattedRecievedFriends = friends.receivedFriendships.map(
-    (friendship) => {
+    friendship => {
       return friendship.user;
     }
   );
-  const formattedSentFriends = friends.sentFriendships.map((friendship) => {
+  const formattedSentFriends = friends.sentFriendships.map(friendship => {
     return friendship.friend;
   });
   const friendsToList = [...formattedRecievedFriends, ...formattedSentFriends];
@@ -35,12 +35,13 @@ const AddToBackingWizard: FC<AddToBackingWizardProps> = ({ setOpen }) => {
     <section className="fixed bg-muted p-4 rounded-t-xl bottom-0 left-0 flex flex-col w-full items-center">
       <Button
         onClick={() => setOpen(false)}
-        variant={"secondary"}
-        className="w-[200px] m-4">
+        variant={'secondary'}
+        className="w-[200px] m-4"
+      >
         Close
       </Button>
       <ul>
-        {friendsToList.map((friend) => (
+        {friendsToList.map(friend => (
           <FriendCard key={friend.id} friend={friend} />
         ))}
       </ul>
