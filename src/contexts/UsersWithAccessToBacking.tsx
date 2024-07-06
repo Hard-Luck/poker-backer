@@ -1,8 +1,8 @@
-'use client';
-import { trpc } from '@/lib/trpc/client';
-import { type PlayerOrBacker } from '@/models/types';
-import { useParams } from 'next/navigation';
-import { type FC, type PropsWithChildren, createContext } from 'react';
+"use client";
+import { trpc } from "@/lib/trpc/client";
+import { type PlayerOrBacker } from "@/models/types";
+import { useParams } from "next/navigation";
+import { type FC, type PropsWithChildren, createContext } from "react";
 
 type UsersWithAccessToBacking = Record<
   string,
@@ -22,7 +22,7 @@ export const UsersWithAccessToBackingContext =
 const UsersWithAccessToBackingProvider: FC<PropsWithChildren> = ({
   children,
 }) => {
-  const { backingId } = useParams() as { backingId: string };
+  const { backingId } = useParams<{ backingId: string }>();
 
   const { data, isLoading } = trpc.userBackings.listIndividual.useQuery(
     {

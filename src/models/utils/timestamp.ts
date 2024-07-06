@@ -1,23 +1,22 @@
 export function formatDateStringToDDMMHHSS(timestamp: string) {
   const date = new Date(timestamp);
-  const day = date.getDate().toString().padStart(2, '0');
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const hours = date.getUTCHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const hours = date.getUTCHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
   return `${day}-${month} ${hours}:${minutes}`;
 }
 
 export function formatDateStringToDDMM(date: Date) {
-  console.log(date);
-  const day = date.getDate().toString().padStart(2, '0');
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const formattedDate = `${day}-${month}`;
   return formattedDate;
 }
 
 export const formatDateStringToDDMMYY = (date: Date) => {
-  const day = date.getDate().toString().padStart(2, '0');
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, "0");
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const year = date.getFullYear();
 
   return `${day}-${month}-${year}`;
@@ -26,8 +25,8 @@ export const formatDateStringToDDMMYY = (date: Date) => {
 export function convertMinsToHrsMins(mins: number): string {
   const hours = Math.floor(mins / 60);
   const minutes = mins % 60;
-  let time = '';
-  if(mins === 0) {
+  let time = "";
+  if (mins === 0) {
     return "0m";
   }
   if (hours > 0) {
@@ -37,7 +36,6 @@ export function convertMinsToHrsMins(mins: number): string {
     time += ` ${minutes}m`;
   }
   return time;
- 
 }
 
 export function isDateAfter(date: Date, dateToCompareTo: Date): boolean {
@@ -50,23 +48,23 @@ export function formatDateStringToLongDate(date: Date) {
   const year = date.getFullYear();
 
   const monthNames: string[] = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
   const daySuffix = getDaySuffix(day);
 
-  const monthName = monthNames[monthIndex] || '';
+  const monthName = monthNames[monthIndex] || "";
 
   const formattedDate = `${day}${daySuffix} of ${monthName} ${year}`;
   return formattedDate;
@@ -74,17 +72,17 @@ export function formatDateStringToLongDate(date: Date) {
 
 function getDaySuffix(day: number): string {
   if (day >= 11 && day <= 13) {
-    return 'th';
+    return "th";
   }
 
   switch (day % 10) {
     case 1:
-      return 'st';
+      return "st";
     case 2:
-      return 'nd';
+      return "nd";
     case 3:
-      return 'rd';
+      return "rd";
     default:
-      return 'th';
+      return "th";
   }
 }

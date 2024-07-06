@@ -1,21 +1,21 @@
-'use client';
-import DatePicker from '@/components/DataPicker';
-import { Button, buttonVariants } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+"use client";
+import DatePicker from "@/components/DataPicker";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/components/ui/sheet';
-import { trpc } from '@/lib/trpc/client';
-import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import { type FC, useState } from 'react';
-import { IoMdAdd } from 'react-icons/io';
-import { toast } from 'sonner';
+} from "@/components/ui/sheet";
+import { trpc } from "@/lib/trpc/client";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { type FC, useState } from "react";
+import { IoMdAdd } from "react-icons/io";
+import { toast } from "sonner";
 
 const AddSessionSidePanel = () => {
   return (
@@ -41,20 +41,20 @@ const AddSessionSidePanel = () => {
 export default AddSessionSidePanel;
 
 const AddSessionForm: FC = () => {
-  const { backingId } = useParams() as { backingId: string };
+  const { backingId } = useParams();
   const [date, setDate] = useState(new Date());
-  const [location, setLocation] = useState('');
-  const [amount, setAmount] = useState('');
-  const [length, setLength] = useState('');
+  const [location, setLocation] = useState("");
+  const [amount, setAmount] = useState("");
+  const [length, setLength] = useState("");
   const { mutate } = trpc.sessions.create.useMutation({
     onSuccess: () => {
       setDate(new Date());
-      setLocation('');
-      setAmount('');
-      setLength('');
-      toast.success('Session Added', {
+      setLocation("");
+      setAmount("");
+      setLength("");
+      toast.success("Session Added", {
         duration: 2000,
-        position: 'top-center',
+        position: "top-center",
       });
     },
     onError: error => {
@@ -62,23 +62,23 @@ const AddSessionForm: FC = () => {
       console.error(error);
       toast.error(error.message, {
         duration: 2000,
-        position: 'top-center',
+        position: "top-center",
       });
     },
   });
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!amount) {
-      toast.error('Please enter an amount', {
+      toast.error("Please enter an amount", {
         duration: 2000,
-        position: 'top-center',
+        position: "top-center",
       });
       return;
     }
     if (!length) {
-      toast.error('Please enter a length', {
+      toast.error("Please enter a length", {
         duration: 2000,
-        position: 'top-center',
+        position: "top-center",
       });
       return;
     }
@@ -87,7 +87,7 @@ const AddSessionForm: FC = () => {
       length: parseInt(length),
       date,
       location,
-      backingId,
+      backingId: backingId as string,
     });
   }
   return (
@@ -135,7 +135,7 @@ const AddSessionForm: FC = () => {
       <div>
         <Link
           href="/dashboard"
-          className={buttonVariants({ variant: 'outline' })}
+          className={buttonVariants({ variant: "outline" })}
         >
           Back to dashboard
         </Link>

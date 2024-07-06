@@ -1,11 +1,11 @@
-import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
+import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
 
-import { type NextRequest } from 'next/server';
-import { appRouter } from '@/lib/server/routers/_app';
-import { createTRPCContext } from '@/lib/trpc/context';
-import { env } from '@/lib/env.mjs';
+import { type NextRequest } from "next/server";
+import { appRouter } from "@/lib/server/routers/_app";
+import { createTRPCContext } from "@/lib/trpc/context";
+import { env } from "@/lib/env.mjs";
 
-const createContext = async (req: NextRequest) => {
+const createContext = (req: NextRequest) => {
   return createTRPCContext({
     headers: req.headers,
   });
@@ -13,15 +13,15 @@ const createContext = async (req: NextRequest) => {
 
 const handler = (req: NextRequest) =>
   fetchRequestHandler({
-    endpoint: '/api/trpc',
+    endpoint: "/api/trpc",
     req,
     router: appRouter,
     createContext: () => createContext(req),
     onError:
-      env.NODE_ENV === 'development'
+      env.NODE_ENV === "development"
         ? ({ path, error }) => {
             console.error(
-              `❌ tRPC failed on ${path ?? '<no-path>'}: ${error.message}`
+              `❌ tRPC failed on ${path ?? "<no-path>"}: ${error.message}`
             );
           }
         : undefined,
