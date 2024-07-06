@@ -1,11 +1,11 @@
-import { createEnv } from '@t3-oss/env-nextjs';
-import { z } from 'zod';
+import { createEnv } from "@t3-oss/env-nextjs";
+import { z } from "zod";
 
 export const env = createEnv({
   server: {
     NODE_ENV: z
-      .enum(['development', 'test', 'production'])
-      .default('development'),
+      .enum(["development", "test", "production"])
+      .default("development"),
     DATABASE_URL: z.string().min(1),
     TURSO_DATABASE_URL: z.string().min(1),
     TURSO_AUTH_TOKEN: z.string().min(1),

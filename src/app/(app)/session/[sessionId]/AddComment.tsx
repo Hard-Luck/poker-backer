@@ -1,28 +1,28 @@
-"use client";
+'use client';
 
 import {
   toastDefaultError,
   toastDefaultSuccess,
-} from "@/components/utils/default-toasts";
-import { trpc } from "@/lib/trpc/client";
-import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
-import { FiSend } from "react-icons/fi";
+} from '@/components/utils/default-toasts';
+import { trpc } from '@/lib/trpc/client';
+import { useParams, useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { FiSend } from 'react-icons/fi';
 
 const AddComment = () => {
   const router = useRouter();
   const sessionId = +useParams().sessionId;
   const { mutate, isLoading } = trpc.comments.create.useMutation({
     onSuccess: () => {
-      toastDefaultSuccess("Comment added");
+      toastDefaultSuccess('Comment added');
       router.refresh();
-      setBody("");
+      setBody('');
     },
-    onError: (err) => {
+    onError: err => {
       toastDefaultError(err.message);
     },
   });
-  const [body, setBody] = useState("");
+  const [body, setBody] = useState('');
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBody(e.target.value);
   };
@@ -40,7 +40,8 @@ const AddComment = () => {
       <button
         className=" rounded-r-lg bg-theme-header p-2 text-2xl text-white transition-colors duration-300 ease-in-out"
         disabled={!body || isLoading}
-        onClick={handleOnClick}>
+        onClick={handleOnClick}
+      >
         <FiSend />
       </button>
     </div>

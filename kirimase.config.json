@@ -1,11 +1,6 @@
 {
   "hasSrc": true,
-  "packages": [
-    "shadcn-ui",
-    "prisma",
-    "clerk",
-    "trpc"
-  ],
+  "packages": ["shadcn-ui", "prisma", "clerk", "trpc"],
   "preferredPackageManager": "npm",
   "t3": false,
   "alias": "@",

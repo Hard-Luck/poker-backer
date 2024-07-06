@@ -6,21 +6,18 @@ import { useState } from "react";
 
 const DeleteBackingButton = () => {
   const router = useRouter();
-  const { backingId } = useParams();
-  console.log(backingId);
+  const { backingId } = useParams<{ backingId: string }>();
   const [confirmNotice, setConfirmNotice] = useState(false);
 
-  const { mutate: deleteBacking, isLoading } = trpc.backings.delete.useMutation(
-    {
-      onSuccess: () => {
-        router.push("/floats");
-        router.refresh();
-      },
-      onError: () => {
-        toastDefaultError("Failed to delete backing, please try again later.");
-      },
-    }
-  );
+  const { mutate: deleteBacking } = trpc.backings.delete.useMutation({
+    onSuccess: () => {
+      router.push("/floats");
+      router.refresh();
+    },
+    onError: () => {
+      toastDefaultError("Failed to delete backing, please try again later.");
+    },
+  });
   function handleOriginalClick() {
     setConfirmNotice(true);
   }
@@ -30,7 +27,8 @@ const DeleteBackingButton = () => {
         <Button
           variant="destructive"
           onClick={() => deleteBacking({ backingId: Number(backingId) })}
-          className="mr-2 w-[150px]">
+          className="mr-2 w-[150px]"
+        >
           CONFIRM DELETE
         </Button>
       </div>

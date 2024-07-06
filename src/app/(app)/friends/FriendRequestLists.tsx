@@ -1,5 +1,5 @@
-import { FriendforFriendListWithImgUrl } from "@/models/friends";
-import { FC } from "react";
+import { type FriendforFriendListWithImgUrl } from '@/models/friends';
+import { type FC } from 'react';
 import {
   Table,
   TableBody,
@@ -7,10 +7,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../../../components/ui/table";
-import Image from "next/image";
-import placeHolderImage from "../../../../public/defaultUser.jpg";
-import AcceptFriendRequestButton from "./AcceptFriendRequestButton";
+} from '../../../components/ui/table';
+import Image from 'next/image';
+import placeHolderImage from '../../../../public/defaultUser.jpg';
+import AcceptFriendRequestButton from './AcceptFriendRequestButton';
 
 type FriendsRequestListProps = {
   friendRequests: FriendforFriendListWithImgUrl[];
@@ -35,7 +35,7 @@ const FriendRequestList: FC<FriendsRequestListProps> = ({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {friendRequests.map((friend) => {
+              {friendRequests.map(friend => {
                 return (
                   <TableRow key={friend.friend_id}>
                     <TableCell>
@@ -71,7 +71,7 @@ const FriendRequestList: FC<FriendsRequestListProps> = ({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {sentFriendRequests.map((friend) => {
+              {sentFriendRequests.map(friend => {
                 return (
                   <TableRow key={friend.friend_id}>
                     <TableCell>

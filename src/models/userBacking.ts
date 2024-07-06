@@ -1,6 +1,6 @@
-import { db } from '@/lib/db';
-import { UserBacking } from '@prisma/client';
-import { PlayerOrBacker } from './types';
+import { db } from "@/lib/db";
+import { type UserBacking } from "@prisma/client";
+import { type PlayerOrBacker } from "./types";
 
 export async function hasAccessToBacking({
   userId,
@@ -29,7 +29,7 @@ export async function getBackingsForUser(userId: string) {
           name: true,
           session: {
             select: { created_at: true },
-            orderBy: { created_at: 'desc' },
+            orderBy: { created_at: "desc" },
             take: 1,
           },
         },
@@ -57,23 +57,20 @@ export async function isBackerForBacking({
   userId: string;
   backingId: number;
 }) {
-  console.log({ userId, backingId });
-
   const userBacking = await db.userBacking.findUnique({
     where: {
       user_id_backing_id: { user_id: userId, backing_id: backingId },
     },
   });
-  console.log(userBacking);
 
-  return userBacking?.type === 'BACKER';
+  return userBacking?.type === "BACKER";
 }
 
 export async function createUserBacking({
   userBacking,
   backerId,
 }: {
-  userBacking: Omit<UserBacking, 'id' | 'percent'>;
+  userBacking: Omit<UserBacking, "id" | "percent">;
   backerId: string;
 }) {
   const hasAccess = await isBackerForBacking({
@@ -81,7 +78,7 @@ export async function createUserBacking({
     userId: backerId,
   });
   if (!hasAccess) {
-    throw new Error('User does not have access to backing');
+    throw new Error("User does not have access to backing");
   }
   return db.userBacking.create({
     data: userBacking,
@@ -99,7 +96,7 @@ export async function patchPercentages({
     return acc.percent + current;
   }, 0);
   if (percentageCheck !== 100) {
-    throw new Error('Percentages do not add up to 100');
+    throw new Error("Percentages do not add up to 100");
   }
   return db.$transaction(
     percentages.map(({ user_id, percent }) => {
@@ -123,7 +120,7 @@ export async function deleteUserBacking({
   return db.userBacking.delete({
     where: {
       user_id_backing_id: { user_id: userId, backing_id: backingId },
-      backing: { access: { some: { user_id: backerId, type: 'BACKER' } } },
+      backing: { access: { some: { user_id: backerId, type: "BACKER" } } },
     },
   });
 }

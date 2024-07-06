@@ -1,7 +1,6 @@
-import { protectedProcedure, publicProcedure, router } from "@/lib/server/trpc";
-import { addSession } from "@/models/sessions";
-import { searchNotFriendUserByPartialUsername } from "@/models/users";
-import { z } from "zod";
+import { protectedProcedure, router } from '@/lib/server/trpc';
+import { searchNotFriendUserByPartialUsername } from '@/models/users';
+import { z } from 'zod';
 export const usersRouter = router({
   getUserMatchingUserName: protectedProcedure
     .input(z.string())

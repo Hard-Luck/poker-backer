@@ -1,10 +1,10 @@
-import { getUserAuth } from "@/lib/auth/utils";
-import { findBackingWithSessionsChopsAndTopUps } from "@/models/userBacking";
-import { notFound, redirect } from "next/navigation";
-import BackingHero from "./BackingHero";
-import HistoryList from "./SessionsList";
-import BackingActionsBar from "./BackingActionsBar";
-import AddSessionSidePanel from "./AddSessionSidePanel";
+import { getUserAuth } from '@/lib/auth/utils';
+import { findBackingWithSessionsChopsAndTopUps } from '@/models/userBacking';
+import { notFound, redirect } from 'next/navigation';
+import BackingHero from './BackingHero';
+import HistoryList from './SessionsList';
+import BackingActionsBar from './BackingActionsBar';
+import AddSessionSidePanel from './AddSessionSidePanel';
 
 type BackingPageProps = {
   params: {
@@ -14,9 +14,9 @@ type BackingPageProps = {
 
 export default async function page({ params }: BackingPageProps) {
   const { backingId } = params;
-  const { session } = await getUserAuth();
+  const { session } = getUserAuth();
   if (!session) {
-    redirect("/sign-in");
+    redirect('/sign-in');
   }
   const backingDetails = await findBackingWithSessionsChopsAndTopUps({
     backingId: +backingId,
@@ -32,11 +32,11 @@ export default async function page({ params }: BackingPageProps) {
   const lastChopDate = chops.at(-1)?.created_at;
   console.log(lastChopDate);
 
-  const sessionsSinceLastChop = sessions.filter((s) => {
+  const sessionsSinceLastChop = sessions.filter(s => {
     if (!lastChopDate) return true;
     return new Date(s.created_at) > new Date(lastChopDate);
   });
-  const topUpsSinceLastChop = topUps.filter((t) => {
+  const topUpsSinceLastChop = topUps.filter(t => {
     if (!lastChopDate) return true;
     //compare the date of the topup with the date of the last chop as dates
     //are stored as strings in the database

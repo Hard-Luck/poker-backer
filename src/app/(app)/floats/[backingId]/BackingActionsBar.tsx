@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import UsersWithAccessToBackingProvider from '@/contexts/UsersWithAccessToBacking';
-import { FC } from 'react';
-import BackingSettings from './BackingSettings';
-import { trpc } from '@/lib/trpc/client';
-import { useParams, useRouter } from 'next/navigation';
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import UsersWithAccessToBackingProvider from "@/contexts/UsersWithAccessToBacking";
+import { type FC } from "react";
+import BackingSettings from "./BackingSettings";
+import { trpc } from "@/lib/trpc/client";
+import { useParams, useRouter } from "next/navigation";
 import {
   toastDefaultError,
   toastDefaultSuccess,
-} from '@/components/utils/default-toasts';
-import TopUpDrawerButton from './TopUpPotWizard';
-import { useUser } from '@clerk/nextjs';
-import useUsersWithAccessToBackingContext from '@/contexts/UsersWithAccessToBacking/useUsersWithAccessToBackingContext';
+} from "@/components/utils/default-toasts";
+import TopUpDrawerButton from "./TopUpPotWizard";
+import { useUser } from "@clerk/nextjs";
+import useUsersWithAccessToBackingContext from "@/contexts/UsersWithAccessToBacking/useUsersWithAccessToBackingContext";
 
 type BackingActionsBarProps = {
   profitOrLoss: number;
@@ -21,23 +21,24 @@ type BackingActionsBarProps = {
 
 const BackingActionsBar: FC<BackingActionsBarProps> = ({ profitOrLoss }) => {
   const { user } = useUser();
-  if (!user) return null;
-  const userId = user.id;
-  const usersWithAccessToBacking = useUsersWithAccessToBackingContext();
-  const backingType = usersWithAccessToBacking.userDetails[userId]?.type;
   const router = useRouter();
-  if (backingType !== 'BACKER') return null;
+  const { backingId } = useParams();
+  const usersWithAccessToBacking = useUsersWithAccessToBackingContext();
 
   const { mutate: chopPot, isLoading } = trpc.chops.create.useMutation({
     onSuccess: () => {
-      toastDefaultSuccess('Chop successful');
+      toastDefaultSuccess("Chop successful");
     },
     onError: error => {
       console.error(error);
-      toastDefaultError('Chop failed, please try again.');
+      toastDefaultError("Chop failed, please try again.");
     },
   });
-  const { backingId } = useParams();
+  if (!user) return null;
+  const userId = user.id;
+  const backingType = usersWithAccessToBacking.userDetails[userId]?.type;
+  if (backingType !== "BACKER") return null;
+
   function handleClick() {
     chopPot({ backingId: Number(backingId) });
     router.refresh();

@@ -1,8 +1,8 @@
-"use client";
-import { PlayerOrBacker } from "@/models/types";
-import { BackingsForUserList } from "@/models/userBacking";
-import { formatShortDate } from "@/models/utils/timestamp";
-import { FC } from "react";
+'use client';
+import { type PlayerOrBacker } from '@/models/types';
+import { type BackingsForUserList } from '@/models/userBacking';
+import { formatDateStringToDDMM } from '@/models/utils/timestamp';
+import { type FC } from 'react';
 import {
   Table,
   TableBody,
@@ -10,8 +10,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../../../components/ui/table";
-import { useRouter } from "next/navigation";
+} from '../../../components/ui/table';
+import { useRouter } from 'next/navigation';
 
 type BackingsListProps = {
   type: PlayerOrBacker;
@@ -22,7 +22,7 @@ const BackingsList: FC<BackingsListProps> = ({ backings, type }) => {
   const router = useRouter();
   return (
     <section>
-      <h2>{type === "PLAYER" ? "Backed in: " : "Players you are backing:"}</h2>
+      <h2>{type === 'PLAYER' ? 'Backed in: ' : 'Players you are backing:'}</h2>
       <Table className="">
         <TableHeader>
           <TableRow>
@@ -31,19 +31,20 @@ const BackingsList: FC<BackingsListProps> = ({ backings, type }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {backings.map((backing) => (
+          {backings.map(backing => (
             <TableRow
               className="cursor-pointer hover:bg-gray-100 hover:text-black"
               role="link"
               onClick={() => {
                 router.push(`/floats/${backing.id}`);
               }}
-              key={backing.id}>
+              key={backing.id}
+            >
               <TableCell>{backing.name}</TableCell>
               <TableCell>
                 {backing.lastSession
-                  ? formatShortDate(backing.lastSession)
-                  : "No sessions played"}
+                  ? formatDateStringToDDMM(backing.lastSession)
+                  : 'No sessions played'}
               </TableCell>
             </TableRow>
           ))}

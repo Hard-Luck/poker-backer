@@ -1,14 +1,14 @@
-import { getUserAuth } from "@/lib/auth/utils";
-import { getSessionsPlayedThisMonth } from "@/models/sessions";
+import { getUserAuth } from '@/lib/auth/utils';
+import { getSessionsPlayedThisMonth } from '@/models/sessions';
 
 export default async function SessionsThisMonth() {
-  const { session } = await getUserAuth();
-  if (!session) throw new Error("No session found");
+  const { session } = getUserAuth();
+  if (!session) throw new Error('No session found');
   const sessionsPlayedThisMonth = await getSessionsPlayedThisMonth(
     session.user.id
   );
   const sessionOrSessions = `${
-    sessionsPlayedThisMonth > 1 ? "Sessions" : "Session"
+    sessionsPlayedThisMonth > 1 ? 'Sessions' : 'Session'
   }`;
   return (
     <div className="h w-7/16 m-2 flex flex-col bg-primary items-center justify-center rounded p-2 ">

@@ -1,10 +1,10 @@
-import { protectedProcedure, router } from "@/lib/server/trpc";
+import { protectedProcedure, router } from '@/lib/server/trpc';
 import {
   acceptFriendRequest,
   getFriendsNotInBacking,
   sendFriendRequest,
-} from "@/models/friends";
-import { z } from "zod";
+} from '@/models/friends';
+import { z } from 'zod';
 
 export const friendshipsRouter = router({
   acceptFriendRequest: protectedProcedure
@@ -13,7 +13,7 @@ export const friendshipsRouter = router({
         friendshipId: z.number(),
       })
     )
-    .mutation(async ({ input, ctx }) => {
+    .mutation(async ({ input }) => {
       const { friendshipId } = input;
       return acceptFriendRequest({ friendshipId });
     }),

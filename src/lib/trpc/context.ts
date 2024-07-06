@@ -1,14 +1,14 @@
-import { db } from "@/lib/db/index"
-import { getUserAuth } from "@/lib/auth/utils";
+import { db } from '@/lib/db/index';
+import { getUserAuth } from '@/lib/auth/utils';
 
-export async function createTRPCContext(opts: { headers: Headers }) {
-const { session } = await getUserAuth();
+export function createTRPCContext(opts: { headers: Headers }) {
+  const { session } = getUserAuth();
 
   return {
     db,
-     session: session,
+    session: session,
     ...opts,
-  }
+  };
 }
 
 export type Context = Awaited<ReturnType<typeof createTRPCContext>>;

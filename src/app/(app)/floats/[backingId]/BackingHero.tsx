@@ -1,5 +1,5 @@
 import MiniCard from '@/components/ui/minicard';
-import { FC } from 'react';
+import { type FC } from 'react';
 
 type BackingHeroProps = {
   totalSessions: number;

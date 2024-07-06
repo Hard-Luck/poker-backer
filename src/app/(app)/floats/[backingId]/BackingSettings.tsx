@@ -9,10 +9,8 @@ import { FaRegSquarePlus, FaRegSquareMinus } from "react-icons/fa6";
 import * as React from "react";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
@@ -45,7 +43,8 @@ const BackingSettings = () => {
     <Drawer
       onClose={() => {
         setSettingsTab("DEFAULT");
-      }}>
+      }}
+    >
       <DrawerTrigger asChild>
         <Button variant="ghost" className="flex-1" aria-label="settings">
           <CiSettings size={"md"} />
@@ -58,14 +57,15 @@ const BackingSettings = () => {
             <div className="flex flex-col justify-self-center justify-center items-center">
               <Switch
                 checked={settingsTab === "DANGEROUS"}
-                onChange={(checked) =>
+                onChange={checked =>
                   setSettingsTab(checked ? "DANGEROUS" : "DEFAULT")
                 }
                 onClick={() => {
-                  setSettingsTab((value) =>
+                  setSettingsTab(value =>
                     value === "DANGEROUS" ? "DEFAULT" : "DANGEROUS"
                   );
-                }}>
+                }}
+              >
                 Dangerous
               </Switch>
               <span className="text-xs">Dangerous Settings</span>
@@ -121,17 +121,18 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
   const { mutate, isLoading } = trpc.userBackings.update.useMutation({
     onSuccess: () => {
       toastDefaultSuccess("Percentages updated");
-      utils.userBackings.listIndividual.invalidate();
+      void utils.userBackings.listIndividual.invalidate();
     },
-    onError: (error) => {
+    onError: () => {
       toastDefaultError(
         "Failed to update percentages, please try again later."
       );
     },
   });
   const params = useParams();
-  const backingId = params.backingId;
+  const backingId = params?.backingId;
   function handleClick() {
+    if (!backingId) return; // TEMP FIX
     let total = 0;
     const percentages = [];
     for (const userId in newPercentages) {
@@ -161,7 +162,7 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
               <Button
                 className="aspect-square flex-1 p-0 m-0 h-6"
                 onClick={() => {
-                  setNewPercentages((prev) => {
+                  setNewPercentages(prev => {
                     return {
                       ...prev,
                       [userId]: {
@@ -170,7 +171,8 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
                       },
                     };
                   });
-                }}>
+                }}
+              >
                 <FaRegSquareMinus />
               </Button>
               <Slider
@@ -179,7 +181,7 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
                 max={100}
                 step={0.5}
                 onValueChange={([value]) => {
-                  setNewPercentages((prev) => {
+                  setNewPercentages(prev => {
                     return {
                       ...prev,
                       [userId]: { ...prev[userId], percent: value },
@@ -190,7 +192,7 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
               <Button
                 className="aspect-square flex-1 p-0 m-0 h-6"
                 onClick={() => {
-                  setNewPercentages((prev) => {
+                  setNewPercentages(prev => {
                     return {
                       ...prev,
                       [userId]: {
@@ -199,7 +201,8 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
                       },
                     };
                   });
-                }}>
+                }}
+              >
                 <FaRegSquarePlus />
               </Button>
               <input
@@ -207,9 +210,9 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
                 min={0}
                 className="w-1/6 text-center"
                 value={newPercentages[userId].percent}
-                onChange={(e) => {
+                onChange={e => {
                   const value = Math.min(100, +e.target.value);
-                  setNewPercentages((prev) => {
+                  setNewPercentages(prev => {
                     return {
                       ...prev,
                       [userId]: { ...prev[userId], percent: value || 0 },
@@ -226,7 +229,8 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
         disabled={isLoading}
         variant="default"
         className="w-full"
-        onClick={handleClick}>
+        onClick={handleClick}
+      >
         Set percentages
       </Button>
     </div>
@@ -253,7 +257,7 @@ const ChangeFloat: React.FC = () => {
       </DrawerDescription>
       <Input
         value={amount}
-        onChange={(e) => {
+        onChange={e => {
           if (e.target.value === "" || !isNaN(+e.target.value)) {
             setAmount(e.target.value);
           }
@@ -265,7 +269,8 @@ const ChangeFloat: React.FC = () => {
           onClick={() => {
             mutate({ backingId: +backingId, float: +amount });
           }}
-          disabled={isLoading}>
+          disabled={isLoading}
+        >
           Change Float
         </Button>
       </div>
@@ -303,11 +308,11 @@ const UserWithAccessCardWithRemoveButton = ({
 }) => {
   const utils = trpc.useUtils();
   const [confirmNotice, setConfirmNotice] = React.useState(false);
-  const { backingId } = useParams() as { backingId: string };
-  const { mutate, isLoading } = trpc.userBackings.delete.useMutation({
+  const { backingId } = useParams();
+  const { mutate } = trpc.userBackings.delete.useMutation({
     onSuccess: () => {
       toastDefaultSuccess("User removed");
-      utils.userBackings.listIndividual.invalidate();
+      void utils.userBackings.listIndividual.invalidate();
     },
     onError: () => {
       toastDefaultError("Failed to remove user, please try again later.");
@@ -326,7 +331,8 @@ const UserWithAccessCardWithRemoveButton = ({
           }}
           variant="destructive"
           className="aspect-square w-[75px] p-0 m-0"
-          aria-label="delete user from backing">
+          aria-label="delete user from backing"
+        >
           Remove
         </Button>
       ) : (
@@ -334,7 +340,8 @@ const UserWithAccessCardWithRemoveButton = ({
           variant="default"
           onClick={() => setConfirmNotice(true)}
           className="aspect-square w-[75px] p-0 m-0"
-          aria-label="delete user from backing">
+          aria-label="delete user from backing"
+        >
           <Delete />
         </Button>
       )}

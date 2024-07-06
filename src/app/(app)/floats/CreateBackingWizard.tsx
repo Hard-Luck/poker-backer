@@ -1,18 +1,17 @@
-"use client";
-import { FC, useState } from "react";
-import { trpc } from "@/lib/trpc/client";
-import Modal from "react-modal";
-import { BsXCircleFill } from "react-icons/bs";
+'use client';
+import { type FC, useState } from 'react';
+import { trpc } from '@/lib/trpc/client';
+import Modal from 'react-modal';
+import { BsXCircleFill } from 'react-icons/bs';
 import {
   toastDefaultError,
   toastDefaultSuccess,
-} from "../../../components/utils/default-toasts";
-import { Button } from "../../../components/ui/button";
-import { useRouter } from "next/navigation";
-type CreateBackingWizardProps = {};
-const CreateBackingWizard: FC<CreateBackingWizardProps> = ({}: {}) => {
+} from '../../../components/utils/default-toasts';
+import { Button } from '../../../components/ui/button';
+import { useRouter } from 'next/navigation';
+const CreateBackingWizard: FC = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [newPot, setNewPot] = useState({ name: "", float: 0 });
+  const [newPot, setNewPot] = useState({ name: '', float: 0 });
   const router = useRouter();
   const { mutate, isLoading } = trpc.backings.create.useMutation({
     onSuccess: handleSuccess,
@@ -20,13 +19,13 @@ const CreateBackingWizard: FC<CreateBackingWizardProps> = ({}: {}) => {
   });
 
   function handleSuccess() {
-    setNewPot({ name: "", float: 0 });
-    toastDefaultSuccess("Pot created successfully");
+    setNewPot({ name: '', float: 0 });
+    toastDefaultSuccess('Pot created successfully');
     setModalIsOpen(false);
     router.refresh();
   }
   function handleError() {
-    toastDefaultError("Error creating pot. Could be duplicate name.");
+    toastDefaultError('Error creating pot. Could be duplicate name.');
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -39,7 +38,8 @@ const CreateBackingWizard: FC<CreateBackingWizardProps> = ({}: {}) => {
       <Button
         variant="default"
         className="w-28 self-center rounded-md bg-blue-500 p-2 text-white"
-        onClick={() => setModalIsOpen(true)}>
+        onClick={() => setModalIsOpen(true)}
+      >
         Create Pot
       </Button>
     );
@@ -47,11 +47,12 @@ const CreateBackingWizard: FC<CreateBackingWizardProps> = ({}: {}) => {
   return (
     <Modal
       style={{
-        overlay: { background: "#232931" },
-        content: { background: "#393e46" },
+        overlay: { background: '#232931' },
+        content: { background: '#393e46' },
       }}
       isOpen={modalIsOpen}
-      onRequestClose={() => setModalIsOpen(false)}>
+      onRequestClose={() => setModalIsOpen(false)}
+    >
       <div className="flex flex-col items-center">
         <Button className="" onClick={() => setModalIsOpen(false)}>
           <BsXCircleFill />
@@ -59,27 +60,29 @@ const CreateBackingWizard: FC<CreateBackingWizardProps> = ({}: {}) => {
         <form className="flex flex-col gap-4 p-4">
           <label
             className="w-28 self-center text-center text-lg"
-            htmlFor="nameInput">
+            htmlFor="nameInput"
+          >
             Name:
           </label>
           <input
             id="nameInput"
             type="text"
             value={newPot.name}
-            onChange={(e) => setNewPot({ ...newPot, name: e.target.value })}
+            onChange={e => setNewPot({ ...newPot, name: e.target.value })}
             className="w-72 self-center rounded-lg p-2"
           />
 
           <label
             className="w-28 self-center text-center text-lg "
-            htmlFor="floatInput">
+            htmlFor="floatInput"
+          >
             Float:
           </label>
           <input
             id="floatInput"
             type="number"
             value={newPot.float}
-            onChange={(e) =>
+            onChange={e =>
               setNewPot({ ...newPot, float: parseFloat(e.target.value) })
             }
             className="w-72 self-center rounded-lg p-2 text-right"

@@ -1,11 +1,11 @@
-import { protectedProcedure, publicProcedure, router } from "@/lib/server/trpc";
+import { protectedProcedure, router } from '@/lib/server/trpc';
 import {
   createBacking,
   deleteBackingAsOwner,
   updateBackingFloat,
-} from "@/models/backing";
-import { TRPCError } from "@trpc/server";
-import { z } from "zod";
+} from '@/models/backing';
+import { TRPCError } from '@trpc/server';
+import { z } from 'zod';
 
 export const backingsRouter = router({
   create: protectedProcedure
@@ -31,8 +31,8 @@ export const backingsRouter = router({
         return true;
       } catch (e) {
         throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Failed to delete backing",
+          code: 'BAD_REQUEST',
+          message: 'Failed to delete backing',
         });
       }
     }),
@@ -51,8 +51,8 @@ export const backingsRouter = router({
         return updateBackingFloat({ backingId, float, userId });
       } catch (e) {
         throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Failed to update backing",
+          code: 'BAD_REQUEST',
+          message: 'Failed to update backing',
         });
       }
     }),

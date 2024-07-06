@@ -5,16 +5,16 @@ import {
   toastDefaultSuccess,
 } from "@/components/utils/default-toasts";
 import { trpc } from "@/lib/trpc/client";
-import { revalidatePath } from "next/cache";
 import { useParams, usePathname, useRouter } from "next/navigation";
-import { Dispatch, FC, SetStateAction, useState } from "react";
+import type { Dispatch, FC, SetStateAction } from "react";
+import { useState } from "react";
 import { IoMdPersonAdd } from "react-icons/io";
 type AddToBackingWizardProps = {
   setOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 const AddToBackingWizard: FC<AddToBackingWizardProps> = ({ setOpen }) => {
-  const { backingId } = useParams<{ backingId: string }>();
+  const { backingId } = useParams();
   const { data: friends, isLoading } =
     trpc.friendships.listNotInBacking.useQuery({
       backingId: Number(backingId),
@@ -22,11 +22,11 @@ const AddToBackingWizard: FC<AddToBackingWizardProps> = ({ setOpen }) => {
   if (isLoading) return null;
   if (!friends) return null;
   const formattedRecievedFriends = friends.receivedFriendships.map(
-    (friendship) => {
+    friendship => {
       return friendship.user;
     }
   );
-  const formattedSentFriends = friends.sentFriendships.map((friendship) => {
+  const formattedSentFriends = friends.sentFriendships.map(friendship => {
     return friendship.friend;
   });
   const friendsToList = [...formattedRecievedFriends, ...formattedSentFriends];
@@ -36,11 +36,12 @@ const AddToBackingWizard: FC<AddToBackingWizardProps> = ({ setOpen }) => {
       <Button
         onClick={() => setOpen(false)}
         variant={"secondary"}
-        className="w-[200px] m-4">
+        className="w-[200px] m-4"
+      >
         Close
       </Button>
       <ul>
-        {friendsToList.map((friend) => (
+        {friendsToList.map(friend => (
           <FriendCard key={friend.id} friend={friend} />
         ))}
       </ul>
@@ -57,15 +58,15 @@ type FriendCardProps = {
 const FriendCard: FC<FriendCardProps> = ({ friend }) => {
   const router = useRouter();
   const path = usePathname();
-  const { backingId } = useParams<{ backingId: string }>();
+  const { backingId } = useParams();
   const [added, setAdded] = useState(false);
   const utils = trpc.useUtils();
   const { mutate: addFriend } = trpc.userBackings.create.useMutation({
     onSuccess: () => {
-      utils.friendships.invalidate();
+      void utils.friendships.invalidate();
       setAdded(true);
       toastDefaultSuccess(`${friend.username} added to backing`);
-      router.push(path);
+      router.push(path ?? "/floats");
     },
     onError: () => {
       toastDefaultError(`Failed to add ${friend.username} to backing`);

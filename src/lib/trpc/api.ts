@@ -1,10 +1,9 @@
 import "server-only";
 
-  //  import { getUserAuth } from "@/lib/auth/utils";
+//  import { getUserAuth } from "@/lib/auth/utils";
 import { appRouter } from "@/lib/server/routers/_app";
 import { env } from "@/lib/env.mjs";
 import { createTRPCContext } from "./context";
-
 import {
   createTRPCProxyClient,
   loggerLink,
@@ -32,7 +31,7 @@ export const api = createTRPCProxyClient<typeof appRouter>({
   transformer: SuperJSON,
   links: [
     loggerLink({
-      enabled: (op) =>
+      enabled: op =>
         env.NODE_ENV === "development" ||
         (op.direction === "down" && op.result instanceof Error),
     }),
@@ -42,18 +41,16 @@ export const api = createTRPCProxyClient<typeof appRouter>({
      */
     () =>
       ({ op }) =>
-        observable((observer) => {
-          createContext()
-            .then((ctx) => {
-              return callProcedure({
-                procedures: appRouter._def.procedures,
-                path: op.path,
-                rawInput: op.input,
-                ctx,
-                type: op.type,
-              });
-            })
-            .then((data) => {
+        observable(observer => {
+          const ctx = createContext();
+          callProcedure({
+            procedures: appRouter._def.procedures,
+            path: op.path,
+            rawInput: op.input,
+            ctx,
+            type: op.type,
+          })
+            .then(data => {
               observer.next({ result: { data } });
               observer.complete();
             })

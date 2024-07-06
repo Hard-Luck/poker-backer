@@ -4,7 +4,7 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import TrpcProvider from "@/lib/trpc/Provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
-
+Toaster;
 export default function RootLayout({
   children,
   cookies,
@@ -23,9 +23,10 @@ export default function RootLayout({
               attribute="class"
               defaultTheme="system"
               enableSystem
-              disableTransitionOnChange>
+              disableTransitionOnChange
+            >
               <Header />
-              {children}
+              <body>{children}</body>
             </ThemeProvider>
           </TrpcProvider>
         </ClerkProvider>

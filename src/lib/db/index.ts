@@ -12,7 +12,7 @@ const authToken = process.env.TURSO_AUTH_TOKEN as string;
 if (process.env.NODE_ENV === 'production') {
   const libsql = createClient({
     url,
-    authToken: process.env.TURSO_AUTH_TOKEN,
+    authToken,
   });
 
   const adapter = new PrismaLibSQL(libsql);
