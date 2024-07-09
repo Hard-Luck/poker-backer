@@ -4,7 +4,7 @@
 
 PokerBacker is a robust and user-friendly application designed to assist poker backers—those who sponsor players for tournament entries. This financial tracking tool helps manage and record transactions, providing a clear overview of your investments and their performance. Built with Next.js and React for a seamless and responsive user experience, PokerBacker leverages modern web technologies for optimal performance. 
 
-Hosted on Vercel
+[Hosted App](https://www.poker-backer.com/)
 
 ## Screenshot
 ![image](https://github.com/Hard-Luck/poker-backer/assets/72257311/a98934cd-9708-4d2c-936f-d9c9c9f335f0)
