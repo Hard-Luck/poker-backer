@@ -91,6 +91,3 @@ A huge thanks to Theo and the T3 team for their foundational work. Much respect 
 - **Precommit Checks:** Utilizes Husky for precommit checks.
 - **CI/CD:** Employs GitHub Actions to check merges and commits to the main branch.
 
----
-
-This README provides a comprehensive overview of the PokerBacker application, presenting it professionally and appealingly to prospective employers. The project demonstrates proficiency in modern web development technologies and practices.
