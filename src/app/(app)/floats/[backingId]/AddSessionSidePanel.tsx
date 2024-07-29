@@ -41,7 +41,7 @@ const AddSessionSidePanel = () => {
 export default AddSessionSidePanel;
 
 const AddSessionForm: FC = () => {
-  const { backingId } = useParams();
+  const { backingId } = useParams() as { backingId: string };
   const [date, setDate] = useState(new Date());
   const [location, setLocation] = useState("");
   const [amount, setAmount] = useState("");

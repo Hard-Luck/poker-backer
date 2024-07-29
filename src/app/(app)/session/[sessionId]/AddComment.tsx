@@ -1,33 +1,33 @@
-'use client';
+"use client";
 
 import {
   toastDefaultError,
   toastDefaultSuccess,
-} from '@/components/utils/default-toasts';
-import { trpc } from '@/lib/trpc/client';
-import { useParams, useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { FiSend } from 'react-icons/fi';
+} from "@/components/utils/default-toasts";
+import { trpc } from "@/lib/trpc/client";
+import { useParams, useRouter } from "next/navigation";
+import { useState } from "react";
+import { FiSend } from "react-icons/fi";
 
 const AddComment = () => {
   const router = useRouter();
-  const sessionId = +useParams().sessionId;
+  const { sessionId } = useParams() as { sessionId: string };
   const { mutate, isLoading } = trpc.comments.create.useMutation({
     onSuccess: () => {
-      toastDefaultSuccess('Comment added');
+      toastDefaultSuccess("Comment added");
       router.refresh();
-      setBody('');
+      setBody("");
     },
     onError: err => {
       toastDefaultError(err.message);
     },
   });
-  const [body, setBody] = useState('');
+  const [body, setBody] = useState("");
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBody(e.target.value);
   };
   const handleOnClick = () => {
-    mutate({ sessionId, body });
+    mutate({ sessionId: Number(sessionId), body });
   };
   return (
     <div className="m-2 flex justify-center rounded-lg bg-theme-grey p-2 text-theme-black">

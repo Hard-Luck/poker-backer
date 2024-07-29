@@ -6,7 +6,9 @@ import { useState } from "react";
 
 const DeleteBackingButton = () => {
   const router = useRouter();
-  const { backingId } = useParams<{ backingId: string }>();
+  const { backingId } = useParams() as {
+    backingId: string;
+  };
   const [confirmNotice, setConfirmNotice] = useState(false);
 
   const { mutate: deleteBacking } = trpc.backings.delete.useMutation({

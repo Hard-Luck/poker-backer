@@ -164,7 +164,9 @@ const SessionCard = ({ session }: { session: SessionsForHistoryList[0] }) => {
 
 const TopUpCard = ({ topUp }: { topUp: TopUpsForHistoryList[0] }) => {
   const { userDetails, isLoading } = useUsersWithAccessToBackingContext();
-  const { backingId } = useParams<{ backingId: string }>();
+  const { backingId } = useParams() as {
+    backingId: string;
+  };
   if (isLoading) return null;
   return (
     <TableRow>
@@ -181,7 +183,7 @@ const TopUpCard = ({ topUp }: { topUp: TopUpsForHistoryList[0] }) => {
           e.stopPropagation();
         }}
       >
-        <DeleteTopUpButton topupId={topUp.id} backingId={backingId} />
+        <DeleteTopUpButton topupId={topUp.id} backingId={backingId as string} />
       </TableCell>
     </TableRow>
   );

@@ -22,7 +22,9 @@ export const UsersWithAccessToBackingContext =
 const UsersWithAccessToBackingProvider: FC<PropsWithChildren> = ({
   children,
 }) => {
-  const { backingId } = useParams<{ backingId: string }>();
+  const { backingId } = useParams() as {
+    backingId: string;
+  };
 
   const { data, isLoading } = trpc.userBackings.listIndividual.useQuery(
     {

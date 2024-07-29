@@ -37,7 +37,9 @@ const TopUpDrawerButton: FC<TopUpPotWizardProps> = ({ profit }) => {
       toastDefaultError("Top up failed, please try again.");
     },
   });
-  const { backingId } = useParams();
+  const { backingId } = useParams() as {
+    backingId: string;
+  };
   return (
     <Drawer
       onOpenChange={() => {

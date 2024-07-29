@@ -249,7 +249,9 @@ const ChangeFloat: React.FC = () => {
     },
   });
   const [amount, setAmount] = React.useState("");
-  const { backingId } = useParams();
+  const { backingId } = useParams() as {
+    backingId: string;
+  };
   return (
     <div className="p-4 gap-2 flex flex-col">
       <DrawerDescription className="justify-self-center text-center py-4">
@@ -308,7 +310,9 @@ const UserWithAccessCardWithRemoveButton = ({
 }) => {
   const utils = trpc.useUtils();
   const [confirmNotice, setConfirmNotice] = React.useState(false);
-  const { backingId } = useParams();
+  const { backingId } = useParams() as {
+    backingId: string;
+  };
   const { mutate } = trpc.userBackings.delete.useMutation({
     onSuccess: () => {
       toastDefaultSuccess("User removed");

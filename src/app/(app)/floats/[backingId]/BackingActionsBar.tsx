@@ -22,7 +22,9 @@ type BackingActionsBarProps = {
 const BackingActionsBar: FC<BackingActionsBarProps> = ({ profitOrLoss }) => {
   const { user } = useUser();
   const router = useRouter();
-  const { backingId } = useParams();
+  const { backingId } = useParams() as {
+    backingId: string;
+  };
   const usersWithAccessToBacking = useUsersWithAccessToBackingContext();
 
   const { mutate: chopPot, isLoading } = trpc.chops.create.useMutation({

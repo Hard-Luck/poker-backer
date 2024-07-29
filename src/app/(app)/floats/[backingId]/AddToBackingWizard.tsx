@@ -14,7 +14,9 @@ type AddToBackingWizardProps = {
 };
 
 const AddToBackingWizard: FC<AddToBackingWizardProps> = ({ setOpen }) => {
-  const { backingId } = useParams();
+  const { backingId } = useParams() as {
+    backingId: string;
+  };
   const { data: friends, isLoading } =
     trpc.friendships.listNotInBacking.useQuery({
       backingId: Number(backingId),
@@ -58,7 +60,9 @@ type FriendCardProps = {
 const FriendCard: FC<FriendCardProps> = ({ friend }) => {
   const router = useRouter();
   const path = usePathname();
-  const { backingId } = useParams();
+  const { backingId } = useParams() as {
+    backingId: string;
+  };
   const [added, setAdded] = useState(false);
   const utils = trpc.useUtils();
   const { mutate: addFriend } = trpc.userBackings.create.useMutation({
