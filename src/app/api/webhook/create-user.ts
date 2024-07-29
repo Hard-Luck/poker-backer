@@ -1,7 +1,7 @@
 import type { WebhookEvent } from '@clerk/clerk-sdk-node';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { prisma } from '~/server/db';
-import { env } from '~/env.mjs';
+import { db } from '@/lib/db';
+import { env } from '@/lib/env.mjs';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const check = req.headers['check'];
@@ -14,7 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       try {
         const user_id = evt.data.id;
         const name = evt.data.first_name + `${Date.now() % 9797}`;
-        await prisma.userInfo.create({
+        await db.userInfo.create({
           data: {
             username: name,
             id: user_id,
