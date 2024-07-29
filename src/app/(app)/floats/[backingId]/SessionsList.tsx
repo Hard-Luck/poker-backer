@@ -183,7 +183,7 @@ const TopUpCard = ({ topUp }: { topUp: TopUpsForHistoryList[0] }) => {
           e.stopPropagation();
         }}
       >
-        <DeleteTopUpButton topupId={topUp.id} backingId={backingId as string} />
+        <DeleteTopUpButton topupId={topUp.id} backingId={backingId} />
       </TableCell>
     </TableRow>
   );

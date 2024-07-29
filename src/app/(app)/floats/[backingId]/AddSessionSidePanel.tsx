@@ -87,7 +87,7 @@ const AddSessionForm: FC = () => {
       length: parseInt(length),
       date,
       location,
-      backingId: backingId as string,
+      backingId: backingId,
     });
   }
   return (

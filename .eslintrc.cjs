@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
-// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+const { type } = require("os");
 const path = require("path");
 
 /** @type {import("eslint").Linter.Config} */
@@ -30,6 +30,7 @@ const config = {
       },
     ],
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+    "@typescript-eslint/no-unnecessary-type-assertion": "warn",
   },
 };
 
