@@ -17,6 +17,7 @@
     "prettier": "prettier --write ."
   },
   "dependencies": {
+    "@clerk/clerk-sdk-node": "^5.0.20",
     "@clerk/nextjs": "^5.2.2",
     "@libsql/client": "^0.5.6",
     "@prisma/adapter-libsql": "^5.11.0",
