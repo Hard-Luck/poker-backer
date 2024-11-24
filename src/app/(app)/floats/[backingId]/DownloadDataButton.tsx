@@ -24,7 +24,7 @@ function DownloadDataButton() {
   }
 
   return (
-    <Button variant={"outline"} onClick={handleClick}>
+    <Button variant={"outline"} onClick={void handleClick}>
       Download history as CSV
     </Button>
   );

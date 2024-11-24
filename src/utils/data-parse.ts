@@ -30,7 +30,7 @@ export function parseBackingHistoryToCsv(
   const rows = formatTransactions(backingHistory);
   sortTransactions(rows);
   updateFloatBalance(rows, backingHistory.float);
-  let csv = `name,${backingHistory.name},float:,${backingHistory.float},${new Date()}\n`;
+  let csv = `name,${backingHistory.name},float:,${backingHistory.float},${new Date().toISOString()}\n`;
   csv += headers.join(",") + "\n";
   csv += rows.map(row => row.join(",")).join("\n");
 
