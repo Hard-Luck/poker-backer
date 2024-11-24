@@ -6,7 +6,6 @@ export const env = createEnv({
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
-    DATABASE_URL: z.string().min(1),
     TURSO_DATABASE_URL: z.string().min(1),
     TURSO_AUTH_TOKEN: z.string().min(1),
     CLERK_SECRET_KEY: z.string().min(1),
@@ -17,7 +16,6 @@ export const env = createEnv({
     NEXT_PUBLIC_CLERK_SIGN_IN_URL: z.string().min(1),
     NEXT_PUBLIC_CLERK_SIGN_UP_URL: z.string().min(1),
     NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL: z.string().min(1),
-    NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL: z.string().min(1), // NEXT_PUBLIC_PUBLISHABLE_KEY: z.string().min(1),
   },
   // If you're using Next.js < 13.4.4, you'll need to specify the runtimeEnv manually
   // runtimeEnv: {

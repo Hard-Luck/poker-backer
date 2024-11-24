@@ -98,7 +98,7 @@ const AddToBackingWizardButton: FC = () => {
       {open ? (
         <AddToBackingWizard setOpen={setOpen} />
       ) : (
-        <Button onClick={() => setOpen(true)}>Add to backing</Button>
+        <Button onClick={() => setOpen(true)}>Add User</Button>
       )}
     </div>
   );

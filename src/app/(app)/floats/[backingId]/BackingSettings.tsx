@@ -27,6 +27,7 @@ import { Delete } from "lucide-react";
 import DeleteBackingButton from "./DeleteBackingButton";
 import { Input } from "@/components/ui/input";
 import AddToBackingWizardButton from "./AddToBackingWizard";
+import DownloadDataButton from "./DownloadDataButton";
 
 const BackingSettings = () => {
   const usersWithAccessToBacking = useUsersWithAccessToBackingContext();
@@ -82,8 +83,10 @@ const BackingSettings = () => {
                 />
               </div>
               <ChangeFloat />
-              <div className="p-4 "></div>
-              <AddToBackingWizardButton />
+              <div className="p-4 flex justify-center gap-1">
+                <AddToBackingWizardButton />
+                <DownloadDataButton />
+              </div>
             </div>
           ) : (
             <div>
