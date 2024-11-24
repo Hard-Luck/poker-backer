@@ -89,7 +89,7 @@ model Chop {
   created_at DateTime @default(now())
   chop_split String
   note       String?
-  Backing    Backing  @relation(fields: [backing_id], references: [id])
+  Backing    Backing  @relation(fields: [backing_id], references: [id], onDelete: Cascade)
 }
 
 model TopUp {
@@ -99,7 +99,7 @@ model TopUp {
   amount     Int
   created_at DateTime @default(now())
   note       String?
-  Backing    Backing  @relation(fields: [backing_id], references: [id])
+  Backing    Backing  @relation(fields: [backing_id], references: [id], onDelete: Cascade)
 }
 
 model SessionComment {
