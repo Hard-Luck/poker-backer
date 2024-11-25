@@ -29,16 +29,20 @@ export default function RecentSession({
 }) {
   return (
     <section className={`text-secondary-foreground `}>
-      <h2 className={`text-center text-2xl  `}>Recent Sessions</h2>
-      <ScrollArea>
+      <h2
+        className={`text-center text-2xl bg-black p-2 h-full border-2 rounded-t-md border-primary border-b-0`}
+      >
+        Recent Sessions
+      </h2>
+      <ScrollArea className="border-primary border-2 border-t-0">
         <ScrollAreaViewport className="max-h-[400px] ">
-          <Table className="">
-            <TableHeader>
-              <TableRow className="text-center">
-                <TableHead className="text-center">Player</TableHead>
-                <TableHead className="text-center">Mins</TableHead>
-                <TableHead className="text-center">+/-</TableHead>
-                <TableHead className="text-center">Date</TableHead>
+          <Table className=" border-black">
+            <TableHeader className="">
+              <TableRow className="text-center bg-opacity-100">
+                <TableHead className="text-center bg-black">Player</TableHead>
+                <TableHead className="text-center bg-black">Mins</TableHead>
+                <TableHead className="text-center bg-black">+/-</TableHead>
+                <TableHead className="text-center bg-black">Date</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
