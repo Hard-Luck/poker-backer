@@ -69,7 +69,7 @@ export const backingsRouter = router({
           message: "You are not a backer for this backing",
         });
       }
-      console.log("Getting backing history");
+
       const history = await getBackingHistory(input.backingId);
       const csv = parseBackingHistoryToCsv(history);
       return { data: csv };
