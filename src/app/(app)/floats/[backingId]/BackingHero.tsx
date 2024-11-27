@@ -1,49 +1,68 @@
-import MiniCard from '@/components/ui/minicard';
-import { type FC } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-type BackingHeroProps = {
-  totalSessions: number;
-  currentTopUps: number;
-  currentFloat: number;
-  float: number;
-  profitOrLoss: number;
-  sessionsSinceLastChop: number;
+interface MiniCardProps {
+  title: string;
+  children: React.ReactNode;
+  textColor?: "blue" | "red";
+}
+
+const MiniCard: React.FC<MiniCardProps> = ({ title, children }) => {
+  return (
+    <Card className="h-full border-primary my-2">
+      <CardHeader>
+        <CardTitle className="text-lg font-bold text-center">{title}</CardTitle>
+      </CardHeader>
+      <CardContent className={`flex flex-col items-center justify-center `}>
+        {children}
+      </CardContent>
+    </Card>
+  );
 };
 
-const BackingHero: FC<BackingHeroProps> = ({
-  totalSessions,
+interface DashboardCardsProps {
+  currentFloat: number;
+  currentTopUps: number;
+  sessionsSinceLastChop: number;
+  totalSessions: number;
+  float: number;
+  profitOrLoss: number;
+}
+
+const DashboardCards: React.FC<DashboardCardsProps> = ({
   currentFloat,
   currentTopUps,
+  sessionsSinceLastChop,
+  totalSessions,
   float,
   profitOrLoss,
-  sessionsSinceLastChop,
 }) => {
+  const textColor = profitOrLoss >= 0 ? "text-blue-500" : "text-red-500";
   return (
-    <section className="grid grid-cols-2 grid-rows-2 bg-secondary">
-      <MiniCard>
-        <h3 className="text-lg font-bold">Balance</h3>
-        <div className="flex flex-col">
-          <span>£{currentFloat + currentTopUps}</span>
+    <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <MiniCard title="Balance">
+        <div className="text-center">
+          <span className="text-xl font-semibold">
+            £{currentFloat + currentTopUps}
+          </span>
           {!!currentTopUps && (
-            <span className="text-xs">(£{currentTopUps} in topups)</span>
+            <span className="block text-xs">(£{currentTopUps} in topups)</span>
           )}
         </div>
       </MiniCard>
-      <MiniCard>
-        <h3 className="text-lg font-bold">Sessions</h3>
-        <span className="">Since Last Chop: {sessionsSinceLastChop}</span>
-        <span className="">Total: {totalSessions}</span>
+      <MiniCard title="Sessions">
+        <span className="block">Since Last Chop: {sessionsSinceLastChop}</span>
+        <span className="block">Total: {totalSessions}</span>
       </MiniCard>
-      <MiniCard>
-        <h3 className="text-lg font-bold">Float</h3>
-        <div className="3">£{float}</div>
+      <MiniCard title="Float">
+        <div className="text-xl font-semibold">£{float}</div>
       </MiniCard>
-      <MiniCard alternateColor={profitOrLoss >= 0 ? 'blue' : 'red'}>
-        <h3 className="text-lg font-bold">Make up</h3>
-        <div className="">£{profitOrLoss}</div>
+      <MiniCard title="Make up" textColor={profitOrLoss >= 0 ? "blue" : "red"}>
+        <div className={`text-xl font-semibold ${textColor}`}>
+          £{Math.abs(profitOrLoss)}
+        </div>
       </MiniCard>
     </section>
   );
 };
 
-export default BackingHero;
+export default DashboardCards;

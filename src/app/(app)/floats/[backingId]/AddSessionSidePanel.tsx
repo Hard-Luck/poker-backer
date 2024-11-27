@@ -14,18 +14,14 @@ import { trpc } from "@/lib/trpc/client";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { type FC, useState } from "react";
-import { IoMdAdd } from "react-icons/io";
 import { toast } from "sonner";
 
 const AddSessionSidePanel = () => {
   return (
-    <div className="flex justify-center p-2">
+    <div className="flex justify-center p-2 m-2">
       <Sheet>
         <Button asChild>
-          <SheetTrigger>
-            <IoMdAdd className="w-6 h-6" />
-            Add Session
-          </SheetTrigger>
+          <SheetTrigger>Add Session</SheetTrigger>
         </Button>
         <SheetContent>
           <SheetHeader>
