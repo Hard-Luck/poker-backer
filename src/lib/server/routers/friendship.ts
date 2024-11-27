@@ -1,10 +1,13 @@
-import { protectedProcedure, router } from '@/lib/server/trpc';
+import { protectedProcedure, router } from "@/lib/server/trpc";
 import {
   acceptFriendRequest,
+  canDeleteFriendRequest,
+  deleteFriendRequest,
   getFriendsNotInBacking,
   sendFriendRequest,
-} from '@/models/friends';
-import { z } from 'zod';
+} from "@/models/friends";
+import { TRPCError } from "@trpc/server";
+import { z } from "zod";
 
 export const friendshipsRouter = router({
   acceptFriendRequest: protectedProcedure
@@ -30,5 +33,18 @@ export const friendshipsRouter = router({
       const { backingId } = input;
       const user_id = ctx.session.user.id;
       return getFriendsNotInBacking({ user_id, backingId });
+    }),
+  delete: protectedProcedure
+    .input(z.object({ friendshipId: z.number() }))
+    .mutation(async ({ input, ctx }) => {
+      const { friendshipId } = input;
+      const user_id = ctx.session.user.id;
+      if (!(await canDeleteFriendRequest({ friendshipId, user_id }))) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You are not authorized to delete this friend request",
+        });
+      }
+      return deleteFriendRequest({ friendshipId });
     }),
 });

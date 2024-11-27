@@ -1,4 +1,4 @@
-import { getBackingHistory } from "@/models/backing";
+import { type getBackingHistory } from "@/models/backing";
 
 type FullBackingForDownload = Awaited<ReturnType<typeof getBackingHistory>>;
 type Transaction = "chop" | "session" | "topUp";

@@ -1,13 +1,12 @@
-import { getUserAuth } from '@/lib/auth/utils';
-import { getAllFriends } from '@/models/friends';
-import { redirect } from 'next/navigation';
-import FriendRequestWizard from './FriendRequestWizard';
-import FriendsList from './FriendsList';
-import FriendRequestList from './FriendRequestLists';
+import { getUserAuth } from "@/lib/auth/utils";
+import { getAllFriends } from "@/models/friends";
+import { redirect } from "next/navigation";
+
+import FriendsRequests from "./FriendRequests";
 
 export default async function FriendsPage() {
   const { session } = getUserAuth();
-  if (!session) redirect('/sign-in');
+  if (!session) redirect("/sign-in");
   const friends = await getAllFriends(session.user.id);
 
   const confirmedFriends = friends.filter(friend => friend.status === true);
@@ -22,14 +21,10 @@ export default async function FriendsPage() {
   );
 
   return (
-    <main className="max-w-[500px]">
-      <h2 className="text-xl font-semibold">Friends</h2>
-      <FriendRequestWizard />
-      <FriendsList friends={confirmedFriends} />
-      <FriendRequestList
-        friendRequests={pendingReceivedRequests}
-        sentFriendRequests={pendingSentRequests}
-      />
-    </main>
+    <FriendsRequests
+      friends={confirmedFriends}
+      receivedRequests={pendingReceivedRequests}
+      sentRequests={pendingSentRequests}
+    />
   );
 }

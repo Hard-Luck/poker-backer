@@ -1,4 +1,4 @@
-import { BackingForRender } from "@/app/(app)/floats/BackingsTabs";
+import { type BackingForRender } from "@/app/(app)/floats/BackingsTabs";
 import { ItemCard } from "./ItemCard";
 import { formatDateStringToLongDate } from "@/models/utils/timestamp";
 
