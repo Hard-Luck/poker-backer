@@ -16,7 +16,7 @@ export default async function Page() {
   );
 
   return (
-    <main className="w-3/4 flex flex-col items-center">
+    <main className="flex flex-col align-middle items-center justify-center min-w-80">
       <h1 className="font-bold text-2xl text-center">Backings</h1>
       {whereUserIsBacker.length === 0 && whereUserIsPlayer.length === 0 ? (
         <p>No floats found</p>

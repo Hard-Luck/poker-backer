@@ -37,10 +37,10 @@ const CreateBackingWizard: FC = () => {
     return (
       <Button
         variant="default"
-        className="w-28 self-center rounded-md bg-blue-500 p-2 text-white"
+        className="w-28 self-center rounded-md bg-secondary p-2 text-white"
         onClick={() => setModalIsOpen(true)}
       >
-        New Float
+        Add Float
       </Button>
     );
   }
