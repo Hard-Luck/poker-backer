@@ -35,14 +35,7 @@ export default async function page({ params }: BackingPageProps) {
     if (!lastChopDate) return true;
     return new Date(s.created_at) > new Date(lastChopDate);
   });
-  const topUpsSinceLastChop = topUps.filter(t => {
-    if (!lastChopDate) return true;
-    //compare the date of the topup with the date of the last chop as dates
-    //are stored as strings in the database
-    return new Date(t.created_at) > new Date(lastChopDate);
-  });
 
-  const totalTopUps = topUpsSinceLastChop.reduce((acc, t) => acc + t.amount, 0);
   const profitOrLoss = sessionsSinceLastChop.reduce(
     (acc, s) => acc + s.amount,
     0
@@ -61,7 +54,6 @@ export default async function page({ params }: BackingPageProps) {
         profitOrLoss={profitOrLoss}
         currentFloat={currentFloat}
         float={backingDetails.backing.float}
-        currentTopUps={totalTopUps}
         sessionsSinceLastChop={numberOfSessionsSinceLastChop}
       />
       <AddSessionSidePanel />

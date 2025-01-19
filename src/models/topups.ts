@@ -1,5 +1,5 @@
-import { db } from '@/lib/db';
-import { isBackerForBacking } from './userBacking';
+import { db } from "@/lib/db";
+import { isBackerForBacking } from "./userBacking";
 
 export async function getTopUpAmounts({
   backingId,
@@ -26,8 +26,8 @@ export async function topUpPot({
   note?: string;
 }) {
   if (!(await isBackerForBacking({ userId, backingId })))
-    throw new Error('Not a backer');
-  return db.topUp.create({
+    throw new Error("Not a backer");
+  const topUp = await db.topUp.create({
     data: {
       user_id: userId,
       backing_id: backingId,
@@ -35,8 +35,18 @@ export async function topUpPot({
       note,
     },
   });
+  await db.backing.update({
+    where: { id: backingId },
+    data: { float: { increment: amount } },
+  });
+  return topUp;
 }
 
 export async function deleteTopup({ topupId }: { topupId: string }) {
-  return db.topUp.delete({ where: { id: topupId } });
+  const topUp = await db.topUp.delete({ where: { id: topupId } });
+  await db.backing.update({
+    where: { id: topUp.backing_id },
+    data: { float: { decrement: topUp.amount } },
+  });
+  return topUp;
 }

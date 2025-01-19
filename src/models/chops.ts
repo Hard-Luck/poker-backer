@@ -1,6 +1,5 @@
 import { db } from "../lib/db";
 import { getSessionAmounts } from "./sessions";
-import { getTopUpAmounts } from "./topups";
 import { type ChopSplitRecord } from "./types";
 import { findAllUserBackings, isBackerForBacking } from "./userBacking";
 
@@ -21,15 +20,7 @@ export async function chop({
     after: lastChopDate,
   });
 
-  const topUpsSinceLastChop = getTopUpAmounts({
-    backingId,
-    after: lastChopDate,
-  });
-
-  const [sessionAmounts, topUpAmounts] = await Promise.all([
-    sessionsSinceLastChop,
-    topUpsSinceLastChop,
-  ]);
+  const sessionAmounts = await sessionsSinceLastChop;
 
   const profit = sessionAmounts.reduce((acc, s) => acc + s.amount, 0);
   if (profit <= 0) throw new Error("Negative");
@@ -45,10 +36,6 @@ export async function chop({
     },
     {}
   );
-
-  topUpAmounts.forEach(({ user_id, amount }) => {
-    splits[user_id].split += amount;
-  });
 
   return db.chop.create({
     data: {

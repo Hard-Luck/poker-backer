@@ -21,7 +21,6 @@ const MiniCard: React.FC<MiniCardProps> = ({ title, children }) => {
 
 interface DashboardCardsProps {
   currentFloat: number;
-  currentTopUps: number;
   sessionsSinceLastChop: number;
   totalSessions: number;
   float: number;
@@ -30,7 +29,6 @@ interface DashboardCardsProps {
 
 const DashboardCards: React.FC<DashboardCardsProps> = ({
   currentFloat,
-  currentTopUps,
   sessionsSinceLastChop,
   totalSessions,
   float,
@@ -41,12 +39,7 @@ const DashboardCards: React.FC<DashboardCardsProps> = ({
     <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
       <MiniCard title="Balance">
         <div className="text-center">
-          <span className="text-xl font-semibold">
-            £{currentFloat + currentTopUps}
-          </span>
-          {!!currentTopUps && (
-            <span className="block text-xs">(£{currentTopUps} in topups)</span>
-          )}
+          <span className="text-xl font-semibold">£{currentFloat}</span>
         </div>
       </MiniCard>
       <MiniCard title="Sessions">

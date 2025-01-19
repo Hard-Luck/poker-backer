@@ -53,7 +53,7 @@ const HistoryList: FC<HistoryListProps> = ({ chops, sessions, topUps }) => {
     (a: Row, b: Row, reversed?: boolean) => number
   > = {
     date: (a, b, reversed = false) =>
-      (a.created_at > b.created_at ? 1 : -1) * (reversed ? -1 : 1),
+      (a.created_at > b.created_at ? 1 : -1) * (reversed ? 1 : -1),
     type: (a, b, reversed = false) =>
       a.type.localeCompare(b.type) * (reversed ? -1 : 1),
     amount: (a, b, reversed = false) =>
@@ -84,7 +84,9 @@ const HistoryList: FC<HistoryListProps> = ({ chops, sessions, topUps }) => {
                   onClick={handleClick}
                 >
                   Date
-                  <span>{sortBy === "date" ? (reversed ? "▼" : "▲") : ""}</span>
+                  <span>
+                    {sortBy === "date" ? (!reversed ? "▼" : "▲") : ""}
+                  </span>
                 </Button>
               </TableHead>
               <TableHead className="text-center">
