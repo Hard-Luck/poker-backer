@@ -4,7 +4,15 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 import TrpcProvider from "@/lib/trpc/Provider";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
-Toaster;
+import { Roboto } from "next/font/google";
+
+const roboto = Roboto({
+  weight: ["400", "700"],
+  style: ["normal", "italic"],
+  subsets: ["latin"],
+  display: "swap",
+});
+
 export default function RootLayout({
   children,
   cookies,
@@ -13,9 +21,12 @@ export default function RootLayout({
   cookies: string;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head />
-      <body className="flex flex-col items-center">
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={roboto.className + " flex flex-col items-center"}
+    >
+      <body>
         <ClerkProvider>
           <TrpcProvider cookies={cookies}>
             <Toaster />
@@ -26,7 +37,7 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               <Header />
-              <body>{children}</body>
+              {children}
             </ThemeProvider>
           </TrpcProvider>
         </ClerkProvider>

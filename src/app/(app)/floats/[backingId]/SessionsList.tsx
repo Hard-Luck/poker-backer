@@ -19,10 +19,17 @@ import { parseAndValidateChopSplit } from "@/models/utils/parse";
 import { formatDateStringToDDMMYY } from "@/models/utils/timestamp";
 import { ScrollAreaViewport } from "@radix-ui/react-scroll-area";
 import { useParams, useRouter } from "next/navigation";
-import { type FC, useState } from "react";
+import { type FC, useEffect, useState } from "react";
 import DeleteChopButton from "./DeleteChopButton";
 import DeleteSessionButton from "./DeleteSessionButton";
 import DeleteTopUpButton from "./DeleteTopUpButton";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 type HistoryListProps = {
   sessions: SessionsForHistoryList;
@@ -31,24 +38,87 @@ type HistoryListProps = {
 };
 
 const HistoryList: FC<HistoryListProps> = ({ chops, sessions, topUps }) => {
+  const [sortBy, setSortBy] = useState<"date" | "name" | "type" | "amount">(
+    "date"
+  );
+  const [reversed, setReversed] = useState(false);
   const list = [
     ...chops.map(c => ({ ...c, type: "chop" })),
     ...sessions.map(s => ({ ...s, type: "session" })),
     ...topUps.map(t => ({ ...t, type: "top_up" })),
-  ].sort((a, b) => {
-    return a.created_at > b.created_at ? -1 : 1;
-  });
+  ];
+  type Row = (typeof list)[0];
+  const sortFunctions: Record<
+    string,
+    (a: Row, b: Row, reversed?: boolean) => number
+  > = {
+    date: (a, b, reversed = false) =>
+      (a.created_at > b.created_at ? 1 : -1) * (reversed ? -1 : 1),
+    type: (a, b, reversed = false) =>
+      a.type.localeCompare(b.type) * (reversed ? -1 : 1),
+    amount: (a, b, reversed = false) =>
+      (a.amount - b.amount) * (reversed ? -1 : 1),
+  };
+  function handleClick(e: React.MouseEvent<HTMLButtonElement>) {
+    const target = e.target as HTMLButtonElement;
+    const text = target.textContent?.replace(/▼|▲/g, "").trim().toLowerCase();
+
+    if (text === sortBy) {
+      setReversed(!reversed);
+    } else {
+      setSortBy(text as "date" | "name" | "type" | "amount");
+      setReversed(false);
+    }
+  }
+  list.sort((a, b) => sortFunctions[sortBy](a, b, reversed));
   return (
     <ScrollArea>
-      <ScrollAreaViewport className="max-h-[425px] ">
-        <Table className="max-w-[375px] text-center">
+      <ScrollAreaViewport className="max-h-[425px]">
+        <Table className=" text-center uppercase text-sm">
           <TableHeader>
             <TableRow>
-              <TableHead className="text-center">Date</TableHead>
-              <TableHead className="text-center">Name</TableHead>
-              <TableHead className="text-center">Type</TableHead>
-              <TableHead className="text-center">Amount</TableHead>
-              <TableHead className="text-center">Delete</TableHead>
+              <TableHead className="text-center">
+                <Button
+                  className="w-10"
+                  variant={"ghost"}
+                  onClick={handleClick}
+                >
+                  Date
+                  <span>{sortBy === "date" ? (reversed ? "▼" : "▲") : ""}</span>
+                </Button>
+              </TableHead>
+              <TableHead className="text-center">
+                <Button className="w-10" variant={"ghost"}>
+                  Name
+                </Button>
+              </TableHead>
+              <TableHead className="text-center">
+                <Button
+                  className="w-10"
+                  variant={"ghost"}
+                  onClick={handleClick}
+                >
+                  Type
+                  <span>{sortBy === "type" ? (reversed ? "▼" : "▲") : ""}</span>
+                </Button>
+              </TableHead>
+              <TableHead className="text-center">
+                <Button
+                  className="w-10"
+                  variant={"ghost"}
+                  onClick={handleClick}
+                >
+                  Amount
+                  <span>
+                    {sortBy === "amount" ? (reversed ? "▼" : "▲") : ""}
+                  </span>
+                </Button>
+              </TableHead>
+              <TableHead className="text-center">
+                <Button className="w-10" variant={"ghost"}>
+                  Delete
+                </Button>
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -88,15 +158,12 @@ const ChopCard = ({ chop }: { chop: ChopsForHistoryList[0] }) => {
   if (isLoading) return null;
   return (
     <>
-      <TableRow
-        onClick={() => setModalOpen(!modalOpen)}
-        className="text-purple-700"
-      >
+      <TableRow onClick={() => setModalOpen(!modalOpen)} className="">
         <TableCell>{formatDateStringToDDMMYY(chop.created_at)}</TableCell>
         <TableCell>
           {userDetails[chop.user_id]?.username || "No longer here"}
         </TableCell>
-        <TableCell>Chop</TableCell>
+        <TableCell className="text-purple-700">Chop</TableCell>
         <TableCell>£{chop.amount}</TableCell>
         <TableCell
           onClick={e => {
@@ -106,7 +173,7 @@ const ChopCard = ({ chop }: { chop: ChopsForHistoryList[0] }) => {
           <DeleteChopButton chopId={chop.id} />
         </TableCell>
       </TableRow>
-      <ChopSplit chopSplit={chop.chop_split} open={modalOpen} />
+      <ChopSplitModal chopSplit={chop.chop_split} open={modalOpen} />
     </>
   );
 };
@@ -144,9 +211,7 @@ const SessionCard = ({ session }: { session: SessionsForHistoryList[0] }) => {
       </TableCell>
       <TableCell>
         <span
-          className={`${
-            session.amount < 0 ? "text-red-500" : "text-primary"
-          } text-lg`}
+          className={`${session.amount < 0 ? "text-red-500" : "text-primary"}`}
         >
           {formatCurrency(session.amount)}
         </span>
@@ -189,35 +254,52 @@ const TopUpCard = ({ topUp }: { topUp: TopUpsForHistoryList[0] }) => {
   );
 };
 
-const ChopSplit = ({
-  chopSplit,
-  open,
-}: {
+interface ChopSplitModalProps {
   chopSplit: string;
   open: boolean;
-}) => {
-  if (!open) return null;
+}
+
+export const ChopSplitModal = ({ chopSplit, open }: ChopSplitModalProps) => {
+  const [isOpen, setIsOpen] = useState(open);
+
+  useEffect(() => {
+    setIsOpen(open);
+  }, [open]);
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
+  let content;
   try {
     const chopData = parseAndValidateChopSplit(chopSplit);
-    return (
-      <TableRow className="s">
-        {Object.entries(chopData).map(([userId, data]) => {
-          return (
-            <TableCell key={userId} className="flex gap-2">
-              <span>{data.username}</span>
-              <span>£{data.split}</span>
-            </TableCell>
-          );
-        })}
-      </TableRow>
+    content = (
+      <div className="grid grid-cols-2 gap-4">
+        {Object.entries(chopData).map(([userId, data]) => (
+          <div
+            key={userId}
+            className="flex justify-between items-center p-2 bg-secondary rounded-md"
+          >
+            <span className="font-medium">{data.username}</span>
+            <span className="text-primary">£{data.split.toFixed(2)}</span>
+          </div>
+        ))}
+      </div>
     );
   } catch (e) {
-    return (
-      <TableRow>
-        <TableCell></TableCell>
-        <TableCell>No Data</TableCell>
-        <TableCell></TableCell>
-      </TableRow>
-    );
+    content = <p className="text-center text-muted-foreground">No Data</p>;
   }
+
+  return (
+    <Dialog open={isOpen} onOpenChange={handleClose}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle className="text-lg font-semibold">
+            Chop Split Details
+          </DialogTitle>
+        </DialogHeader>
+        {content}
+      </DialogContent>
+    </Dialog>
+  );
 };
