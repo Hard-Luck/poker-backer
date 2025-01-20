@@ -53,9 +53,9 @@ const TopUpDrawerButton: FC<TopUpPotWizardProps> = ({ profit }) => {
           Top Up
         </Button>
       </DrawerTrigger>
-      <DrawerContent>
-        <DrawerClose asChild>
-          <Button className=" m-2 self-center">X</Button>
+      <DrawerContent className="p-4">
+        <DrawerClose className="absolute" asChild>
+          <Button className="w-fit right-4">X</Button>
         </DrawerClose>
         <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>

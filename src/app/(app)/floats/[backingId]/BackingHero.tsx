@@ -1,23 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-
-interface MiniCardProps {
-  title: string;
-  children: React.ReactNode;
-  textColor?: "blue" | "red";
-}
-
-const MiniCard: React.FC<MiniCardProps> = ({ title, children }) => {
-  return (
-    <Card className="h-full border-primary my-2">
-      <CardHeader>
-        <CardTitle className="text-lg font-bold text-center">{title}</CardTitle>
-      </CardHeader>
-      <CardContent className={`flex flex-col items-center justify-center `}>
-        {children}
-      </CardContent>
-    </Card>
-  );
-};
+import AddSessionSidePanel from "./AddSessionSidePanel";
 
 interface DashboardCardsProps {
   currentFloat: number;
@@ -36,24 +17,20 @@ const DashboardCards: React.FC<DashboardCardsProps> = ({
 }) => {
   const textColor = profitOrLoss >= 0 ? "text-blue-500" : "text-red-500";
   return (
-    <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <MiniCard title="Balance">
-        <div className="text-center">
-          <span className="text-xl font-semibold">£{currentFloat}</span>
+    <section className="flex justify-between p-6 text-sm">
+      <div className="flex flex-col ">
+        <div>Balance - £{currentFloat}</div>
+        <div>Sessions - Since Last Chop: {sessionsSinceLastChop}</div>
+        <div>Sessions - Total: {totalSessions}</div>
+        <div>Float - £{float}</div>
+        <div>
+          Make up -
+          <span className={`${textColor}`}> £{Math.abs(profitOrLoss)}</span>
         </div>
-      </MiniCard>
-      <MiniCard title="Sessions">
-        <span className="block">Since Last Chop: {sessionsSinceLastChop}</span>
-        <span className="block">Total: {totalSessions}</span>
-      </MiniCard>
-      <MiniCard title="Float">
-        <div className="text-xl font-semibold">£{float}</div>
-      </MiniCard>
-      <MiniCard title="Make up" textColor={profitOrLoss >= 0 ? "blue" : "red"}>
-        <div className={`text-xl font-semibold ${textColor}`}>
-          £{Math.abs(profitOrLoss)}
-        </div>
-      </MiniCard>
+      </div>
+      <div>
+        <AddSessionSidePanel />
+      </div>
     </section>
   );
 };

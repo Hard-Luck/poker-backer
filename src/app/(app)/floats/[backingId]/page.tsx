@@ -4,7 +4,6 @@ import { notFound, redirect } from "next/navigation";
 import BackingHero from "./BackingHero";
 import HistoryList from "./SessionsList";
 import BackingActionsBar from "./BackingActionsBar";
-import AddSessionSidePanel from "./AddSessionSidePanel";
 
 type BackingPageProps = {
   params: {
@@ -45,21 +44,25 @@ export default async function page({ params }: BackingPageProps) {
   const currentFloat = backingDetails.backing.float + profitOrLoss;
 
   return (
-    <main>
-      <h1 className="text-3xl font-bold text-center">
-        History for {backingDetails.backing.name}
-      </h1>
-      <BackingHero
-        totalSessions={numberOfSessions}
-        profitOrLoss={profitOrLoss}
-        currentFloat={currentFloat}
-        float={backingDetails.backing.float}
-        sessionsSinceLastChop={numberOfSessionsSinceLastChop}
-      />
-      <AddSessionSidePanel />
-
-      <BackingActionsBar profitOrLoss={profitOrLoss} />
-      <HistoryList chops={chops} topUps={topUps} sessions={sessions} />
+    <main className="flex flex-col h-[calc(100vh-4rem)]">
+      <div className="flex-none">
+        <h1 className="text-3xl font-bold text-center p-2">
+          History for {backingDetails.backing.name}
+        </h1>
+        <BackingHero
+          totalSessions={numberOfSessions}
+          profitOrLoss={profitOrLoss}
+          currentFloat={currentFloat}
+          float={backingDetails.backing.float}
+          sessionsSinceLastChop={numberOfSessionsSinceLastChop}
+        />
+      </div>
+      <div className="flex-1 min-h-0 flex flex-col">
+        <BackingActionsBar profitOrLoss={profitOrLoss} />
+        <div className="flex-1 min-h-0">
+          <HistoryList chops={chops} topUps={topUps} sessions={sessions} />
+        </div>
+      </div>
     </main>
   );
 }

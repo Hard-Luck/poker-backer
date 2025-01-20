@@ -1,6 +1,6 @@
-import { type FC, useState } from 'react';
-import { Button } from './ui/button';
-import { Trash2 } from 'lucide-react';
+import { type FC, useState } from "react";
+import { Button } from "./ui/button";
+import { Trash2 } from "lucide-react";
 
 type DeleteButtonProps = {
   onClick: () => void;
@@ -11,23 +11,23 @@ const DeleteButton: FC<DeleteButtonProps> = ({ onClick }) => {
   if (!hasBeenClicked) {
     return (
       <Button
-        variant={'default'}
-        className="p-0 w-6 h-6 aspect-square"
+        variant={"default"}
+        className="p-0 w-6 h-6 aspect-square text-gray-800"
         onClick={() => {
           setHasBeenClicked(true);
         }}
       >
-        <Trash2 width={'1rem'} height={'1rem'} />
+        <Trash2 width={"1rem"} height={"1rem"} />
       </Button>
     );
   }
   return (
     <Button
-      variant={'destructive'}
+      variant={"destructive"}
       className="p-0 w-6 h-6 aspect-square"
       onClick={onClick}
     >
-      <Trash2 width={'1rem'} height={'1rem'} />
+      <Trash2 width={"1rem"} height={"1rem"} />
     </Button>
   );
 };

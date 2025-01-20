@@ -46,6 +46,7 @@ const CreateBackingWizard: FC = () => {
   }
   return (
     <Modal
+      className="h-screen flex justify-center items-center z-50"
       style={{
         overlay: { background: "#232931" },
         content: { background: "#393e46" },

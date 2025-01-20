@@ -17,7 +17,6 @@ import type {
 import { formatCurrency } from "@/models/utils/currency";
 import { parseAndValidateChopSplit } from "@/models/utils/parse";
 import { formatDateStringToDDMMYY } from "@/models/utils/timestamp";
-import { ScrollAreaViewport } from "@radix-ui/react-scroll-area";
 import { useParams, useRouter } from "next/navigation";
 import { type FC, useEffect, useState } from "react";
 import DeleteChopButton from "./DeleteChopButton";
@@ -72,83 +71,62 @@ const HistoryList: FC<HistoryListProps> = ({ chops, sessions, topUps }) => {
   }
   list.sort((a, b) => sortFunctions[sortBy](a, b, reversed));
   return (
-    <ScrollArea>
-      <ScrollAreaViewport className="max-h-[425px]">
-        <Table className=" text-center uppercase text-sm">
-          <TableHeader>
-            <TableRow>
-              <TableHead className="text-center">
-                <Button
-                  className="w-10"
-                  variant={"ghost"}
-                  onClick={handleClick}
-                >
-                  Date
-                  <span>
-                    {sortBy === "date" ? (!reversed ? "▼" : "▲") : ""}
-                  </span>
-                </Button>
-              </TableHead>
-              <TableHead className="text-center">
-                <Button className="w-10" variant={"ghost"}>
-                  Name
-                </Button>
-              </TableHead>
-              <TableHead className="text-center">
-                <Button
-                  className="w-10"
-                  variant={"ghost"}
-                  onClick={handleClick}
-                >
-                  Type
-                  <span>{sortBy === "type" ? (reversed ? "▼" : "▲") : ""}</span>
-                </Button>
-              </TableHead>
-              <TableHead className="text-center">
-                <Button
-                  className="w-10"
-                  variant={"ghost"}
-                  onClick={handleClick}
-                >
-                  Amount
-                  <span>
-                    {sortBy === "amount" ? (reversed ? "▼" : "▲") : ""}
-                  </span>
-                </Button>
-              </TableHead>
-              <TableHead className="text-center">
-                <Button className="w-10" variant={"ghost"}>
-                  Delete
-                </Button>
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {list.map(({ type, ...item }, i) => {
-              switch (type) {
-                case "chop":
-                  return (
-                    <ChopCard key={i} chop={item as ChopsForHistoryList[0]} />
-                  );
-                case "session":
-                  return (
-                    <SessionCard
-                      key={i}
-                      session={item as SessionsForHistoryList[0]}
-                    />
-                  );
-                case "top_up":
-                  return (
-                    <TopUpCard
-                      key={i}
-                      topUp={item as TopUpsForHistoryList[0]}
-                    />
-                  );
-              }
-            })}
-          </TableBody>
-        </Table>
-      </ScrollAreaViewport>
+    <ScrollArea className="h-full border border-black">
+      <Table className="text-center uppercase text-sm">
+        <TableHeader className="sticky top-0 bg-background">
+          <TableRow>
+            <TableHead className="text-center">
+              <Button className="w-10" variant={"ghost"} onClick={handleClick}>
+                Date
+                <span>{sortBy === "date" ? (!reversed ? "▼" : "▲") : ""}</span>
+              </Button>
+            </TableHead>
+            <TableHead className="text-center">
+              <Button className="w-10" variant={"ghost"}>
+                Name
+              </Button>
+            </TableHead>
+            <TableHead className="text-center">
+              <Button className="w-10" variant={"ghost"} onClick={handleClick}>
+                Type
+                <span>{sortBy === "type" ? (reversed ? "▼" : "▲") : ""}</span>
+              </Button>
+            </TableHead>
+            <TableHead className="text-center">
+              <Button className="w-10" variant={"ghost"} onClick={handleClick}>
+                Amount
+                <span>{sortBy === "amount" ? (reversed ? "▼" : "▲") : ""}</span>
+              </Button>
+            </TableHead>
+            <TableHead className="text-center">
+              <Button className="w-10" variant={"ghost"}>
+                Delete
+              </Button>
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {list.map(({ type, ...item }, i) => {
+            switch (type) {
+              case "chop":
+                return (
+                  <ChopCard key={i} chop={item as ChopsForHistoryList[0]} />
+                );
+              case "session":
+                return (
+                  <SessionCard
+                    key={i}
+                    session={item as SessionsForHistoryList[0]}
+                  />
+                );
+              case "top_up":
+                return (
+                  <TopUpCard key={i} topUp={item as TopUpsForHistoryList[0]} />
+                );
+            }
+          })}
+        </TableBody>
+      </Table>
     </ScrollArea>
   );
 };
@@ -160,7 +138,7 @@ const ChopCard = ({ chop }: { chop: ChopsForHistoryList[0] }) => {
   if (isLoading) return null;
   return (
     <>
-      <TableRow onClick={() => setModalOpen(!modalOpen)} className="">
+      <TableRow onClick={() => setModalOpen(!modalOpen)}>
         <TableCell>{formatDateStringToDDMMYY(chop.created_at)}</TableCell>
         <TableCell>
           {userDetails[chop.user_id]?.username || "No longer here"}
