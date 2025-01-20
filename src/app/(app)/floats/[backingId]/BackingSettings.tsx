@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import useUsersWithAccessToBackingContext from "@/contexts/UsersWithAccessToBacking/useUsersWithAccessToBackingContext";
 import { useUser } from "@clerk/nextjs";
-import { CiSettings } from "react-icons/ci";
+import { IoSettings } from "react-icons/io5";
 import { FaRegSquarePlus, FaRegSquareMinus } from "react-icons/fa6";
 
 import * as React from "react";
@@ -47,8 +47,8 @@ const BackingSettings = () => {
       }}
     >
       <DrawerTrigger asChild>
-        <Button variant="ghost" className="flex-1" aria-label="settings">
-          <CiSettings size={"md"} />
+        <Button aria-label="settings">
+          <IoSettings className="w-6 h-6  text-gray-800" />
         </Button>
       </DrawerTrigger>
       <DrawerContent>

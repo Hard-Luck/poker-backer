@@ -21,11 +21,7 @@ export default function RootLayout({
   cookies: string;
 }) {
   return (
-    <html
-      lang="en"
-      suppressHydrationWarning
-      className={roboto.className + " flex flex-col items-center"}
-    >
+    <html lang="en" suppressHydrationWarning className={roboto.className}>
       <body>
         <ClerkProvider>
           <TrpcProvider cookies={cookies}>
@@ -37,7 +33,7 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               <Header />
-              {children}
+              <div className="h-[calc(100vh-4rem)]">{children}</div>
             </ThemeProvider>
           </TrpcProvider>
         </ClerkProvider>

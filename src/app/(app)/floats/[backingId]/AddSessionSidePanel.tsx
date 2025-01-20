@@ -20,8 +20,8 @@ const AddSessionSidePanel = () => {
   return (
     <div className="flex justify-center p-2 m-2">
       <Sheet>
-        <Button asChild>
-          <SheetTrigger>Add Session</SheetTrigger>
+        <Button className="text-gray-800 font-bold" asChild>
+          <SheetTrigger className=" font-extrabold">Add Session</SheetTrigger>
         </Button>
         <SheetContent>
           <SheetHeader>
@@ -126,7 +126,7 @@ const AddSessionForm: FC = () => {
             onChange={e => setLocation(e.target.value)}
           />
         </div>
-        <Button type="submit">Add Session</Button>
+        <Button className="text-gray-800 font-bold" type="submit">Add Session</Button>
       </form>
       <div>
         <Link

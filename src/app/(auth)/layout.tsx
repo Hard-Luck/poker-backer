@@ -9,5 +9,5 @@ export default function AuthLayout({
   const session = getUserAuth();
   if (session?.session) redirect("/dashboard");
 
-  return <div className=" h-screen pt-8">{children}</div>;
+  return <div className="h-screen pt-8 ">{children}</div>;
 }
