@@ -1,12 +1,13 @@
-# PokerBacker: A Next.js App for Poker Financial Tracking
+# PokerBacker: A Next.js App for Poker Financial Tracking.
 
 ## Description
 
-PokerBacker is a robust and user-friendly application designed to assist poker backers—those who sponsor players for tournament entries. This financial tracking tool helps manage and record transactions, providing a clear overview of your investments and their performance. Built with Next.js and React for a seamless and responsive user experience, PokerBacker leverages modern web technologies for optimal performance. 
+PokerBacker is a robust and user-friendly application designed to assist poker backers—those who sponsor players for tournament entries. This financial tracking tool helps manage and record transactions, providing a clear overview of your investments and their performance. Built with Next.js and React for a seamless and responsive user experience, PokerBacker leverages modern web technologies for optimal performance.
 
 [Hosted App](https://www.poker-backer.com/)
 
 ## Screenshot
+
 ![image](https://github.com/Hard-Luck/poker-backer/assets/72257311/a98934cd-9708-4d2c-936f-d9c9c9f335f0)
 ![image](https://github.com/Hard-Luck/poker-backer/assets/72257311/667454c3-99a4-4537-90b7-6d31f0d86257)
 ![image](https://github.com/Hard-Luck/poker-backer/assets/72257311/fe325f82-7751-4e2f-9fe2-779fa08dc7af)
@@ -32,6 +33,7 @@ Follow these instructions to set up a copy of the project on your local machine 
 ### Installation
 
 1. **Clone the repo**
+
    ```sh
    git clone https://github.com/hard-luck/poker-backer.git
    ```
@@ -54,6 +56,7 @@ Follow these instructions to set up a copy of the project on your local machine 
 ### Usage
 
 To run the application in development mode:
+
 ```sh
 npm run dev
 ```
@@ -90,4 +93,3 @@ A huge thanks to Theo and the T3 team for their foundational work. Much respect 
 
 - **Precommit Checks:** Utilizes Husky for precommit checks.
 - **CI/CD:** Employs GitHub Actions to check merges and commits to the main branch.
-
