@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import UsersWithAccessToBackingProvider from "@/contexts/UsersWithAccessToBacking";
 import { type FC } from "react";
 import BackingSettings from "./BackingSettings";
 import { trpc } from "@/lib/trpc/client";
@@ -57,29 +56,27 @@ const BackingActionsBar: FC<BackingActionsBarProps> = ({ profitOrLoss }) => {
   }
 
   return (
-    <UsersWithAccessToBackingProvider>
-      <div className="container mx-auto px-4 pb-4">
-        <Card className="border-border">
-          <div className="flex items-center justify-center divide-x divide-border">
-            <Button
-              variant="ghost"
-              className="flex-1 h-12 rounded-none gap-2 text-sm font-medium hover:bg-muted"
-              disabled={profitOrLoss <= 0 || isLoading}
-              onClick={handleClick}
-            >
-              {isLoading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <Scissors className="h-4 w-4" />
-              )}
-              Chop
-            </Button>
-            <TopUpDrawerButton profit={profitOrLoss} />
-            <BackingSettings />
-          </div>
-        </Card>
-      </div>
-    </UsersWithAccessToBackingProvider>
+    <div className="container mx-auto px-4 pb-4">
+      <Card className="border-border">
+        <div className="flex items-center justify-center divide-x divide-border">
+          <Button
+            variant="ghost"
+            className="flex-1 h-12 rounded-none gap-2 text-sm font-medium hover:bg-muted"
+            disabled={profitOrLoss <= 0 || isLoading}
+            onClick={handleClick}
+          >
+            {isLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Scissors className="h-4 w-4" />
+            )}
+            Chop
+          </Button>
+          <TopUpDrawerButton profit={profitOrLoss} />
+          <BackingSettings />
+        </div>
+      </Card>
+    </div>
   );
 };
 
