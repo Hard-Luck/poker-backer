@@ -46,3 +46,5 @@ yarn-error.log*
 # dev
 prisma/dev.db
 todo.txt
+
+dump.sql

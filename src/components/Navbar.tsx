@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { AlignRight } from "lucide-react";
@@ -59,14 +59,26 @@ export default function Navbar() {
 }
 
 const HeaderLogo = () => {
-  const { theme } = useTheme();
-  if (!theme)
-    return (
-      <Image src="/header-logo-white.png" width={100} height={100} alt="logo" />
-    );
-  return theme === "dark" ? (
-    <Image src="/header-logo-white.png" width={100} height={100} alt="logo" />
-  ) : (
-    <Image src="/header-logo-black.png" width={100} height={100} alt="logo" />
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const logoSrc =
+    mounted && resolvedTheme === "light"
+      ? "/header-logo-black.png"
+      : "/header-logo-white.png";
+
+  return (
+    <Image
+      src={logoSrc}
+      width={100}
+      height={100}
+      alt="Poker Backer logo"
+      style={{ width: "auto", height: "auto" }}
+      priority
+    />
   );
 };
