@@ -27,10 +27,14 @@ export default function DataDeletionPage() {
         </section>
 
         <section className="space-y-3">
-          <h2 className="text-xl font-semibold">Option 1: Delete From Your Account</h2>
+          <h2 className="text-xl font-semibold">
+            Option 1: Delete From Your Account
+          </h2>
           <ol className="list-decimal space-y-2 pl-5 text-sm sm:text-base">
             <li>Sign in to PokerBacker.</li>
-            <li>Open the account menu in the top-right user profile control.</li>
+            <li>
+              Open the account menu in the top-right user profile control.
+            </li>
             <li>Go to account management and delete your account.</li>
           </ol>
           <p>
@@ -40,7 +44,9 @@ export default function DataDeletionPage() {
         </section>
 
         <section className="space-y-3">
-          <h2 className="text-xl font-semibold">Option 2: Request Deletion Manually</h2>
+          <h2 className="text-xl font-semibold">
+            Option 2: Request Deletion Manually
+          </h2>
           <p>
             If you cannot access your account, contact the project owner through{" "}
             <a
@@ -59,15 +65,18 @@ export default function DataDeletionPage() {
           <h2 className="text-xl font-semibold">What Gets Deleted</h2>
           <ul className="list-disc space-y-2 pl-5 text-sm sm:text-base">
             <li>Your account profile data.</li>
-            <li>Your poker backing records, including sessions, chops, top-ups, comments, and notes associated with your account.</li>
+            <li>
+              Your poker backing records, including sessions, chops, top-ups,
+              comments, and notes associated with your account.
+            </li>
           </ul>
         </section>
 
         <section className="space-y-3">
           <h2 className="text-xl font-semibold">Retention Exceptions</h2>
           <p>
-            We may retain limited information where required for security,
-            fraud prevention, legal compliance, or dispute resolution.
+            We may retain limited information where required for security, fraud
+            prevention, legal compliance, or dispute resolution.
           </p>
         </section>
       </div>

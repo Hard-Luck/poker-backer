@@ -22,17 +22,26 @@ export default function PrivacyPage() {
         <section className="space-y-3">
           <p>
             PokerBacker is a poker staking and bankroll tracking app. We only
-            collect the data needed to create your account, run the product,
-            and keep your records available to you.
+            collect the data needed to create your account, run the product, and
+            keep your records available to you.
           </p>
         </section>
 
         <section className="space-y-3">
           <h2 className="text-xl font-semibold">What We Collect</h2>
           <ul className="list-disc space-y-2 pl-5 text-sm sm:text-base">
-            <li>Account information such as your name, email address, and authentication identifiers.</li>
-            <li>Data you enter into the app, including backers, players, sessions, chops, top-ups, notes, and comments.</li>
-            <li>Basic technical data required to operate the service, such as session and security information.</li>
+            <li>
+              Account information such as your name, email address, and
+              authentication identifiers.
+            </li>
+            <li>
+              Data you enter into the app, including backers, players, sessions,
+              chops, top-ups, notes, and comments.
+            </li>
+            <li>
+              Basic technical data required to operate the service, such as
+              session and security information.
+            </li>
           </ul>
         </section>
 
@@ -41,7 +50,9 @@ export default function PrivacyPage() {
           <ul className="list-disc space-y-2 pl-5 text-sm sm:text-base">
             <li>To authenticate users and secure accounts.</li>
             <li>To store, display, and sync poker backing records.</li>
-            <li>To maintain app reliability, prevent abuse, and diagnose issues.</li>
+            <li>
+              To maintain app reliability, prevent abuse, and diagnose issues.
+            </li>
           </ul>
         </section>
 
@@ -67,7 +78,14 @@ export default function PrivacyPage() {
           <h2 className="text-xl font-semibold">Your Choices</h2>
           <p>
             You can request deletion of your account and related data using the
-            data deletion process at <a className="font-medium underline underline-offset-4" href="/data-deletion">/data-deletion</a>.
+            data deletion process at{" "}
+            <a
+              className="font-medium underline underline-offset-4"
+              href="/data-deletion"
+            >
+              /data-deletion
+            </a>
+            .
           </p>
         </section>
 
