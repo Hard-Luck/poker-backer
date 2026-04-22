@@ -73,7 +73,7 @@ export async function createUserBacking({
   userBacking,
   backerId,
 }: {
-  userBacking: Omit<UserBacking, "id">;
+  userBacking: Omit<UserBacking, "id" | "percent">;
   backerId: string;
 }) {
   const isBacker = await isBackerForBacking({
