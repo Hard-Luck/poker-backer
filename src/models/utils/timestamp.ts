@@ -1,5 +1,29 @@
-export function formatDateStringToDDMMHHSS(timestamp: string) {
-  const date = new Date(timestamp);
+type DateInput = Date | string | number | null | undefined;
+
+function parseDateInput(value: DateInput) {
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime()) ? null : value;
+  }
+
+  if (typeof value !== "string" && typeof value !== "number") {
+    return null;
+  }
+
+  const parsedDate = new Date(value);
+  return Number.isNaN(parsedDate.getTime()) ? null : parsedDate;
+}
+
+function formatUnknownDate() {
+  return "Unknown date";
+}
+
+export function formatDateStringToDDMMHHSS(timestamp: DateInput) {
+  const date = parseDateInput(timestamp);
+
+  if (!date) {
+    return formatUnknownDate();
+  }
+
   const day = date.getDate().toString().padStart(2, "0");
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const hours = date.getUTCHours().toString().padStart(2, "0");
@@ -7,14 +31,26 @@ export function formatDateStringToDDMMHHSS(timestamp: string) {
   return `${day}-${month} ${hours}:${minutes}`;
 }
 
-export function formatDateStringToDDMM(date: Date) {
+export function formatDateStringToDDMM(dateInput: DateInput) {
+  const date = parseDateInput(dateInput);
+
+  if (!date) {
+    return formatUnknownDate();
+  }
+
   const day = date.getDate().toString().padStart(2, "0");
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const formattedDate = `${day}-${month}`;
   return formattedDate;
 }
 
-export const formatDateStringToDDMMYY = (date: Date) => {
+export const formatDateStringToDDMMYY = (dateInput: DateInput) => {
+  const date = parseDateInput(dateInput);
+
+  if (!date) {
+    return formatUnknownDate();
+  }
+
   const day = date.getDate().toString().padStart(2, "0");
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const year = date.getFullYear();
@@ -38,11 +74,24 @@ export function convertMinsToHrsMins(mins: number): string {
   return time;
 }
 
-export function isDateAfter(date: Date, dateToCompareTo: Date): boolean {
-  return date.getTime() > dateToCompareTo.getTime();
+export function isDateAfter(date: DateInput, dateToCompareTo: DateInput): boolean {
+  const firstDate = parseDateInput(date);
+  const secondDate = parseDateInput(dateToCompareTo);
+
+  if (!firstDate || !secondDate) {
+    return false;
+  }
+
+  return firstDate.getTime() > secondDate.getTime();
 }
 
-export function formatDateStringToLongDate(date: Date) {
+export function formatDateStringToLongDate(dateInput: DateInput) {
+  const date = parseDateInput(dateInput);
+
+  if (!date) {
+    return formatUnknownDate();
+  }
+
   const day = date.getDate();
   const monthIndex = date.getMonth();
   const year = date.getFullYear();

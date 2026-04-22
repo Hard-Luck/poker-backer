@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/drawer";
 import { Slider } from "@/components/ui/slider";
 import { trpc } from "@/lib/trpc/client";
+import { parsePositiveInt } from "@/models/utils/parse";
 import {
   toastDefaultError,
   toastDefaultSuccess,
@@ -120,6 +121,9 @@ type ChangePercentagesProps = {
 
 const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
   const [newPercentages, setNewPercentages] = React.useState(users);
+  React.useEffect(() => {
+    setNewPercentages(users);
+  }, [users]);
   const utils = trpc.useUtils();
   const { mutate, isLoading } = trpc.userBackings.update.useMutation({
     onSuccess: () => {
@@ -135,7 +139,15 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
   const params = useParams();
   const backingId = params?.backingId;
   function handleClick() {
-    if (!backingId) return; // TEMP FIX
+    const parsedBackingId = parsePositiveInt(
+      typeof backingId === "string" ? backingId : null
+    );
+
+    if (!parsedBackingId) {
+      toastDefaultError("Invalid backing ID.");
+      return;
+    }
+
     let total = 0;
     const percentages = [];
     for (const userId in newPercentages) {
@@ -150,7 +162,7 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
       return;
     }
     mutate({
-      backingId: +backingId,
+      backingId: parsedBackingId,
       percentages,
     });
   }
@@ -158,6 +170,9 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
   return (
     <div className="">
       {Object.entries(users).map(([userId, user]) => {
+        const currentUser = newPercentages[userId] ?? user;
+        const currentPercent = currentUser.percent;
+
         return (
           <div key={userId} className="my-4 flex flex-col w-full">
             <span className="">{user.username}</span>
@@ -166,11 +181,13 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
                 className="aspect-square flex-1 p-0 m-0 h-6"
                 onClick={() => {
                   setNewPercentages(prev => {
+                    const previousUser = prev[userId] ?? user;
+
                     return {
                       ...prev,
                       [userId]: {
-                        ...prev[userId],
-                        percent: Math.max(0, prev[userId].percent - 0.5),
+                        ...previousUser,
+                        percent: Math.max(0, previousUser.percent - 0.5),
                       },
                     };
                   });
@@ -180,14 +197,16 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
               </Button>
               <Slider
                 className="flex-3"
-                value={[newPercentages[userId].percent]}
+                value={[currentPercent]}
                 max={100}
                 step={0.5}
                 onValueChange={([value]) => {
                   setNewPercentages(prev => {
+                    const previousUser = prev[userId] ?? user;
+
                     return {
                       ...prev,
-                      [userId]: { ...prev[userId], percent: value },
+                      [userId]: { ...previousUser, percent: value },
                     };
                   });
                 }}
@@ -196,11 +215,13 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
                 className="aspect-square flex-1 p-0 m-0 h-6"
                 onClick={() => {
                   setNewPercentages(prev => {
+                    const previousUser = prev[userId] ?? user;
+
                     return {
                       ...prev,
                       [userId]: {
-                        ...prev[userId],
-                        percent: Math.min(100, prev[userId].percent + 0.5),
+                        ...previousUser,
+                        percent: Math.min(100, previousUser.percent + 0.5),
                       },
                     };
                   });
@@ -212,13 +233,24 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
                 max={100}
                 min={0}
                 className="w-1/6 text-center"
-                value={newPercentages[userId].percent}
+                value={currentPercent}
                 onChange={e => {
-                  const value = Math.min(100, +e.target.value);
+                  const parsedValue =
+                    e.target.value === "" ? 0 : Number(e.target.value);
+
+                  if (!Number.isFinite(parsedValue)) {
+                    return;
+                  }
+
                   setNewPercentages(prev => {
+                    const previousUser = prev[userId] ?? user;
+
                     return {
                       ...prev,
-                      [userId]: { ...prev[userId], percent: value || 0 },
+                      [userId]: {
+                        ...previousUser,
+                        percent: Math.max(0, Math.min(100, parsedValue)),
+                      },
                     };
                   });
                 }}
@@ -272,7 +304,20 @@ const ChangeFloat: React.FC = () => {
         <Button
           variant="default"
           onClick={() => {
-            mutate({ backingId: +backingId, float: +amount });
+            const parsedBackingId = parsePositiveInt(backingId);
+            const parsedAmount = Number(amount);
+
+            if (!parsedBackingId) {
+              toastDefaultError("Invalid backing ID.");
+              return;
+            }
+
+            if (!Number.isFinite(parsedAmount) || parsedAmount <= 0) {
+              toastDefaultError("Please enter a valid float amount.");
+              return;
+            }
+
+            mutate({ backingId: parsedBackingId, float: parsedAmount });
           }}
           disabled={isLoading}
         >
@@ -331,9 +376,16 @@ const UserWithAccessCardWithRemoveButton = ({
       {confirmNotice ? (
         <Button
           onClick={() => {
+            const parsedBackingId = parsePositiveInt(backingId);
+
+            if (!parsedBackingId) {
+              toastDefaultError("Invalid backing ID.");
+              return;
+            }
+
             mutate({
               toRemoveId: userId,
-              backingId: Number(backingId),
+              backingId: parsedBackingId,
             });
           }}
           variant="destructive"

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { toastDefaultError } from "@/components/utils/default-toasts";
 import { trpc } from "@/lib/trpc/client";
+import { parsePositiveInt } from "@/models/utils/parse";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -28,7 +29,16 @@ const DeleteBackingButton = () => {
       <div>
         <Button
           variant="destructive"
-          onClick={() => deleteBacking({ backingId: Number(backingId) })}
+          onClick={() => {
+            const parsedBackingId = parsePositiveInt(backingId);
+
+            if (!parsedBackingId) {
+              toastDefaultError("Invalid backing ID.");
+              return;
+            }
+
+            deleteBacking({ backingId: parsedBackingId });
+          }}
           className="mr-2 w-[150px]"
         >
           CONFIRM DELETE

@@ -1,5 +1,7 @@
 import DeleteButton from '@/components/DeleteButton';
+import { toastDefaultError } from '@/components/utils/default-toasts';
 import { trpc } from '@/lib/trpc/client';
+import { parsePositiveInt } from '@/models/utils/parse';
 import { useRouter } from 'next/navigation';
 
 const DeleteTopUpButton = ({
@@ -18,7 +20,16 @@ const DeleteTopUpButton = ({
   if (isLoading) return null;
   return (
     <DeleteButton
-      onClick={() => mutate({ topupId, backingId: Number(backingId) })}
+      onClick={() => {
+        const parsedBackingId = parsePositiveInt(backingId);
+
+        if (!parsedBackingId) {
+          toastDefaultError('Invalid backing ID.');
+          return;
+        }
+
+        mutate({ topupId, backingId: parsedBackingId });
+      }}
     />
   );
 };

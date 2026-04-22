@@ -1,5 +1,6 @@
 import { getUserAuth } from "@/lib/auth/utils";
 import { findBackingWithSessionsChopsAndTopUps } from "@/models/userBacking";
+import { parsePositiveInt } from "@/models/utils/parse";
 import { notFound, redirect } from "next/navigation";
 import BackingHero from "./BackingHero";
 import HistoryList from "./SessionsList";
@@ -13,12 +14,16 @@ type BackingPageProps = {
 
 export default async function page({ params }: BackingPageProps) {
   const { backingId } = params;
+  const parsedBackingId = parsePositiveInt(backingId);
   const { session } = getUserAuth();
   if (!session) {
     redirect("/sign-in");
   }
+  if (!parsedBackingId) {
+    notFound();
+  }
   const backingDetails = await findBackingWithSessionsChopsAndTopUps({
-    backingId: +backingId,
+    backingId: parsedBackingId,
     userId: session.user.id,
   });
   if (backingDetails === null) {

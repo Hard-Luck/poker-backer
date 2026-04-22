@@ -5,6 +5,7 @@ import {
   toastDefaultSuccess,
 } from "@/components/utils/default-toasts";
 import { trpc } from "@/lib/trpc/client";
+import { parsePositiveInt } from "@/models/utils/parse";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import type { Dispatch, FC, SetStateAction } from "react";
 import { useState } from "react";
@@ -17,10 +18,15 @@ const AddToBackingWizard: FC<AddToBackingWizardProps> = ({ setOpen }) => {
   const { backingId } = useParams() as {
     backingId: string;
   };
+  const parsedBackingId = parsePositiveInt(backingId);
+  const hasValidBackingId = parsedBackingId !== null;
   const { data: friends, isLoading } =
     trpc.friendships.listNotInBacking.useQuery({
-      backingId: Number(backingId),
+      backingId: hasValidBackingId ? parsedBackingId : 0,
+    }, {
+      enabled: hasValidBackingId,
     });
+  if (!hasValidBackingId) return null;
   if (isLoading) return null;
   if (!friends) return null;
   const formattedRecievedFriends = friends.receivedFriendships.map(
@@ -63,6 +69,7 @@ const FriendCard: FC<FriendCardProps> = ({ friend }) => {
   const { backingId } = useParams() as {
     backingId: string;
   };
+  const parsedBackingId = parsePositiveInt(backingId);
   const [added, setAdded] = useState(false);
   const utils = trpc.useUtils();
   const { mutate: addFriend } = trpc.userBackings.create.useMutation({
@@ -77,7 +84,12 @@ const FriendCard: FC<FriendCardProps> = ({ friend }) => {
     },
   });
   function handleClick() {
-    addFriend({ friendId: friend.id, backingId: +backingId });
+    if (!parsedBackingId) {
+      toastDefaultError("Invalid backing ID.");
+      return;
+    }
+
+    addFriend({ friendId: friend.id, backingId: parsedBackingId });
   }
   return (
     <li className="flex gap-2 w-full justify-between text-left ">

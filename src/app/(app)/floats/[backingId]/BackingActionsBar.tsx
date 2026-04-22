@@ -6,6 +6,7 @@ import UsersWithAccessToBackingProvider from "@/contexts/UsersWithAccessToBackin
 import { type FC } from "react";
 import BackingSettings from "./BackingSettings";
 import { trpc } from "@/lib/trpc/client";
+import { parsePositiveInt } from "@/models/utils/parse";
 import { useParams, useRouter } from "next/navigation";
 import {
   toastDefaultError,
@@ -30,6 +31,7 @@ const BackingActionsBar: FC<BackingActionsBarProps> = ({ profitOrLoss }) => {
   const { mutate: chopPot, isLoading } = trpc.chops.create.useMutation({
     onSuccess: () => {
       toastDefaultSuccess("Chop successful");
+      router.refresh();
     },
     onError: error => {
       console.error(error);
@@ -42,8 +44,14 @@ const BackingActionsBar: FC<BackingActionsBarProps> = ({ profitOrLoss }) => {
   if (backingType !== "BACKER") return null;
 
   function handleClick() {
-    chopPot({ backingId: Number(backingId) });
-    router.refresh();
+    const parsedBackingId = parsePositiveInt(backingId);
+
+    if (!parsedBackingId) {
+      toastDefaultError("Invalid backing ID.");
+      return;
+    }
+
+    chopPot({ backingId: parsedBackingId });
   }
   return (
     <UsersWithAccessToBackingProvider>

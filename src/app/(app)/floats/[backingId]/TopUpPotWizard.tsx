@@ -15,6 +15,7 @@ import {
   toastDefaultSuccess,
 } from "@/components/utils/default-toasts";
 import { trpc } from "@/lib/trpc/client";
+import { parsePositiveInt } from "@/models/utils/parse";
 import { useParams } from "next/navigation";
 import { type FC, useState } from "react";
 import { FaPlusMinus } from "react-icons/fa6";
@@ -86,7 +87,7 @@ const TopUpDrawerButton: FC<TopUpPotWizardProps> = ({ profit }) => {
                   setAmount("");
                   return;
                 }
-                if (isNaN(Number(e.target.value))) {
+                if (!/^\d*\.?\d*$/.test(e.target.value)) {
                   return;
                 }
                 setAmount(e.target.value);
@@ -107,14 +108,30 @@ const TopUpDrawerButton: FC<TopUpPotWizardProps> = ({ profit }) => {
             className="mt-4 w-full"
             disabled={isLoading}
             onClick={() => {
-              if (Number(amount) < 0 && Number(amount) + profit < 0) {
+              const parsedBackingId = parsePositiveInt(backingId);
+              const parsedAmount = Number(amount);
+
+              if (!parsedBackingId) {
+                toastDefaultError("Invalid backing ID.");
+                return;
+              }
+
+              if (!Number.isFinite(parsedAmount) || parsedAmount <= 0) {
+                toastDefaultError("Please enter a valid top up amount.");
+                return;
+              }
+
+              const signedAmount =
+                parsedAmount * (plusOrMinus === "+" ? 1 : -1);
+
+              if (signedAmount < 0 && profit + signedAmount < 0) {
                 toastDefaultError("Cannot remove more than the profit.");
                 return;
               }
               topUpPot({
-                amount: Number(amount) * (plusOrMinus === "+" ? 1 : -1),
+                amount: signedAmount,
                 note,
-                backingId: Number(backingId),
+                backingId: parsedBackingId,
               });
             }}
           >

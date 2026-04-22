@@ -10,6 +10,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { parsePositiveInt } from "@/models/utils/parse";
 import { trpc } from "@/lib/trpc/client";
 import Link from "next/link";
 import { useParams } from "next/navigation";
@@ -78,12 +79,40 @@ const AddSessionForm: FC = () => {
       });
       return;
     }
+    const parsedBackingId = parsePositiveInt(backingId);
+    const parsedAmount = Number(amount);
+    const parsedLength = Number(length);
+
+    if (!parsedBackingId) {
+      toast.error("Invalid backing ID", {
+        duration: 2000,
+        position: "top-center",
+      });
+      return;
+    }
+
+    if (!Number.isFinite(parsedAmount)) {
+      toast.error("Please enter a valid amount", {
+        duration: 2000,
+        position: "top-center",
+      });
+      return;
+    }
+
+    if (!Number.isFinite(parsedLength) || parsedLength <= 0) {
+      toast.error("Please enter a valid session length", {
+        duration: 2000,
+        position: "top-center",
+      });
+      return;
+    }
+
     mutate({
-      amount: parseInt(amount),
-      length: parseInt(length),
+      amount: parsedAmount,
+      length: parsedLength,
       date,
       location,
-      backingId: backingId,
+      backingId: String(parsedBackingId),
     });
   }
   return (

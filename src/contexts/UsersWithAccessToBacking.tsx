@@ -1,5 +1,6 @@
 "use client";
 import { trpc } from "@/lib/trpc/client";
+import { parsePositiveInt } from "@/models/utils/parse";
 import { type PlayerOrBacker } from "@/models/types";
 import { useParams } from "next/navigation";
 import { type FC, type PropsWithChildren, createContext } from "react";
@@ -25,12 +26,14 @@ const UsersWithAccessToBackingProvider: FC<PropsWithChildren> = ({
   const { backingId } = useParams() as {
     backingId: string;
   };
+  const parsedBackingId = parsePositiveInt(backingId);
 
   const { data, isLoading } = trpc.userBackings.listIndividual.useQuery(
     {
-      backingId: +backingId,
+      backingId: parsedBackingId ?? 0,
     },
     {
+      enabled: parsedBackingId !== null,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
     }

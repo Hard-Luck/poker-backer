@@ -11,7 +11,7 @@ import { Button } from "../../../components/ui/button";
 import { useRouter } from "next/navigation";
 const CreateBackingWizard: FC = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [newPot, setNewPot] = useState({ name: "", float: 0 });
+  const [newPot, setNewPot] = useState({ name: "", float: "" });
   const router = useRouter();
   const { mutate, isLoading } = trpc.backings.create.useMutation({
     onSuccess: handleSuccess,
@@ -19,7 +19,7 @@ const CreateBackingWizard: FC = () => {
   });
 
   function handleSuccess() {
-    setNewPot({ name: "", float: 0 });
+    setNewPot({ name: "", float: "" });
     toastDefaultSuccess("Pot created successfully");
     setModalIsOpen(false);
     router.refresh();
@@ -31,7 +31,19 @@ const CreateBackingWizard: FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const { name, float } = newPot;
-    mutate({ name, float });
+    const parsedFloat = Number(float);
+
+    if (!name.trim()) {
+      toastDefaultError("Please enter a name for the pot.");
+      return;
+    }
+
+    if (!Number.isFinite(parsedFloat)) {
+      toastDefaultError("Please enter a valid float amount.");
+      return;
+    }
+
+    mutate({ name: name.trim(), float: parsedFloat });
   };
   if (!modalIsOpen) {
     return (
@@ -83,9 +95,7 @@ const CreateBackingWizard: FC = () => {
             id="floatInput"
             type="number"
             value={newPot.float}
-            onChange={e =>
-              setNewPot({ ...newPot, float: parseFloat(e.target.value) })
-            }
+            onChange={e => setNewPot({ ...newPot, float: e.target.value })}
             className="w-72 self-center rounded-lg p-2 text-right"
           />
 

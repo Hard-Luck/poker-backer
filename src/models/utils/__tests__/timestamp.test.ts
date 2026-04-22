@@ -50,6 +50,10 @@ describe('formatDateStringToDDMMYY', () => {
         expect(formatDateStringToDDMMYY(new Date('2021-02-21T00:00:00Z'))).toBe('21-02-2021');
         expect(formatDateStringToDDMMYY(new Date('2021-03-31T00:00:00Z'))).toBe('31-03-2021');
     });
+    test('should safely format ISO date strings and invalid values', () => {
+        expect(formatDateStringToDDMMYY('2021-01-01T00:00:00Z')).toBe('01-01-2021');
+        expect(formatDateStringToDDMMYY('not-a-date')).toBe('Unknown date');
+    });
 })
 
 describe('formatDateStringToDDMM', () => {
@@ -57,6 +61,10 @@ describe('formatDateStringToDDMM', () => {
         expect(formatDateStringToDDMM(new Date('2021-01-01T00:00:00Z'))).toBe('01-01');
         expect(formatDateStringToDDMM(new Date('2021-02-21T00:00:00Z'))).toBe('21-02');
         expect(formatDateStringToDDMM(new Date('2021-03-31T00:00:00Z'))).toBe('31-03');
+    });
+    test('should safely format string dates and invalid values', () => {
+        expect(formatDateStringToDDMM('2021-01-01T00:00:00Z')).toBe('01-01');
+        expect(formatDateStringToDDMM(undefined)).toBe('Unknown date');
     });
 })
 
@@ -70,6 +78,9 @@ describe('formatDateStringToDDMMHHSS', () => {
         expect(formatDateStringToDDMMHHSS('2021-01-01T00:00:11Z')).toBe('01-01 00:00');
         expect(formatDateStringToDDMMHHSS('2021-02-21T01:02:22Z')).toBe('21-02 01:02');
         expect(formatDateStringToDDMMHHSS('2021-03-31T21:32:31Z')).toBe('31-03 21:32');
+    });
+    test('should safely handle invalid timestamps', () => {
+        expect(formatDateStringToDDMMHHSS('bad-value')).toBe('Unknown date');
     });
 })
 
@@ -88,5 +99,8 @@ describe('isDateAfter', () => {
         const date1 = new Date('2021-01-01T00:00:00Z'); 
         const date2 = new Date('2021-01-01T00:00:00Z');
         expect(isDateAfter(date1, date2)).toBe(false);
+    });
+    test('should return false for invalid dates', () => {
+        expect(isDateAfter('bad-date', new Date('2021-01-01T00:00:00Z'))).toBe(false);
     });
 })
