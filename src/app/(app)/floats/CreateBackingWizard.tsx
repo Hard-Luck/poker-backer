@@ -35,7 +35,7 @@ const CreateBackingWizard: FC = () => {
     setOpen(false);
     router.refresh();
   }
-  
+
   function handleError() {
     toastDefaultError("Error creating float. Could be duplicate name.");
   }
@@ -71,7 +71,8 @@ const CreateBackingWizard: FC = () => {
         <DialogHeader>
           <DialogTitle>Create New Float</DialogTitle>
           <DialogDescription>
-            Set up a new backing arrangement. Enter a name and starting float amount.
+            Set up a new backing arrangement. Enter a name and starting float
+            amount.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -88,7 +89,9 @@ const CreateBackingWizard: FC = () => {
           <div className="space-y-2">
             <Label htmlFor="float">Starting Float</Label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">$</span>
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                $
+              </span>
               <Input
                 id="float"
                 type="number"

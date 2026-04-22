@@ -21,7 +21,7 @@ import { UserPlus, Check, Loader2, Users } from "lucide-react";
 
 const AddToBackingWizardButton: FC = () => {
   const [open, setOpen] = useState(false);
-  
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -53,14 +53,15 @@ const AddToBackingWizard: FC<AddToBackingWizardProps> = ({ setOpen }) => {
   const { backingId } = useParams() as { backingId: string };
   const parsedBackingId = parsePositiveInt(backingId);
   const hasValidBackingId = parsedBackingId !== null;
-  
-  const { data: friends, isLoading } = trpc.friendships.listNotInBacking.useQuery(
-    { backingId: hasValidBackingId ? parsedBackingId : 0 },
-    { enabled: hasValidBackingId }
-  );
-  
+
+  const { data: friends, isLoading } =
+    trpc.friendships.listNotInBacking.useQuery(
+      { backingId: hasValidBackingId ? parsedBackingId : 0 },
+      { enabled: hasValidBackingId }
+    );
+
   if (!hasValidBackingId) return null;
-  
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-8">
@@ -68,9 +69,9 @@ const AddToBackingWizard: FC<AddToBackingWizardProps> = ({ setOpen }) => {
       </div>
     );
   }
-  
+
   if (!friends) return null;
-  
+
   const formattedRecievedFriends = friends.receivedFriendships.map(
     friendship => friendship.user
   );
@@ -83,9 +84,7 @@ const AddToBackingWizard: FC<AddToBackingWizardProps> = ({ setOpen }) => {
     return (
       <div className="text-center py-8">
         <Users className="h-12 w-12 mx-auto text-muted-foreground mb-3" />
-        <p className="text-muted-foreground">
-          No friends available to add
-        </p>
+        <p className="text-muted-foreground">No friends available to add</p>
         <p className="text-sm text-muted-foreground mt-1">
           Add friends first to invite them to this float
         </p>
@@ -96,7 +95,11 @@ const AddToBackingWizard: FC<AddToBackingWizardProps> = ({ setOpen }) => {
   return (
     <div className="space-y-2">
       {friendsToList.map(friend => (
-        <FriendCard key={friend.id} friend={friend} onSuccess={() => setOpen(false)} />
+        <FriendCard
+          key={friend.id}
+          friend={friend}
+          onSuccess={() => setOpen(false)}
+        />
       ))}
     </div>
   );
@@ -114,20 +117,22 @@ const FriendCard: FC<FriendCardProps> = ({ friend, onSuccess }) => {
   const parsedBackingId = parsePositiveInt(backingId);
   const [added, setAdded] = useState(false);
   const utils = trpc.useUtils();
-  
-  const { mutate: addFriend, isLoading } = trpc.userBackings.create.useMutation({
-    onSuccess: () => {
-      void utils.friendships.invalidate();
-      setAdded(true);
-      toastDefaultSuccess(`${friend.username} added to float`);
-      router.push(path ?? "/floats");
-      onSuccess();
-    },
-    onError: () => {
-      toastDefaultError(`Failed to add ${friend.username} to float`);
-    },
-  });
-  
+
+  const { mutate: addFriend, isLoading } = trpc.userBackings.create.useMutation(
+    {
+      onSuccess: () => {
+        void utils.friendships.invalidate();
+        setAdded(true);
+        toastDefaultSuccess(`${friend.username} added to float`);
+        router.push(path ?? "/floats");
+        onSuccess();
+      },
+      onError: () => {
+        toastDefaultError(`Failed to add ${friend.username} to float`);
+      },
+    }
+  );
+
   function handleClick() {
     if (!parsedBackingId) {
       toastDefaultError("Invalid backing ID.");
@@ -135,7 +140,7 @@ const FriendCard: FC<FriendCardProps> = ({ friend, onSuccess }) => {
     }
     addFriend({ friendId: friend.id, backingId: parsedBackingId });
   }
-  
+
   return (
     <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
       <div className="flex items-center gap-3">

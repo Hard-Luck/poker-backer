@@ -74,7 +74,10 @@ export function convertMinsToHrsMins(mins: number): string {
   return time;
 }
 
-export function isDateAfter(date: DateInput, dateToCompareTo: DateInput): boolean {
+export function isDateAfter(
+  date: DateInput,
+  dateToCompareTo: DateInput
+): boolean {
   const firstDate = parseDateInput(date);
   const secondDate = parseDateInput(dateToCompareTo);
 

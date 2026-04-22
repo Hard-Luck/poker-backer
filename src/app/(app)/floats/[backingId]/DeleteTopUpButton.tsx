@@ -1,8 +1,8 @@
-import DeleteButton from '@/components/DeleteButton';
-import { toastDefaultError } from '@/components/utils/default-toasts';
-import { trpc } from '@/lib/trpc/client';
-import { parsePositiveInt } from '@/models/utils/parse';
-import { useRouter } from 'next/navigation';
+import DeleteButton from "@/components/DeleteButton";
+import { toastDefaultError } from "@/components/utils/default-toasts";
+import { trpc } from "@/lib/trpc/client";
+import { parsePositiveInt } from "@/models/utils/parse";
+import { useRouter } from "next/navigation";
 
 const DeleteTopUpButton = ({
   backingId,
@@ -24,7 +24,7 @@ const DeleteTopUpButton = ({
         const parsedBackingId = parsePositiveInt(backingId);
 
         if (!parsedBackingId) {
-          toastDefaultError('Invalid backing ID.');
+          toastDefaultError("Invalid backing ID.");
           return;
         }
 

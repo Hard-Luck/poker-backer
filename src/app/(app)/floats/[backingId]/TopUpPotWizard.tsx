@@ -19,7 +19,14 @@ import { trpc } from "@/lib/trpc/client";
 import { parsePositiveInt } from "@/models/utils/parse";
 import { useParams } from "next/navigation";
 import { type FC, useState } from "react";
-import { ArrowUpCircle, Plus, Minus, Loader2, X, StickyNote } from "lucide-react";
+import {
+  ArrowUpCircle,
+  Plus,
+  Minus,
+  Loader2,
+  X,
+  StickyNote,
+} from "lucide-react";
 
 type TopUpPotWizardProps = {
   profit: number;
@@ -29,12 +36,14 @@ const TopUpDrawerButton: FC<TopUpPotWizardProps> = ({ profit }) => {
   const [amount, setAmount] = useState("");
   const [note, setNote] = useState("");
   const [plusOrMinus, setPlusOrMinus] = useState<"+" | "-">("+");
-  
+
   const { mutate: topUpPot, isLoading } = trpc.topUps.create.useMutation({
     onSuccess: ({ amount }) => {
       toastDefaultSuccess(
         `Top up successful. ${
-          amount > 0 ? `Topped up by £${amount}` : `£${-amount} top up taken back`
+          amount > 0
+            ? `Topped up by £${amount}`
+            : `£${-amount} top up taken back`
         }`
       );
     },
@@ -42,9 +51,9 @@ const TopUpDrawerButton: FC<TopUpPotWizardProps> = ({ profit }) => {
       toastDefaultError("Top up failed, please try again.");
     },
   });
-  
+
   const { backingId } = useParams() as { backingId: string };
-  
+
   return (
     <Drawer
       onOpenChange={() => {
@@ -54,8 +63,8 @@ const TopUpDrawerButton: FC<TopUpPotWizardProps> = ({ profit }) => {
       }}
     >
       <DrawerTrigger asChild>
-        <Button 
-          variant="ghost" 
+        <Button
+          variant="ghost"
           className="flex-1 h-12 rounded-none gap-2 text-sm font-medium hover:bg-muted"
         >
           <ArrowUpCircle className="h-4 w-4" />
@@ -66,9 +75,9 @@ const TopUpDrawerButton: FC<TopUpPotWizardProps> = ({ profit }) => {
         <div className="mx-auto w-full max-w-sm pb-8">
           <DrawerHeader className="relative">
             <DrawerClose asChild>
-              <Button 
-                variant="ghost" 
-                size="icon" 
+              <Button
+                variant="ghost"
+                size="icon"
                 className="absolute right-0 top-0"
               >
                 <X className="h-4 w-4" />
@@ -82,12 +91,15 @@ const TopUpDrawerButton: FC<TopUpPotWizardProps> = ({ profit }) => {
               Add or remove funds from the float
             </DrawerDescription>
           </DrawerHeader>
-          
+
           <div className="px-4 space-y-6">
             {/* Amount */}
             <div className="space-y-2">
               <Label htmlFor="topup-amount">
-                Amount <span className="text-xs text-muted-foreground">(required)</span>
+                Amount{" "}
+                <span className="text-xs text-muted-foreground">
+                  (required)
+                </span>
               </Label>
               <div className="flex items-center gap-2">
                 <Button
@@ -95,7 +107,9 @@ const TopUpDrawerButton: FC<TopUpPotWizardProps> = ({ profit }) => {
                   variant={plusOrMinus === "+" ? "default" : "outline"}
                   size="icon"
                   className="shrink-0"
-                  onClick={() => setPlusOrMinus(plusOrMinus === "+" ? "-" : "+")}
+                  onClick={() =>
+                    setPlusOrMinus(plusOrMinus === "+" ? "-" : "+")
+                  }
                 >
                   {plusOrMinus === "+" ? (
                     <Plus className="h-4 w-4" />
@@ -132,7 +146,9 @@ const TopUpDrawerButton: FC<TopUpPotWizardProps> = ({ profit }) => {
               <Label htmlFor="topup-note" className="flex items-center gap-2">
                 <StickyNote className="h-4 w-4 text-muted-foreground" />
                 Note
-                <span className="text-xs text-muted-foreground">(optional)</span>
+                <span className="text-xs text-muted-foreground">
+                  (optional)
+                </span>
               </Label>
               <Input
                 id="topup-note"
@@ -160,13 +176,14 @@ const TopUpDrawerButton: FC<TopUpPotWizardProps> = ({ profit }) => {
                   return;
                 }
 
-                const signedAmount = parsedAmount * (plusOrMinus === "+" ? 1 : -1);
+                const signedAmount =
+                  parsedAmount * (plusOrMinus === "+" ? 1 : -1);
 
                 if (signedAmount < 0 && profit + signedAmount < 0) {
                   toastDefaultError("Cannot remove more than the profit.");
                   return;
                 }
-                
+
                 topUpPot({
                   amount: signedAmount,
                   note,

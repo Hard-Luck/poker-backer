@@ -3,7 +3,18 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import useUsersWithAccessToBackingContext from "@/contexts/UsersWithAccessToBacking/useUsersWithAccessToBackingContext";
-import { Settings, Plus, Minus, AlertTriangle, Users, Percent, PiggyBank, Trash2, Loader2, X } from "lucide-react";
+import {
+  Settings,
+  Plus,
+  Minus,
+  AlertTriangle,
+  Users,
+  Percent,
+  PiggyBank,
+  Trash2,
+  Loader2,
+  X,
+} from "lucide-react";
 
 import * as React from "react";
 import {
@@ -34,8 +45,7 @@ import { useUser } from "@clerk/nextjs";
 const BackingSettings = () => {
   const usersWithAccessToBacking = useUsersWithAccessToBackingContext();
 
-
-  const { user } = useUser()
+  const { user } = useUser();
   if (!user) return null;
   const userId = user.id;
   const backingType = usersWithAccessToBacking.userDetails[userId]?.type;
@@ -78,7 +88,10 @@ const BackingSettings = () => {
             <Tabs defaultValue="general" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
                 <TabsTrigger value="general">General</TabsTrigger>
-                <TabsTrigger value="danger" className="text-destructive data-[state=active]:text-destructive">
+                <TabsTrigger
+                  value="danger"
+                  className="text-destructive data-[state=active]:text-destructive"
+                >
                   <AlertTriangle className="h-3 w-3 mr-1" />
                   Danger
                 </TabsTrigger>
@@ -94,7 +107,9 @@ const BackingSettings = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <ChangePercentages users={usersWithAccessToBacking.userDetails} />
+                    <ChangePercentages
+                      users={usersWithAccessToBacking.userDetails}
+                    />
                   </CardContent>
                 </Card>
 
@@ -142,7 +157,8 @@ const BackingSettings = () => {
                   </CardHeader>
                   <CardContent>
                     <p className="text-sm text-muted-foreground mb-4">
-                      This action cannot be undone. All sessions, chops, and top-ups will be permanently deleted.
+                      This action cannot be undone. All sessions, chops, and
+                      top-ups will be permanently deleted.
                     </p>
                     <DeleteBackingButton />
                   </CardContent>
@@ -176,17 +192,24 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
       void utils.userBackings.listIndividual.invalidate();
     },
     onError: () => {
-      toastDefaultError("Failed to update percentages, please try again later.");
+      toastDefaultError(
+        "Failed to update percentages, please try again later."
+      );
     },
   });
 
   const params = useParams();
   const backingId = params?.backingId;
 
-  const totalPercent = Object.values(newPercentages).reduce((acc, u) => acc + u.percent, 0);
+  const totalPercent = Object.values(newPercentages).reduce(
+    (acc, u) => acc + u.percent,
+    0
+  );
 
   function handleClick() {
-    const parsedBackingId = parsePositiveInt(typeof backingId === "string" ? backingId : null);
+    const parsedBackingId = parsePositiveInt(
+      typeof backingId === "string" ? backingId : null
+    );
 
     if (!parsedBackingId) {
       toastDefaultError("Invalid backing ID.");
@@ -198,10 +221,12 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
       return;
     }
 
-    const percentages = Object.entries(newPercentages).map(([user_id, { percent }]) => ({
-      user_id,
-      percent,
-    }));
+    const percentages = Object.entries(newPercentages).map(
+      ([user_id, { percent }]) => ({
+        user_id,
+        percent,
+      })
+    );
 
     mutate({ backingId: parsedBackingId, percentages });
   }
@@ -216,7 +241,9 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
           <div key={userId} className="space-y-2">
             <div className="flex items-center justify-between">
               <Label className="text-sm font-medium">{user.username}</Label>
-              <span className="text-sm text-muted-foreground">{currentPercent}%</span>
+              <span className="text-sm text-muted-foreground">
+                {currentPercent}%
+              </span>
             </div>
             <div className="flex items-center gap-2">
               <Button
@@ -228,8 +255,11 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
                   setNewPercentages(prev => ({
                     ...prev,
                     [userId]: {
-                      ...prev[userId] ?? user,
-                      percent: Math.max(0, (prev[userId]?.percent ?? user.percent) - 0.5),
+                      ...(prev[userId] ?? user),
+                      percent: Math.max(
+                        0,
+                        (prev[userId]?.percent ?? user.percent) - 0.5
+                      ),
                     },
                   }));
                 }}
@@ -244,7 +274,7 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
                 onValueChange={([value]) => {
                   setNewPercentages(prev => ({
                     ...prev,
-                    [userId]: { ...prev[userId] ?? user, percent: value },
+                    [userId]: { ...(prev[userId] ?? user), percent: value },
                   }));
                 }}
               />
@@ -257,8 +287,11 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
                   setNewPercentages(prev => ({
                     ...prev,
                     [userId]: {
-                      ...prev[userId] ?? user,
-                      percent: Math.min(100, (prev[userId]?.percent ?? user.percent) + 0.5),
+                      ...(prev[userId] ?? user),
+                      percent: Math.min(
+                        100,
+                        (prev[userId]?.percent ?? user.percent) + 0.5
+                      ),
                     },
                   }));
                 }}
@@ -269,12 +302,13 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
                 className="w-16 text-center"
                 value={currentPercent}
                 onChange={e => {
-                  const parsedValue = e.target.value === "" ? 0 : Number(e.target.value);
+                  const parsedValue =
+                    e.target.value === "" ? 0 : Number(e.target.value);
                   if (!Number.isFinite(parsedValue)) return;
                   setNewPercentages(prev => ({
                     ...prev,
                     [userId]: {
-                      ...prev[userId] ?? user,
+                      ...(prev[userId] ?? user),
                       percent: Math.max(0, Math.min(100, parsedValue)),
                     },
                   }));
@@ -287,7 +321,9 @@ const ChangePercentages: React.FC<ChangePercentagesProps> = ({ users }) => {
 
       <div className="flex items-center justify-between pt-2 border-t">
         <span className="text-sm font-medium">Total</span>
-        <span className={`text-sm font-semibold ${totalPercent === 100 ? 'text-primary' : 'text-destructive'}`}>
+        <span
+          className={`text-sm font-semibold ${totalPercent === 100 ? "text-primary" : "text-destructive"}`}
+        >
           {totalPercent}%
         </span>
       </div>
@@ -329,7 +365,9 @@ const ChangeFloat: React.FC = () => {
       <div className="space-y-2">
         <Label htmlFor="float-amount">New Float Amount</Label>
         <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">£</span>
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+            £
+          </span>
           <Input
             id="float-amount"
             className="pl-7"
@@ -377,15 +415,14 @@ const ChangeFloat: React.FC = () => {
 };
 
 const DeleteUserFromBackingSettings: React.FC = () => {
-  // TEMPORARILY MOCKED FOR UI DEVELOPMENT
-  const user = { id: 'mock-user-id' };
+  const { user } = useUser();
   const usersWithAccessToBacking = useUsersWithAccessToBackingContext();
 
   if (!user) return null;
 
-  const otherUsers = Object.entries(usersWithAccessToBacking.userDetails).filter(
-    ([userId]) => userId !== user.id
-  );
+  const otherUsers = Object.entries(
+    usersWithAccessToBacking.userDetails
+  ).filter(([userId]) => userId !== user.id);
 
   if (otherUsers.length === 0) {
     return (
@@ -446,11 +483,7 @@ const UserWithAccessCardWithRemoveButton = ({
             mutate({ toRemoveId: userId, backingId: parsedBackingId });
           }}
         >
-          {isLoading ? (
-            <Loader2 className="h-4 w-4 animate-spin" />
-          ) : (
-            "Confirm"
-          )}
+          {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Confirm"}
         </Button>
       ) : (
         <Button

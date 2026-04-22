@@ -16,7 +16,14 @@ import { trpc } from "@/lib/trpc/client";
 import { useParams } from "next/navigation";
 import { type FC, useState } from "react";
 import { toast } from "sonner";
-import { Plus, DollarSign, Clock, MapPin, Calendar, Loader2 } from "lucide-react";
+import {
+  Plus,
+  DollarSign,
+  Clock,
+  MapPin,
+  Calendar,
+  Loader2,
+} from "lucide-react";
 
 const AddSessionSidePanel = () => {
   return (
@@ -24,8 +31,8 @@ const AddSessionSidePanel = () => {
       <CardContent className="p-0 h-full">
         <Sheet>
           <SheetTrigger asChild>
-            <Button 
-              variant="ghost" 
+            <Button
+              variant="ghost"
               className="w-full h-full flex flex-col items-center justify-center gap-2 py-4"
             >
               <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
@@ -57,7 +64,7 @@ const AddSessionForm: FC = () => {
   const [location, setLocation] = useState("");
   const [amount, setAmount] = useState("");
   const [length, setLength] = useState("");
-  
+
   const { mutate, isLoading } = trpc.sessions.create.useMutation({
     onSuccess: () => {
       setDate(new Date());
@@ -77,7 +84,7 @@ const AddSessionForm: FC = () => {
       });
     },
   });
-  
+
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!amount) {
@@ -130,7 +137,7 @@ const AddSessionForm: FC = () => {
       backingId: String(parsedBackingId),
     });
   }
-  
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Amount */}
@@ -140,7 +147,9 @@ const AddSessionForm: FC = () => {
           Amount
         </Label>
         <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">£</span>
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+            £
+          </span>
           <Input
             id="amount"
             className="pl-7"
@@ -153,7 +162,9 @@ const AddSessionForm: FC = () => {
             }}
           />
         </div>
-        <p className="text-xs text-muted-foreground">Use negative values for losses</p>
+        <p className="text-xs text-muted-foreground">
+          Use negative values for losses
+        </p>
       </div>
 
       {/* Date */}
@@ -199,11 +210,7 @@ const AddSessionForm: FC = () => {
       </div>
 
       {/* Submit */}
-      <Button 
-        type="submit" 
-        className="w-full" 
-        disabled={isLoading}
-      >
+      <Button type="submit" className="w-full" disabled={isLoading}>
         {isLoading ? (
           <>
             <Loader2 className="h-4 w-4 mr-2 animate-spin" />

@@ -12,7 +12,7 @@ function DownloadDataButton() {
   const { backingId } = useParams() as { backingId: string };
   const [isLoading, setIsLoading] = useState(false);
   const trpcClient = trpc.useUtils();
-  
+
   async function handleClick() {
     const parsedBackingId = parsePositiveInt(backingId);
 
@@ -41,8 +41,8 @@ function DownloadDataButton() {
   }
 
   return (
-    <Button 
-      variant="outline" 
+    <Button
+      variant="outline"
       className="flex-1 gap-2"
       onClick={() => void handleClick()}
       disabled={isLoading}

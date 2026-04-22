@@ -13,16 +13,18 @@ const DeleteBackingButton = () => {
   const { backingId } = useParams() as { backingId: string };
   const [confirmNotice, setConfirmNotice] = useState(false);
 
-  const { mutate: deleteBacking, isLoading } = trpc.backings.delete.useMutation({
-    onSuccess: () => {
-      router.push("/floats");
-      router.refresh();
-    },
-    onError: () => {
-      toastDefaultError("Failed to delete float, please try again later.");
-    },
-  });
-  
+  const { mutate: deleteBacking, isLoading } = trpc.backings.delete.useMutation(
+    {
+      onSuccess: () => {
+        router.push("/floats");
+        router.refresh();
+      },
+      onError: () => {
+        toastDefaultError("Failed to delete float, please try again later.");
+      },
+    }
+  );
+
   if (confirmNotice) {
     return (
       <div className="flex gap-2 w-full">
@@ -59,10 +61,10 @@ const DeleteBackingButton = () => {
       </div>
     );
   }
-  
+
   return (
-    <Button 
-      variant="destructive" 
+    <Button
+      variant="destructive"
       className="w-full gap-2"
       onClick={() => setConfirmNotice(true)}
     >

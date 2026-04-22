@@ -39,7 +39,7 @@ const BackingActionsBar: FC<BackingActionsBarProps> = ({ profitOrLoss }) => {
       toastDefaultError("Chop failed, please try again.");
     },
   });
-  
+
   if (!user) return null;
   const userId = user.id;
   const backingType = usersWithAccessToBacking.userDetails[userId]?.type;
@@ -55,7 +55,7 @@ const BackingActionsBar: FC<BackingActionsBarProps> = ({ profitOrLoss }) => {
 
     chopPot({ backingId: parsedBackingId });
   }
-  
+
   return (
     <UsersWithAccessToBackingProvider>
       <div className="container mx-auto px-4 pb-4">

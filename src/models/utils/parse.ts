@@ -1,13 +1,13 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 export function parsePositiveInt(
   value: string | number | null | undefined
 ): number | null {
-  if (typeof value === 'number') {
+  if (typeof value === "number") {
     return Number.isInteger(value) && value > 0 ? value : null;
   }
 
-  if (typeof value !== 'string' || value.trim() === '') {
+  if (typeof value !== "string" || value.trim() === "") {
     return null;
   }
 
@@ -28,6 +28,6 @@ export function parseAndValidateChopSplit(
     );
     return chopSplitSchema.parse(JSON.parse(chopSplit));
   } catch (error) {
-    throw new Error('Could not be parsed and/or validated.');
+    throw new Error("Could not be parsed and/or validated.");
   }
 }
