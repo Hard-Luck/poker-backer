@@ -1,4 +1,4 @@
-# PokerBacker: A Next.js App for Poker Financial Tracking.
+# PokerBacker: A Next.js App for Poker Financial Tracking
 
 ## Description
 
