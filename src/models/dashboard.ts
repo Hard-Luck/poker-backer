@@ -2,8 +2,6 @@ import { db } from '@/lib/db';
 
 export default async function getDashboard(id: string) {
   const sessions = await getRecentSessions(id);
-  //const sessionCount = await getSessionCount(id);
-  //const data = await Promise.all([total, sessions, sessionCount]);
   return { sessions };
 }
 

@@ -11,7 +11,7 @@ export type AuthSession = {
   } | null;
 };
 
-export const getUserAuth =  () => {
+export const getUserAuth = () => {
   // find out more about setting up 'sessionClaims' (custom sessions) here: https://clerk.com/docs/backend-requests/making/custom-session-token
   const { userId, sessionClaims } = auth();
   if (userId) {

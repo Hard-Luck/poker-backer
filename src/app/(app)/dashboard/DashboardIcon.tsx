@@ -1,4 +1,4 @@
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { type FC } from "react";
 import { type IconType } from "react-icons/lib";
 
@@ -9,9 +9,15 @@ type DashboardIconProps = {
 
 const DashboardIcon: FC<DashboardIconProps> = ({ text, Icon }) => {
   return (
-    <Card className="border-primary p-2 m-2 text-center rounded w-24 h-24 flex flex-col justify-center items-center">
-      <Icon size="4em" />
-      <span className="whitespace-nowrap text-sm mt-2">{text}</span>
+    <Card className="group border-border bg-card hover:border-primary hover:bg-primary/5 transition-all duration-200 cursor-pointer shadow-sm hover:shadow-md h-full">
+      <CardContent className="p-3 md:p-4 flex flex-col items-center justify-center gap-2 h-full">
+        <div className="flex h-10 w-10 md:h-12 md:w-12 items-center justify-center rounded-full bg-muted group-hover:bg-primary/10 transition-colors">
+          <Icon className="h-5 w-5 md:h-6 md:w-6 text-muted-foreground group-hover:text-primary transition-colors" />
+        </div>
+        <span className="text-xs md:text-sm font-medium text-muted-foreground group-hover:text-foreground transition-colors whitespace-nowrap">
+          {text}
+        </span>
+      </CardContent>
     </Card>
   );
 };

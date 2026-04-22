@@ -11,18 +11,28 @@ export default async function Page() {
   const { session } = getUserAuth();
   if (!session) throw new Error("No session found");
   const user = await getDashboard(session.user.id);
+  
   return (
-    <main className="flex flex-col h-[calc(100vh-4rem)] gap-4">
-      <div className="flex flex-col gap-2 self-center">
-        <SessionsThisMonth />
-        <div className="flex flex-row gap-2">
-          <HistoryLink />
-          <FriendsLink />
-          <AddSessionLink />
+    <main className="flex flex-col min-h-[calc(100vh-4rem)] bg-background">
+      {/* Dashboard Content */}
+      <div className="flex-1 container mx-auto px-4 py-6 md:py-8 flex flex-col gap-6">
+        {/* Stats and Quick Actions Section */}
+        <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-4 md:gap-6 items-stretch">
+          {/* Sessions This Month Card */}
+          <SessionsThisMonth />
+          
+          {/* Quick Actions */}
+          <div className="grid grid-cols-3 gap-3">
+            <HistoryLink />
+            <FriendsLink />
+            <AddSessionLink />
+          </div>
         </div>
-      </div>
-      <div className="flex-1 min-h-0">
-        <RecentSession sessions={user.sessions} />
+        
+        {/* Recent Sessions Section */}
+        <div className="flex-1 min-h-0">
+          <RecentSession sessions={user.sessions} />
+        </div>
       </div>
     </main>
   );

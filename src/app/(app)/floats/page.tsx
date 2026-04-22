@@ -2,6 +2,8 @@ import CreateBackingWizard from "./CreateBackingWizard";
 import { getUserAuth } from "@/lib/auth/utils";
 import { getBackingsForUser } from "@/models/userBacking";
 import BackingTabs from "./BackingsTabs";
+import { Card, CardContent } from "@/components/ui/card";
+import { Wallet } from "lucide-react";
 
 export default async function Page() {
   const { session } = getUserAuth();
@@ -15,15 +17,40 @@ export default async function Page() {
     backing => backing.type === "BACKER"
   );
 
+  const hasBackings = whereUserIsBacker.length > 0 || whereUserIsPlayer.length > 0;
+
   return (
-    <main className="flex flex-col align-middle items-center justify-center min-w-80 px-4">
-      <h1 className="font-bold text-2xl text-center">Backings</h1>
-      {whereUserIsBacker.length === 0 && whereUserIsPlayer.length === 0 ? (
-        <p>No floats found</p>
+    <main className="container max-w-4xl mx-auto px-4 py-6 md:py-8">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-lg bg-primary/10">
+            <Wallet className="h-6 w-6 text-primary" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold tracking-tight">Floats</h1>
+            <p className="text-sm text-muted-foreground">Manage your backing arrangements</p>
+          </div>
+        </div>
+        <CreateBackingWizard />
+      </div>
+
+      {/* Content */}
+      {!hasBackings ? (
+        <Card className="border-dashed">
+          <CardContent className="flex flex-col items-center justify-center py-12 text-center">
+            <div className="p-3 rounded-full bg-muted mb-4">
+              <Wallet className="h-8 w-8 text-muted-foreground" />
+            </div>
+            <h3 className="text-lg font-medium mb-1">No floats yet</h3>
+            <p className="text-sm text-muted-foreground max-w-sm">
+              Create your first float to start tracking backing arrangements with players.
+            </p>
+          </CardContent>
+        </Card>
       ) : (
         <BackingTabs backers={whereUserIsBacker} players={whereUserIsPlayer} />
       )}
-      <CreateBackingWizard />
     </main>
   );
 }

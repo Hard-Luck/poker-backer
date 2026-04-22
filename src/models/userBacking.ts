@@ -17,6 +17,7 @@ export async function hasAccessToBacking({
   });
   return userBacking !== null;
 }
+
 export async function getBackingsForUser(userId: string) {
   const userBackings = await db.userBacking.findMany({
     where: {
@@ -46,6 +47,7 @@ export async function getBackingsForUser(userId: string) {
     };
   });
 }
+
 export type BackingsForUserList = Awaited<
   ReturnType<typeof getBackingsForUser>
 >;
@@ -57,29 +59,28 @@ export async function isBackerForBacking({
   userId: string;
   backingId: number;
 }) {
-  const userBacking = await db.userBacking.findUnique({
+  const userBacking = await db.userBacking.findFirst({
     where: {
-      user_id_backing_id: { user_id: userId, backing_id: backingId },
+      user_id: userId,
+      backing_id: backingId,
+      type: "BACKER",
     },
   });
-
-  return userBacking?.type === "BACKER";
+  return userBacking !== null;
 }
 
 export async function createUserBacking({
   userBacking,
   backerId,
 }: {
-  userBacking: Omit<UserBacking, "id" | "percent">;
+  userBacking: Omit<UserBacking, "id">;
   backerId: string;
 }) {
-  const hasAccess = await isBackerForBacking({
-    backingId: userBacking.backing_id,
+  const isBacker = await isBackerForBacking({
     userId: backerId,
+    backingId: userBacking.backing_id,
   });
-  if (!hasAccess) {
-    throw new Error("User does not have access to backing");
-  }
+  if (!isBacker) throw new Error("Not authorized");
   return db.userBacking.create({
     data: userBacking,
   });
@@ -92,19 +93,13 @@ export async function patchPercentages({
   backingId: number;
   percentages: { user_id: string; percent: number }[];
 }) {
-  const percentageCheck = percentages.reduce((current, acc) => {
-    return acc.percent + current;
-  }, 0);
-  if (percentageCheck !== 100) {
-    throw new Error("Percentages do not add up to 100");
-  }
   return db.$transaction(
-    percentages.map(({ user_id, percent }) => {
-      return db.userBacking.update({
+    percentages.map(({ user_id, percent }) =>
+      db.userBacking.update({
         where: { user_id_backing_id: { user_id, backing_id: backingId } },
         data: { percent },
-      });
-    })
+      })
+    )
   );
 }
 
@@ -117,18 +112,19 @@ export async function deleteUserBacking({
   backerId: string;
   backingId: number;
 }) {
+  const isBacker = await isBackerForBacking({
+    userId: backerId,
+    backingId,
+  });
+  if (!isBacker) throw new Error("Not authorized");
   return db.userBacking.delete({
-    where: {
-      user_id_backing_id: { user_id: userId, backing_id: backingId },
-      backing: { access: { some: { user_id: backerId, type: "BACKER" } } },
-    },
+    where: { user_id_backing_id: { user_id: userId, backing_id: backingId } },
   });
 }
 
 export function findAllUserBackings({ backingId }: { backingId?: number }) {
-  const where = backingId ? { backing_id: backingId } : {};
   return db.userBacking.findMany({
-    where,
+    where: { backing_id: backingId },
     include: { user: { select: { username: true } } },
   });
 }
@@ -140,45 +136,22 @@ export async function findBackingWithSessionsChopsAndTopUps({
   backingId: number;
   userId: string;
 }) {
-  return db.userBacking.findUnique({
-    where: { user_id_backing_id: { user_id: userId, backing_id: backingId } },
-    select: {
+  const userBacking = await db.userBacking.findFirst({
+    where: {
+      user_id: userId,
+      backing_id: backingId,
+    },
+    include: {
       backing: {
-        select: {
+        include: {
           _count: { select: { session: true } },
-          session: {
-            select: {
-              id: true,
-              amount: true,
-              created_at: true,
-              user_id: true,
-              game_type: true,
-              location: true,
-            },
-          },
-          chops: {
-            select: {
-              id: true,
-              amount: true,
-              created_at: true,
-              user_id: true,
-              chop_split: true,
-            },
-          },
-          topUps: {
-            select: {
-              id: true,
-              amount: true,
-              created_at: true,
-              user_id: true,
-            },
-          },
-          owner: true,
-          float: true,
-          name: true,
+          session: { orderBy: { created_at: "desc" } },
+          chops: { orderBy: { created_at: "asc" } },
+          topUps: { orderBy: { created_at: "desc" } },
         },
       },
-      type: true,
     },
   });
+  if (!userBacking) return null;
+  return userBacking;
 }

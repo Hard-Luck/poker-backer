@@ -5,6 +5,8 @@ import { notFound, redirect } from "next/navigation";
 import BackingHero from "./BackingHero";
 import HistoryList from "./SessionsList";
 import BackingActionsBar from "./BackingActionsBar";
+import { ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 type BackingPageProps = {
   params: {
@@ -50,10 +52,30 @@ export default async function page({ params }: BackingPageProps) {
 
   return (
     <main className="flex flex-col h-[calc(100vh-4rem)]">
+      {/* Header */}
+      <div className="flex-none border-b bg-card">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center gap-4">
+            <Link 
+              href="/floats" 
+              className="p-2 rounded-lg hover:bg-muted transition-colors"
+            >
+              <ArrowLeft className="h-5 w-5 text-muted-foreground" />
+            </Link>
+            <div>
+              <h1 className="text-xl md:text-2xl font-bold text-foreground">
+                {backingDetails.backing.name}
+              </h1>
+              <p className="text-sm text-muted-foreground">
+                Float History & Management
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      {/* Stats Hero */}
       <div className="flex-none">
-        <h1 className="text-3xl font-bold text-center p-2">
-          History for {backingDetails.backing.name}
-        </h1>
         <BackingHero
           totalSessions={numberOfSessions}
           profitOrLoss={profitOrLoss}
@@ -62,11 +84,15 @@ export default async function page({ params }: BackingPageProps) {
           sessionsSinceLastChop={numberOfSessionsSinceLastChop}
         />
       </div>
-      <div className="flex-1 min-h-0 flex flex-col">
+      
+      {/* Actions Bar */}
+      <div className="flex-none">
         <BackingActionsBar profitOrLoss={profitOrLoss} />
-        <div className="flex-1 min-h-0">
-          <HistoryList chops={chops} topUps={topUps} sessions={sessions} />
-        </div>
+      </div>
+      
+      {/* History List */}
+      <div className="flex-1 min-h-0">
+        <HistoryList chops={chops} topUps={topUps} sessions={sessions} />
       </div>
     </main>
   );

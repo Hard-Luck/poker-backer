@@ -21,8 +21,8 @@ export default function RootLayout({
   cookies: string;
 }) {
   return (
-    <html lang="en" suppressHydrationWarning className={roboto.className}>
-      <body>
+    <html lang="en" suppressHydrationWarning className={`${roboto.className} bg-background`}>
+      <body className="bg-background text-foreground">
         <ClerkProvider>
           <TrpcProvider cookies={cookies}>
             <Toaster />

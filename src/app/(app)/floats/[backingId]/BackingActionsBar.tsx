@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { Card } from "@/components/ui/card";
 import UsersWithAccessToBackingProvider from "@/contexts/UsersWithAccessToBacking";
 import { type FC } from "react";
 import BackingSettings from "./BackingSettings";
@@ -15,6 +15,7 @@ import {
 import TopUpDrawerButton from "./TopUpPotWizard";
 import { useUser } from "@clerk/nextjs";
 import useUsersWithAccessToBackingContext from "@/contexts/UsersWithAccessToBacking/useUsersWithAccessToBackingContext";
+import { Scissors, Loader2 } from "lucide-react";
 
 type BackingActionsBarProps = {
   profitOrLoss: number;
@@ -38,6 +39,7 @@ const BackingActionsBar: FC<BackingActionsBarProps> = ({ profitOrLoss }) => {
       toastDefaultError("Chop failed, please try again.");
     },
   });
+  
   if (!user) return null;
   const userId = user.id;
   const backingType = usersWithAccessToBacking.userDetails[userId]?.type;
@@ -53,21 +55,29 @@ const BackingActionsBar: FC<BackingActionsBarProps> = ({ profitOrLoss }) => {
 
     chopPot({ backingId: parsedBackingId });
   }
+  
   return (
     <UsersWithAccessToBackingProvider>
-      <div className="flex h-5 items-center justify-between  text-sm text-center m-4">
-        <Button
-          variant="ghost"
-          className="flex-1"
-          disabled={profitOrLoss <= 0 || isLoading}
-          onClick={handleClick}
-        >
-          Chop
-        </Button>
-        <Separator orientation="vertical" className="color-primary" />
-        <TopUpDrawerButton profit={profitOrLoss} />
-        <Separator orientation="vertical" />
-        <BackingSettings />
+      <div className="container mx-auto px-4 pb-4">
+        <Card className="border-border">
+          <div className="flex items-center justify-center divide-x divide-border">
+            <Button
+              variant="ghost"
+              className="flex-1 h-12 rounded-none gap-2 text-sm font-medium hover:bg-muted"
+              disabled={profitOrLoss <= 0 || isLoading}
+              onClick={handleClick}
+            >
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Scissors className="h-4 w-4" />
+              )}
+              Chop
+            </Button>
+            <TopUpDrawerButton profit={profitOrLoss} />
+            <BackingSettings />
+          </div>
+        </Card>
       </div>
     </UsersWithAccessToBackingProvider>
   );

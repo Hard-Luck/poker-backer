@@ -18,8 +18,9 @@ export function TabContent({ backings }: { backings: BackingForRender[] }) {
     }
     return formatted;
   });
+  
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
       {backingWithFormattedDate.map(backing => (
         <ItemCard key={backing.id} backing={backing} />
       ))}
