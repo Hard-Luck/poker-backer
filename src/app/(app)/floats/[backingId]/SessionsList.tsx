@@ -43,6 +43,7 @@ type HistoryListProps = {
 const HistoryList: FC<HistoryListProps> = ({ chops, sessions, topUps }) => {
   const [sortBy, setSortBy] = useState<"date" | "name" | "type" | "amount">("date");
   const [reversed, setReversed] = useState(false);
+  const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
   
   const list = [
     ...chops.map(c => ({ ...c, type: "chop" })),
@@ -72,6 +73,21 @@ const HistoryList: FC<HistoryListProps> = ({ chops, sessions, topUps }) => {
       setReversed(false);
     }
   }
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 768px)");
+
+    const updateView = () => {
+      setIsDesktop(mediaQuery.matches);
+    };
+
+    updateView();
+    mediaQuery.addEventListener("change", updateView);
+
+    return () => {
+      mediaQuery.removeEventListener("change", updateView);
+    };
+  }, []);
   
   list.sort((a, b) => sortFunctions[sortBy](a, b, reversed));
 
@@ -89,70 +105,70 @@ const HistoryList: FC<HistoryListProps> = ({ chops, sessions, topUps }) => {
           </CardTitle>
         </CardHeader>
         <CardContent className="flex-1 min-h-0 p-0">
-          {/* Desktop Table */}
-          <ScrollArea className="h-full hidden md:block">
-            <Table>
-              <TableHeader className="sticky top-0 bg-muted/50">
-                <TableRow>
-                  <TableHead className="pl-6 w-[180px]">
-                    <Button variant="ghost" size="sm" onClick={handleClick} className="font-semibold gap-1 -ml-2">
-                      <ArrowUpDown className="h-3 w-3" />
-                      Date
-                      <SortIndicator column="date" />
-                    </Button>
-                  </TableHead>
-                  <TableHead className="w-[150px]">
-                    <span className="font-semibold">Player</span>
-                  </TableHead>
-                  <TableHead className="text-center w-[120px]">
-                    <Button variant="ghost" size="sm" onClick={handleClick} className="font-semibold gap-1">
-                      <ArrowUpDown className="h-3 w-3" />
-                      Type
-                      <SortIndicator column="type" />
-                    </Button>
-                  </TableHead>
-                  <TableHead className="text-right w-[120px]">
-                    <Button variant="ghost" size="sm" onClick={handleClick} className="font-semibold gap-1">
-                      <ArrowUpDown className="h-3 w-3" />
-                      Amount
-                      <SortIndicator column="amount" />
-                    </Button>
-                  </TableHead>
-                  <TableHead className="text-center w-[80px]">
-                    <span className="font-semibold">Actions</span>
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
+          {isDesktop === null ? null : isDesktop ? (
+            <ScrollArea className="h-full">
+              <Table>
+                <TableHeader className="sticky top-0 bg-muted/50">
+                  <TableRow>
+                    <TableHead className="pl-6 w-[180px]">
+                      <Button variant="ghost" size="sm" onClick={handleClick} className="font-semibold gap-1 -ml-2">
+                        <ArrowUpDown className="h-3 w-3" />
+                        Date
+                        <SortIndicator column="date" />
+                      </Button>
+                    </TableHead>
+                    <TableHead className="w-[150px]">
+                      <span className="font-semibold">Player</span>
+                    </TableHead>
+                    <TableHead className="text-center w-[120px]">
+                      <Button variant="ghost" size="sm" onClick={handleClick} className="font-semibold gap-1">
+                        <ArrowUpDown className="h-3 w-3" />
+                        Type
+                        <SortIndicator column="type" />
+                      </Button>
+                    </TableHead>
+                    <TableHead className="text-right w-[120px]">
+                      <Button variant="ghost" size="sm" onClick={handleClick} className="font-semibold gap-1">
+                        <ArrowUpDown className="h-3 w-3" />
+                        Amount
+                        <SortIndicator column="amount" />
+                      </Button>
+                    </TableHead>
+                    <TableHead className="text-center w-[80px]">
+                      <span className="font-semibold">Actions</span>
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {list.map(({ type, ...item }, i) => {
+                    switch (type) {
+                      case "chop":
+                        return <ChopRow key={`chop-${i}`} chop={item as ChopsForHistoryList[0]} />;
+                      case "session":
+                        return <SessionRow key={`session-${i}`} session={item as SessionsForHistoryList[0]} />;
+                      case "top_up":
+                        return <TopUpRow key={`topup-${i}`} topUp={item as TopUpsForHistoryList[0]} />;
+                    }
+                  })}
+                </TableBody>
+              </Table>
+            </ScrollArea>
+          ) : (
+            <ScrollArea className="h-full">
+              <div className="divide-y divide-border">
                 {list.map(({ type, ...item }, i) => {
                   switch (type) {
                     case "chop":
-                      return <ChopRow key={`chop-${i}`} chop={item as ChopsForHistoryList[0]} />;
+                      return <ChopCard key={`chop-${i}`} chop={item as ChopsForHistoryList[0]} />;
                     case "session":
-                      return <SessionRow key={`session-${i}`} session={item as SessionsForHistoryList[0]} />;
+                      return <SessionCard key={`session-${i}`} session={item as SessionsForHistoryList[0]} />;
                     case "top_up":
-                      return <TopUpRow key={`topup-${i}`} topUp={item as TopUpsForHistoryList[0]} />;
+                      return <TopUpCard key={`topup-${i}`} topUp={item as TopUpsForHistoryList[0]} />;
                   }
                 })}
-              </TableBody>
-            </Table>
-          </ScrollArea>
-
-          {/* Mobile Cards */}
-          <ScrollArea className="h-full md:hidden">
-            <div className="divide-y divide-border">
-              {list.map(({ type, ...item }, i) => {
-                switch (type) {
-                  case "chop":
-                    return <ChopCard key={`chop-${i}`} chop={item as ChopsForHistoryList[0]} />;
-                  case "session":
-                    return <SessionCard key={`session-${i}`} session={item as SessionsForHistoryList[0]} />;
-                  case "top_up":
-                    return <TopUpCard key={`topup-${i}`} topUp={item as TopUpsForHistoryList[0]} />;
-                }
-              })}
-            </div>
-          </ScrollArea>
+              </div>
+            </ScrollArea>
+          )}
         </CardContent>
       </Card>
     </div>
