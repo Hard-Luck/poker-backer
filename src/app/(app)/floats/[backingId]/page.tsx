@@ -1,5 +1,5 @@
 import { getUserAuth } from "@/lib/auth/utils";
-import { findBackingWithSessionsChopsAndTopUps } from "@/models/userBacking";
+import { getBackingStatsForPage } from "@/models/userBacking";
 import { parsePositiveInt } from "@/models/utils/parse";
 import { notFound, redirect } from "next/navigation";
 import BackingHero from "./BackingHero";
@@ -24,31 +24,15 @@ export default async function page({ params }: BackingPageProps) {
   if (!parsedBackingId) {
     notFound();
   }
-  const backingDetails = await findBackingWithSessionsChopsAndTopUps({
+  const stats = await getBackingStatsForPage({
     backingId: parsedBackingId,
     userId: session.user.id,
   });
-  if (backingDetails === null) {
+  if (stats === null) {
     notFound();
   }
-  const chops = backingDetails.backing.chops;
-  const topUps = backingDetails.backing.topUps;
-  const sessions = backingDetails.backing.session;
-  const numberOfSessions = backingDetails.backing._count.session;
-  const lastChopDate = chops.at(-1)?.created_at;
 
-  const sessionsSinceLastChop = sessions.filter(s => {
-    if (!lastChopDate) return true;
-    return new Date(s.created_at) > new Date(lastChopDate);
-  });
-
-  const profitOrLoss = sessionsSinceLastChop.reduce(
-    (acc, s) => acc + s.amount,
-    0
-  );
-  const numberOfSessionsSinceLastChop = sessionsSinceLastChop.length;
-
-  const currentFloat = backingDetails.backing.float + profitOrLoss;
+  const currentFloat = stats.float + stats.profitOrLoss;
 
   return (
     <main className="flex flex-col h-[calc(100vh-4rem)]">
@@ -64,7 +48,7 @@ export default async function page({ params }: BackingPageProps) {
             </Link>
             <div>
               <h1 className="text-xl md:text-2xl font-bold text-foreground">
-                {backingDetails.backing.name}
+                {stats.name}
               </h1>
               <p className="text-sm text-muted-foreground">
                 Float History & Management
@@ -77,22 +61,22 @@ export default async function page({ params }: BackingPageProps) {
       {/* Stats Hero */}
       <div className="flex-none">
         <BackingHero
-          totalSessions={numberOfSessions}
-          profitOrLoss={profitOrLoss}
+          totalSessions={stats.totalSessions}
+          profitOrLoss={stats.profitOrLoss}
           currentFloat={currentFloat}
-          float={backingDetails.backing.float}
-          sessionsSinceLastChop={numberOfSessionsSinceLastChop}
+          float={stats.float}
+          sessionsSinceLastChop={stats.sessionsSinceLastChop}
         />
       </div>
 
       {/* Actions Bar */}
       <div className="flex-none">
-        <BackingActionsBar profitOrLoss={profitOrLoss} />
+        <BackingActionsBar profitOrLoss={stats.profitOrLoss} />
       </div>
 
-      {/* History List */}
+      {/* History List — fetches its own data client-side to avoid RSC timeout */}
       <div className="flex-1 min-h-0">
-        <HistoryList chops={chops} topUps={topUps} sessions={sessions} />
+        <HistoryList backingId={parsedBackingId} />
       </div>
     </main>
   );

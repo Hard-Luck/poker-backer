@@ -129,6 +129,53 @@ export function findAllUserBackings({ backingId }: { backingId?: number }) {
   });
 }
 
+/**
+ * Lightweight stats-only query for the page RSC.
+ * Uses SQL aggregate for profit/count — avoids loading full session list.
+ */
+export async function getBackingStatsForPage({
+  backingId,
+  userId,
+}: {
+  backingId: number;
+  userId: string;
+}) {
+  const userBacking = await db.userBacking.findFirst({
+    where: { user_id: userId, backing_id: backingId },
+    include: {
+      backing: {
+        include: {
+          _count: { select: { session: true } },
+          chops: {
+            orderBy: { created_at: "desc" },
+            take: 1,
+            select: { created_at: true },
+          },
+        },
+      },
+    },
+  });
+  if (!userBacking) return null;
+
+  const lastChopDate = userBacking.backing.chops[0]?.created_at ?? null;
+  const sinceLastChop = await db.session.aggregate({
+    where: {
+      backing_id: backingId,
+      ...(lastChopDate ? { created_at: { gt: lastChopDate } } : {}),
+    },
+    _sum: { amount: true },
+    _count: { _all: true },
+  });
+
+  return {
+    name: userBacking.backing.name,
+    float: userBacking.backing.float,
+    totalSessions: userBacking.backing._count.session,
+    profitOrLoss: sinceLastChop._sum.amount ?? 0,
+    sessionsSinceLastChop: sinceLastChop._count._all,
+  };
+}
+
 export async function findBackingWithSessionsChopsAndTopUps({
   backingId,
   userId,

@@ -12,15 +12,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import useUsersWithAccessToBackingContext from "@/contexts/UsersWithAccessToBacking/useUsersWithAccessToBackingContext";
-import type {
-  ChopsForHistoryList,
-  SessionsForHistoryList,
-  TopUpsForHistoryList,
-} from "@/models/prismaTypes";
+import { trpc } from "@/lib/trpc/client";
+import type { AppRouter } from "@/lib/server/routers/_app";
+import type { inferRouterOutputs } from "@trpc/server";
 import { formatCurrency } from "@/models/utils/currency";
 import { parseAndValidateChopSplit } from "@/models/utils/parse";
 import { formatDateStringToDDMMYY } from "@/models/utils/timestamp";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { type FC, useEffect, useState } from "react";
 import DeleteChopButton from "./DeleteChopButton";
 import DeleteSessionButton from "./DeleteSessionButton";
@@ -32,28 +30,98 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, Calendar, MapPin, ChevronRight, Scissors, ArrowUpCircle, Gamepad2 } from "lucide-react";
+import {
+  ArrowUpDown,
+  Calendar,
+  MapPin,
+  ChevronRight,
+  Scissors,
+  ArrowUpCircle,
+  Gamepad2,
+  Loader2,
+} from "lucide-react";
+
+type RouterOutputs = inferRouterOutputs<AppRouter>;
+type HistoryData = RouterOutputs["backings"]["getHistory"];
+type SessionItem = HistoryData["sessions"][0];
+type ChopItem = HistoryData["chops"][0];
+type TopUpItem = HistoryData["topUps"][0];
 
 type HistoryListProps = {
-  sessions: SessionsForHistoryList;
-  topUps: TopUpsForHistoryList;
-  chops: ChopsForHistoryList;
+  backingId: number;
 };
 
-const HistoryList: FC<HistoryListProps> = ({ chops, sessions, topUps }) => {
-  const [sortBy, setSortBy] = useState<"date" | "name" | "type" | "amount">("date");
+const HistoryList: FC<HistoryListProps> = ({ backingId }) => {
+  const { data, isLoading, error } = trpc.backings.getHistory.useQuery(
+    { backingId },
+    { refetchOnWindowFocus: false, retry: false }
+  );
+
+  if (isLoading) {
+    return (
+      <div className="container mx-auto px-4 h-full pb-4">
+        <Card className="h-full flex flex-col border-border items-center justify-center">
+          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        </Card>
+      </div>
+    );
+  }
+
+  if (error || !data) {
+    return (
+      <div className="container mx-auto px-4 h-full pb-4">
+        <Card className="h-full flex flex-col border-border items-center justify-center">
+          <p className="text-sm text-muted-foreground">
+            Could not load history.
+          </p>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <HistoryListInner
+      sessions={data.sessions}
+      chops={data.chops}
+      topUps={data.topUps}
+      backingId={backingId}
+    />
+  );
+};
+
+export default HistoryList;
+
+type HistoryListInnerProps = {
+  sessions: SessionItem[];
+  chops: ChopItem[];
+  topUps: TopUpItem[];
+  backingId: number;
+};
+
+const HistoryListInner: FC<HistoryListInnerProps> = ({
+  chops,
+  sessions,
+  topUps,
+  backingId,
+}) => {
+  const [sortBy, setSortBy] = useState<"date" | "name" | "type" | "amount">(
+    "date"
+  );
   const [reversed, setReversed] = useState(false);
   const [isDesktop, setIsDesktop] = useState<boolean | null>(null);
-  
+
   const list = [
-    ...chops.map(c => ({ ...c, type: "chop" })),
-    ...sessions.map(s => ({ ...s, type: "session" })),
-    ...topUps.map(t => ({ ...t, type: "top_up" })),
+    ...chops.map(c => ({ ...c, type: "chop" as const })),
+    ...sessions.map(s => ({ ...s, type: "session" as const })),
+    ...topUps.map(t => ({ ...t, type: "top_up" as const })),
   ];
-  
+
   type Row = (typeof list)[0];
-  
-  const sortFunctions: Record<string, (a: Row, b: Row, reversed?: boolean) => number> = {
+
+  const sortFunctions: Record<
+    string,
+    (a: Row, b: Row, reversed?: boolean) => number
+  > = {
     date: (a, b, reversed = false) =>
       (a.created_at > b.created_at ? 1 : -1) * (reversed ? 1 : -1),
     type: (a, b, reversed = false) =>
@@ -88,7 +156,7 @@ const HistoryList: FC<HistoryListProps> = ({ chops, sessions, topUps }) => {
       mediaQuery.removeEventListener("change", updateView);
     };
   }, []);
-  
+
   list.sort((a, b) => sortFunctions[sortBy](a, b, reversed));
 
   const SortIndicator = ({ column }: { column: string }) => {
@@ -111,7 +179,12 @@ const HistoryList: FC<HistoryListProps> = ({ chops, sessions, topUps }) => {
                 <TableHeader className="sticky top-0 bg-muted/50">
                   <TableRow>
                     <TableHead className="pl-6 w-[180px]">
-                      <Button variant="ghost" size="sm" onClick={handleClick} className="font-semibold gap-1 -ml-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={handleClick}
+                        className="font-semibold gap-1 -ml-2"
+                      >
                         <ArrowUpDown className="h-3 w-3" />
                         Date
                         <SortIndicator column="date" />
@@ -121,14 +194,24 @@ const HistoryList: FC<HistoryListProps> = ({ chops, sessions, topUps }) => {
                       <span className="font-semibold">Player</span>
                     </TableHead>
                     <TableHead className="text-center w-[120px]">
-                      <Button variant="ghost" size="sm" onClick={handleClick} className="font-semibold gap-1">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={handleClick}
+                        className="font-semibold gap-1"
+                      >
                         <ArrowUpDown className="h-3 w-3" />
                         Type
                         <SortIndicator column="type" />
                       </Button>
                     </TableHead>
                     <TableHead className="text-right w-[120px]">
-                      <Button variant="ghost" size="sm" onClick={handleClick} className="font-semibold gap-1">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={handleClick}
+                        className="font-semibold gap-1"
+                      >
                         <ArrowUpDown className="h-3 w-3" />
                         Amount
                         <SortIndicator column="amount" />
@@ -143,11 +226,24 @@ const HistoryList: FC<HistoryListProps> = ({ chops, sessions, topUps }) => {
                   {list.map(({ type, ...item }, i) => {
                     switch (type) {
                       case "chop":
-                        return <ChopRow key={`chop-${i}`} chop={item as ChopsForHistoryList[0]} />;
+                        return (
+                          <ChopRow key={`chop-${i}`} chop={item as ChopItem} />
+                        );
                       case "session":
-                        return <SessionRow key={`session-${i}`} session={item as SessionsForHistoryList[0]} />;
+                        return (
+                          <SessionRow
+                            key={`session-${i}`}
+                            session={item as SessionItem}
+                          />
+                        );
                       case "top_up":
-                        return <TopUpRow key={`topup-${i}`} topUp={item as TopUpsForHistoryList[0]} />;
+                        return (
+                          <TopUpRow
+                            key={`topup-${i}`}
+                            topUp={item as TopUpItem}
+                            backingId={String(backingId)}
+                          />
+                        );
                     }
                   })}
                 </TableBody>
@@ -159,11 +255,24 @@ const HistoryList: FC<HistoryListProps> = ({ chops, sessions, topUps }) => {
                 {list.map(({ type, ...item }, i) => {
                   switch (type) {
                     case "chop":
-                      return <ChopCard key={`chop-${i}`} chop={item as ChopsForHistoryList[0]} />;
+                      return (
+                        <ChopCard key={`chop-${i}`} chop={item as ChopItem} />
+                      );
                     case "session":
-                      return <SessionCard key={`session-${i}`} session={item as SessionsForHistoryList[0]} />;
+                      return (
+                        <SessionCard
+                          key={`session-${i}`}
+                          session={item as SessionItem}
+                        />
+                      );
                     case "top_up":
-                      return <TopUpCard key={`topup-${i}`} topUp={item as TopUpsForHistoryList[0]} />;
+                      return (
+                        <TopUpCard
+                          key={`topup-${i}`}
+                          topUp={item as TopUpItem}
+                          backingId={String(backingId)}
+                        />
+                      );
                   }
                 })}
               </div>
@@ -175,18 +284,16 @@ const HistoryList: FC<HistoryListProps> = ({ chops, sessions, topUps }) => {
   );
 };
 
-export default HistoryList;
-
 // Desktop Row Components
-const ChopRow = ({ chop }: { chop: ChopsForHistoryList[0] }) => {
+const ChopRow = ({ chop }: { chop: ChopItem }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const { userDetails, isLoading } = useUsersWithAccessToBackingContext();
   if (isLoading) return null;
-  
+
   return (
     <>
-      <TableRow 
-        onClick={() => setModalOpen(!modalOpen)} 
+      <TableRow
+        onClick={() => setModalOpen(!modalOpen)}
         className="cursor-pointer hover:bg-muted/50 transition-colors"
       >
         <TableCell className="pl-6">
@@ -199,14 +306,21 @@ const ChopRow = ({ chop }: { chop: ChopsForHistoryList[0] }) => {
           <div className="flex items-center gap-3">
             <Avatar className="h-8 w-8 shrink-0">
               <AvatarFallback className="bg-purple-100 text-purple-700 text-xs">
-                {(userDetails[chop.user_id]?.username || "??").slice(0, 2).toUpperCase()}
+                {(userDetails[chop.user_id]?.username || "??")
+                  .slice(0, 2)
+                  .toUpperCase()}
               </AvatarFallback>
             </Avatar>
-            <span className="font-medium">{userDetails[chop.user_id]?.username || "Unknown"}</span>
+            <span className="font-medium">
+              {userDetails[chop.user_id]?.username || "Unknown"}
+            </span>
           </div>
         </TableCell>
         <TableCell className="text-center">
-          <Badge variant="secondary" className="bg-purple-100 text-purple-700 border-purple-200">
+          <Badge
+            variant="secondary"
+            className="bg-purple-100 text-purple-700 border-purple-200"
+          >
             <Scissors className="h-3 w-3 mr-1" />
             Chop
           </Badge>
@@ -223,13 +337,13 @@ const ChopRow = ({ chop }: { chop: ChopsForHistoryList[0] }) => {
   );
 };
 
-const SessionRow = ({ session }: { session: SessionsForHistoryList[0] }) => {
+const SessionRow = ({ session }: { session: SessionItem }) => {
   const { userDetails, isLoading } = useUsersWithAccessToBackingContext();
   const router = useRouter();
   if (isLoading) return null;
-  
+
   const isProfit = session.amount >= 0;
-  
+
   return (
     <TableRow
       role="link"
@@ -246,11 +360,15 @@ const SessionRow = ({ session }: { session: SessionsForHistoryList[0] }) => {
         <div className="flex items-center gap-3">
           <Avatar className="h-8 w-8 shrink-0">
             <AvatarFallback className="bg-primary/10 text-primary text-xs">
-              {(userDetails[session.user_id]?.username || "??").slice(0, 2).toUpperCase()}
+              {(userDetails[session.user_id]?.username || "??")
+                .slice(0, 2)
+                .toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
-            <span className="font-medium">{userDetails[session.user_id]?.username || "Unknown"}</span>
+            <span className="font-medium">
+              {userDetails[session.user_id]?.username || "Unknown"}
+            </span>
             {session.location && (
               <span className="text-xs text-muted-foreground flex items-center gap-1">
                 <MapPin className="h-3 w-3" />
@@ -266,7 +384,9 @@ const SessionRow = ({ session }: { session: SessionsForHistoryList[0] }) => {
           {session.game_type === "tournament" ? "Tournament" : "Cash"}
         </Badge>
       </TableCell>
-      <TableCell className={`text-right font-semibold ${isProfit ? 'text-primary' : 'text-destructive'}`}>
+      <TableCell
+        className={`text-right font-semibold ${isProfit ? "text-primary" : "text-destructive"}`}
+      >
         {formatCurrency(session.amount)}
       </TableCell>
       <TableCell className="text-center" onClick={e => e.stopPropagation()}>
@@ -276,11 +396,16 @@ const SessionRow = ({ session }: { session: SessionsForHistoryList[0] }) => {
   );
 };
 
-const TopUpRow = ({ topUp }: { topUp: TopUpsForHistoryList[0] }) => {
+const TopUpRow = ({
+  topUp,
+  backingId,
+}: {
+  topUp: TopUpItem;
+  backingId: string;
+}) => {
   const { userDetails, isLoading } = useUsersWithAccessToBackingContext();
-  const { backingId } = useParams() as { backingId: string };
   if (isLoading) return null;
-  
+
   return (
     <TableRow className="hover:bg-muted/50 transition-colors">
       <TableCell className="pl-6">
@@ -293,14 +418,21 @@ const TopUpRow = ({ topUp }: { topUp: TopUpsForHistoryList[0] }) => {
         <div className="flex items-center gap-3">
           <Avatar className="h-8 w-8 shrink-0">
             <AvatarFallback className="bg-amber-100 text-amber-700 text-xs">
-              {(userDetails[topUp.user_id]?.username || "??").slice(0, 2).toUpperCase()}
+              {(userDetails[topUp.user_id]?.username || "??")
+                .slice(0, 2)
+                .toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <span className="font-medium">{userDetails[topUp.user_id]?.username || "Unknown"}</span>
+          <span className="font-medium">
+            {userDetails[topUp.user_id]?.username || "Unknown"}
+          </span>
         </div>
       </TableCell>
       <TableCell className="text-center">
-        <Badge variant="secondary" className="bg-amber-100 text-amber-700 border-amber-200">
+        <Badge
+          variant="secondary"
+          className="bg-amber-100 text-amber-700 border-amber-200"
+        >
           <ArrowUpCircle className="h-3 w-3 mr-1" />
           Top Up
         </Badge>
@@ -308,7 +440,7 @@ const TopUpRow = ({ topUp }: { topUp: TopUpsForHistoryList[0] }) => {
       <TableCell className="text-right font-semibold text-amber-700">
         {formatCurrency(topUp.amount)}
       </TableCell>
-      <TableCell className="text-center" onClick={e => e.stopPropagation()}>
+      <TableCell className="text-center">
         <DeleteTopUpButton topupId={topUp.id} backingId={backingId} />
       </TableCell>
     </TableRow>
@@ -316,14 +448,14 @@ const TopUpRow = ({ topUp }: { topUp: TopUpsForHistoryList[0] }) => {
 };
 
 // Mobile Card Components
-const ChopCard = ({ chop }: { chop: ChopsForHistoryList[0] }) => {
+const ChopCard = ({ chop }: { chop: ChopItem }) => {
   const [modalOpen, setModalOpen] = useState(false);
   const { userDetails, isLoading } = useUsersWithAccessToBackingContext();
   if (isLoading) return null;
-  
+
   return (
     <>
-      <div 
+      <div
         onClick={() => setModalOpen(!modalOpen)}
         className="p-4 hover:bg-muted/50 transition-colors cursor-pointer"
       >
@@ -331,11 +463,15 @@ const ChopCard = ({ chop }: { chop: ChopsForHistoryList[0] }) => {
           <div className="flex items-center gap-3">
             <Avatar className="h-10 w-10">
               <AvatarFallback className="bg-purple-100 text-purple-700">
-                {(userDetails[chop.user_id]?.username || "??").slice(0, 2).toUpperCase()}
+                {(userDetails[chop.user_id]?.username || "??")
+                  .slice(0, 2)
+                  .toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div>
-              <p className="font-medium">{userDetails[chop.user_id]?.username || "Unknown"}</p>
+              <p className="font-medium">
+                {userDetails[chop.user_id]?.username || "Unknown"}
+              </p>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <Calendar className="h-3 w-3" />
                 {formatDateStringToDDMMYY(chop.created_at)}
@@ -343,10 +479,15 @@ const ChopCard = ({ chop }: { chop: ChopsForHistoryList[0] }) => {
             </div>
           </div>
           <div className="text-right">
-            <Badge variant="secondary" className="bg-purple-100 text-purple-700 border-purple-200 mb-1">
+            <Badge
+              variant="secondary"
+              className="bg-purple-100 text-purple-700 border-purple-200 mb-1"
+            >
               Chop
             </Badge>
-            <p className="font-semibold text-purple-700">£{chop.amount.toLocaleString()}</p>
+            <p className="font-semibold text-purple-700">
+              £{chop.amount.toLocaleString()}
+            </p>
           </div>
         </div>
       </div>
@@ -355,15 +496,15 @@ const ChopCard = ({ chop }: { chop: ChopsForHistoryList[0] }) => {
   );
 };
 
-const SessionCard = ({ session }: { session: SessionsForHistoryList[0] }) => {
+const SessionCard = ({ session }: { session: SessionItem }) => {
   const { userDetails, isLoading } = useUsersWithAccessToBackingContext();
   const router = useRouter();
   if (isLoading) return null;
-  
+
   const isProfit = session.amount >= 0;
-  
+
   return (
-    <div 
+    <div
       onClick={() => router.push(`/session/${session.id}`)}
       className="p-4 hover:bg-muted/50 transition-colors cursor-pointer"
     >
@@ -371,11 +512,15 @@ const SessionCard = ({ session }: { session: SessionsForHistoryList[0] }) => {
         <div className="flex items-center gap-3">
           <Avatar className="h-10 w-10">
             <AvatarFallback className="bg-primary/10 text-primary">
-              {(userDetails[session.user_id]?.username || "??").slice(0, 2).toUpperCase()}
+              {(userDetails[session.user_id]?.username || "??")
+                .slice(0, 2)
+                .toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <div>
-            <p className="font-medium">{userDetails[session.user_id]?.username || "Unknown"}</p>
+            <p className="font-medium">
+              {userDetails[session.user_id]?.username || "Unknown"}
+            </p>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <Calendar className="h-3 w-3" />
               {formatDateStringToDDMMYY(session.created_at)}
@@ -394,7 +539,9 @@ const SessionCard = ({ session }: { session: SessionsForHistoryList[0] }) => {
             <Badge variant="outline" className="capitalize mb-1">
               {session.game_type === "tournament" ? "Tournament" : "Cash"}
             </Badge>
-            <p className={`font-semibold ${isProfit ? 'text-primary' : 'text-destructive'}`}>
+            <p
+              className={`font-semibold ${isProfit ? "text-primary" : "text-destructive"}`}
+            >
               {formatCurrency(session.amount)}
             </p>
           </div>
@@ -405,32 +552,50 @@ const SessionCard = ({ session }: { session: SessionsForHistoryList[0] }) => {
   );
 };
 
-const TopUpCard = ({ topUp }: { topUp: TopUpsForHistoryList[0] }) => {
+const TopUpCard = ({
+  topUp,
+  backingId,
+}: {
+  topUp: TopUpItem;
+  backingId: string;
+}) => {
   const { userDetails, isLoading } = useUsersWithAccessToBackingContext();
   if (isLoading) return null;
-  
+
   return (
     <div className="p-4 hover:bg-muted/50 transition-colors">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Avatar className="h-10 w-10">
             <AvatarFallback className="bg-amber-100 text-amber-700">
-              {(userDetails[topUp.user_id]?.username || "??").slice(0, 2).toUpperCase()}
+              {(userDetails[topUp.user_id]?.username || "??")
+                .slice(0, 2)
+                .toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <div>
-            <p className="font-medium">{userDetails[topUp.user_id]?.username || "Unknown"}</p>
+            <p className="font-medium">
+              {userDetails[topUp.user_id]?.username || "Unknown"}
+            </p>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <Calendar className="h-3 w-3" />
               {formatDateStringToDDMMYY(topUp.created_at)}
             </div>
           </div>
         </div>
-        <div className="text-right">
-          <Badge variant="secondary" className="bg-amber-100 text-amber-700 border-amber-200 mb-1">
-            Top Up
-          </Badge>
-          <p className="font-semibold text-amber-700">{formatCurrency(topUp.amount)}</p>
+        <div className="flex items-center gap-2">
+          <div className="text-right">
+            <Badge
+              variant="secondary"
+              className="bg-amber-100 text-amber-700 border-amber-200 mb-1"
+            >
+              Top Up
+            </Badge>
+            <p className="font-semibold text-amber-700">
+              {formatCurrency(topUp.amount)}
+            </p>
+          </div>
+          <DeleteTopUpButton topupId={topUp.id} backingId={backingId} />
         </div>
       </div>
     </div>
@@ -465,13 +630,19 @@ export const ChopSplitModal = ({ chopSplit, open }: ChopSplitModalProps) => {
             className="flex justify-between items-center p-3 bg-muted rounded-lg"
           >
             <span className="font-medium">{data.username}</span>
-            <span className="text-primary font-semibold">£{data.split.toFixed(2)}</span>
+            <span className="text-primary font-semibold">
+              £{data.split.toFixed(2)}
+            </span>
           </div>
         ))}
       </div>
     );
   } catch (e) {
-    content = <p className="text-center text-muted-foreground py-4">No split data available</p>;
+    content = (
+      <p className="text-center text-muted-foreground py-4">
+        No split data available
+      </p>
+    );
   }
 
   return (

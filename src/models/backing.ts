@@ -66,3 +66,51 @@ export async function getBackingHistory(backing_id: number) {
     },
   });
 }
+
+/**
+ * Fetches the full history for a backing using parallel queries.
+ * Split from the page RSC to avoid Vercel function timeout on large floats.
+ */
+export async function getHistoryForBacking(backingId: number) {
+  const [sessions, chops, topUps] = await Promise.all([
+    db.session.findMany({
+      where: { backing_id: backingId },
+      orderBy: { created_at: "desc" },
+      take: 500,
+      select: {
+        id: true,
+        user_id: true,
+        amount: true,
+        created_at: true,
+        game_type: true,
+        location: true,
+      },
+    }),
+    db.chop.findMany({
+      where: { backing_id: backingId },
+      orderBy: { created_at: "desc" },
+      take: 200,
+      select: {
+        id: true,
+        user_id: true,
+        amount: true,
+        created_at: true,
+        chop_split: true,
+        note: true,
+      },
+    }),
+    db.topUp.findMany({
+      where: { backing_id: backingId },
+      orderBy: { created_at: "desc" },
+      take: 200,
+      select: {
+        id: true,
+        user_id: true,
+        amount: true,
+        created_at: true,
+        note: true,
+      },
+    }),
+  ]);
+  return { sessions, chops, topUps };
+}

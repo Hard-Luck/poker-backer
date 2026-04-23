@@ -3,9 +3,10 @@ import {
   createBacking,
   deleteBackingAsOwner,
   getBackingHistory,
+  getHistoryForBacking,
   updateBackingFloat,
 } from "@/models/backing";
-import { isBackerForBacking } from "@/models/userBacking";
+import { hasAccessToBacking, isBackerForBacking } from "@/models/userBacking";
 import { parseBackingHistoryToCsv } from "@/utils/data-parse";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
@@ -73,5 +74,16 @@ export const backingsRouter = router({
       const history = await getBackingHistory(input.backingId);
       const csv = parseBackingHistoryToCsv(history);
       return { data: csv };
+    }),
+  getHistory: protectedProcedure
+    .input(z.object({ backingId: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const { backingId } = input;
+      const userId = ctx.session.user.id;
+      const hasAccess = await hasAccessToBacking({ backingId, userId });
+      if (!hasAccess) {
+        throw new TRPCError({ code: "FORBIDDEN" });
+      }
+      return getHistoryForBacking(backingId);
     }),
 });
