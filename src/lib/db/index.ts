@@ -19,9 +19,9 @@ if (process.env.NODE_ENV === "production") {
   libsql = createClient({ url: `file:${process.cwd()}/prisma/dev.db` });
 }
 
-const adapter = new PrismaLibSQL(libsql);
-global.db = new PrismaClient({ adapter });
+if (!global.db) {
+  const adapter = new PrismaLibSQL(libsql);
+  global.db = new PrismaClient({ adapter });
+}
 
-export const db = global.db || new PrismaClient({});
-
-if (process.env.NODE_ENV !== "production") global.db = db;
+export const db = global.db;

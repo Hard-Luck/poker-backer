@@ -1,6 +1,7 @@
 import * as React from "react";
 import { getUserAuth } from "@/lib/auth/utils";
 import getDashboard from "@/models/dashboard";
+import { getSessionsPlayedThisMonth } from "@/models/sessions";
 import SessionsThisMonth from "./SessionsThisMonth";
 import RecentSession from "./RecentSessions";
 import HistoryLink from "./HistoryLink";
@@ -10,7 +11,10 @@ import AddSessionLink from "./AddSessionLink";
 export default async function Page() {
   const { session } = getUserAuth();
   if (!session) throw new Error("No session found");
-  const user = await getDashboard(session.user.id);
+  const [user, sessionsThisMonth] = await Promise.all([
+    getDashboard(session.user.id),
+    getSessionsPlayedThisMonth(session.user.id),
+  ]);
   
   return (
     <main className="flex flex-col min-h-[calc(100vh-4rem)] bg-background">
@@ -19,7 +23,7 @@ export default async function Page() {
         {/* Stats and Quick Actions Section */}
         <div className="grid grid-cols-1 md:grid-cols-[auto_1fr] gap-4 md:gap-6 items-stretch">
           {/* Sessions This Month Card */}
-          <SessionsThisMonth />
+          <SessionsThisMonth count={sessionsThisMonth} />
           
           {/* Quick Actions */}
           <div className="grid grid-cols-3 gap-3">
